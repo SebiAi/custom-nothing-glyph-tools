@@ -62,7 +62,7 @@ I would recommend saving your Audacity project regularly.
 You can now add Labels by clicking on your desired location on the Label Track and pressing <kbd>CONTROL</kbd> + <kbd>b</kbd>. To remove one Label right-click on the Labels name and choose *Delete Label*. More info [here](https://manual.audacityteam.org/man/removing_labels_examples.html).
 
 #### Naming format
-Each marker should be named like this: `glyphId-lightLevelFrom[-lightLevelTo[-Mode]]`
+Each Label should be named like this: `glyphId-lightLevelFrom[-lightLevelTo[-Mode]]`
 * **glyphId**: 1 to 5 (Camera, Diagonal, Battery/Wireless Charger, USB Line, USB Dot)
 * **lightLevelFrom** and **lightLevelTo**: In percent 0 to 100. When no *lightLevelTo* is provided *lightLevelFrom* will be used as the from and to value.
 * **Mode**: Currently there are two modes supported:
