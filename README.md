@@ -14,6 +14,11 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 
 ***
 
+# :safety_vest: Need help?
+If you need help feel free to reach out to me on Discord: @sebiai
+
+***
+
 # :construction: Compatibility
 I have only tested the scripts on Linux. There should be nothing preventing them to run on Windows or MacOS.
 
