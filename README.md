@@ -26,9 +26,10 @@ I have only tested the scripts on Linux. There should be nothing preventing them
 
 # :pencil2: Usage
 ## :memo: Requirements
-* \[*Required*\] **exiftool** - To read the metadata of the sound file (could be replaced by ffmpeg (ffprobe) - feel free to make a pull request)
-* \[*Required*\] **ffmpeg** - To write metadata to the sound file
-* \[*Optional*\] [**Audacity**](https://www.audacityteam.org/) - Create custom compositions more easily with Labels
+* \[*Required*\] **[python3](https://www.python.org/downloads/)** - To run the scripts
+* \[*Required*\] **[exiftool](https://exiftool.org/install.html)** - To read the metadata of the sound file (could be replaced by ffmpeg (ffprobe) - feel free to make a pull request)
+* \[*Required*\] **[ffmpeg](https://ffmpeg.org/download.html)** - To write metadata to the sound file
+* \[*Optional*\] **[Audacity](https://www.audacityteam.org/)** - Create custom compositions more easily with Labels
 
     :arrow_right: *exiftool and ffmpeg must be in PATH. There is currently no way to provide custom paths to these executables without editing the script.*
 
