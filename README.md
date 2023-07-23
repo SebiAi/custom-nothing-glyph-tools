@@ -20,7 +20,17 @@ If you need help feel free to reach out to me on Discord: @sebiai
 ***
 
 # :construction: Compatibility
+## OS
+* Linux :white_check_mark:
+* Windows :question: - \[*To be tested*\]
+* Mac :question: - \[*To be tested*\]
+
 I have only tested the scripts on Linux. There should be nothing preventing them to run on Windows or MacOS.
+## Phones
+* Nothing Phone 1 :white_check_mark:
+* Nothing Phone 2 :question: - \[*To be tested*\]
+
+Phone 2 support needs to be tested.
 
 ***
 
