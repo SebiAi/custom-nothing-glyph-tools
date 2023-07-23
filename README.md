@@ -96,7 +96,7 @@ If you like regex patterns, the name of the Label should match this one (the per
 
 > **:warning: Important**
 
-**At the end of the audio there MUST be a Label called *END*.** This is needed so the script knows how long the audio is.
+**At the end of the audio there MUST be a Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
 
 Example 1:
 ```
@@ -106,7 +106,7 @@ Example 1:
 0.242847	0.242847	3-100-0-LIN
 0.296312	0.296312	END
 ```
-In this example the Mode `-LIN` is not necessary because it is the default but makes it more readable.
+In this example, the Mode `-LIN` is not necessary because it is the default but makes it more readable.
 
 Example 2:
 ```
@@ -160,7 +160,7 @@ Congrats, you can now transfer the audio file to your Nothing phone and import i
 ***
 
 # Hardware limitations
-* On the Phone (1) at least the Glyphs can't playback fast-changing light sequences
+* On the Phone (1) at least the Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound.
 
 ***
 
