@@ -77,6 +77,8 @@ Each Label should be named like this: `glyphId-lightLevelFrom[-lightLevelTo[-Mod
     * LIN: Linear Interpolation (default)
     * EXP: Exponential Interpolation
 
+The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
+
 If you like regex patterns, the name of the Label should match this one (the per cent values will be checked separately):
 ```regex
 ^([1-5])-(\d{1,3})(?:-(\d{1,3}))?(?:-(EXP|LIN))?$
@@ -85,6 +87,35 @@ If you like regex patterns, the name of the Label should match this one (the per
 > **:warning: Important**
 
 **At the end of the audio there MUST be a Label called *END*.** This is needed so the script knows how long the audio is.
+
+Example 1:
+```
+0.031441	0.031441	2-0-100-LIN
+0.074091	0.074091	2-100-0-LIN
+0.198122	0.198122	3-0-100-LIN
+0.242847	0.242847	3-100-0-LIN
+0.296312	0.296312	END
+```
+In this example the Mode `-LIN` is not necessary because it is the default but makes it more readable.
+
+Example 2:
+```
+0.031441	0.031441	2-0-100
+0.074091	0.074091	2-100-0
+0.198122	0.198122	3-0-100
+0.242847	0.242847	3-100-0
+0.296312	0.296312	END
+```
+This is a minimalized version of *Example 1*.
+
+Example 3:
+```
+0.031441	0.031441	2-100
+0.074091	0.074091	3-100-0
+0.198122	0.198122	4-0-100-EXP
+0.296312	0.296312	END
+```
+Another example with one exponential interpolation (`-EXP`) and line one and two are minimalized. They expand to `2-100-100-LIN` and `3-100-0-LIN`.
 
 #### Exporting Labels
 1) **File -> Export -> Export Labels**
