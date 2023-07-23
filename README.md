@@ -22,15 +22,15 @@ If you need help feel free to reach out to me on Discord: @sebiai
 # :construction: Compatibility
 ## OS
 * Linux :white_check_mark:
-* Windows :question: - \[*To be tested*\]
-* Mac :question: - \[*To be tested*\]
+* Windows :white_check_mark:
+* Mac :question: - \[*To be tested - please reach out to me if you manage to get it working!*\]
 
-I have only tested the scripts on Linux. There should be nothing preventing them to run on Windows or MacOS.
+I have only tested the scripts on Linux. Somebody else managed to do it on Windows. There *should* be nothing preventing them to run on MacOS.
 ## Phones
 * Nothing Phone 1 :white_check_mark:
-* Nothing Phone 2 :question: - \[*To be tested*\]
+* Nothing Phone 2 :white_check_mark:
 
-Phone 2 support needs to be tested.
+Works on both Nothing devices.
 
 ***
 
