@@ -117,7 +117,10 @@ def audacity_to_glyphs(file: str):
             # Get the values from the text
             result = re.match(REGEX_PATTERN_TEXT, text)
             if result is None:
-                printWarning(f"Row {i + 1} text is invalid. Skipping.")
+                if '[' in text or ']' in text:
+                    printWarning(f"Row {i + 1} text is invalid - seems like you have brackets in your Label name => remove them!. Skipping.")
+                else:
+                    printWarning(f"Row {i + 1} text is invalid. Skipping.")
                 continue
 
             glyph = int(result.group(1))
