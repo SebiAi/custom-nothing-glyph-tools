@@ -89,9 +89,9 @@ Each Label should be named like this: `glyphId-lightLevelFrom[-lightLevelTo[-Mod
 
 The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
 
-If you like regex patterns, the name of the Label should match this one (the per cent values will be checked separately):
+If you like regex patterns, the name of the Label should match this one (thanks [Joel05](https://github.com/SebiAi/custom-nothing-glyph-tools/issues/1)):
 ```regex
-^([1-5])-(\d{1,3})(?:-(\d{1,3}))?(?:-(EXP|LIN))?$
+^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN))?$
 ```
 
 > **:warning: Important**
