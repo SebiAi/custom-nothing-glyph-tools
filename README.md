@@ -191,6 +191,7 @@ Congrats, you can now transfer the audio file to your Nothing phone and import i
   
   ### AUTHOR
   After decoding and decompressing it contains the Glyph light data in a csv like manner where in each line we have the 5 Glyphs separated and followed by a comma (`,`). Each line corresponds to 16ms. Each Glyph
+  
   0) Camera
   1) Diagonal
   2) Battery/Wireless Charger
