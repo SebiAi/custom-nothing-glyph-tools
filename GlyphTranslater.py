@@ -7,7 +7,7 @@ import csv
 import re
 from termcolor import cprint
 
-REGEX_PATTERN_TEXT = '^([1-5])-(\d{1,3})(?:-(\d{1,3}))?(?:-(EXP|LIN))?$'
+REGEX_PATTERN_TEXT = '^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN))?$'
 
 # +------------------------------------+
 # |                                    |
@@ -124,8 +124,8 @@ def audacity_to_glyphs(file: str):
                 continue
 
             glyph = int(result.group(1))
-            fromLightLV = min(int(result.group(2)), 100)
-            toLightLV = min(int(result.group(3)), 100) if result.group(3) is not None else fromLightLV
+            fromLightLV = int(result.group(2))
+            toLightLV = int(result.group(3)) if result.group(3) is not None else fromLightLV
             mode = result.group(4) if result.group(4) is not None else "LIN"
             
             # Debug print all the values
