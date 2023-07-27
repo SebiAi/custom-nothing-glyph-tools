@@ -133,21 +133,21 @@ Another example with one exponential interpolation (`-EXP`) and line one and two
 #### Converting Labels to Glyph format
 Now that we have a Labels file we can use the [GlyphTranslater](./GlyphTranslater.py) to get our desired files like this:
 ```bash
-./GlyphTranslater.py MyLabelFile.txt
+python3 GlyphTranslater.py MyLabelFile.txt
 ```
 Assuming your Label file was called `MyLabelFile.txt` it will spit out two files called `MyLabelFile.glypha` and `MyLabelFile.glyphc1` in your current working directory.
 
 ### Read and write the Glyph format data to an audio file
 #### Read from an audio file
 ```bash
-./GlyphModder.py MyGlyphCreation.ogg
+python3 GlyphModder.py MyGlyphCreation.ogg
 ```
 Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two files called `MyGlyphCreation.glypha` and `MyGlyphCreation.glyphc1` in your current working directory.
 
 #### Write to an audio file
 When you have both your `.glypha` and `.glyphc1` files (via Audacity and the GlyphTranslater method or otherwise) you can write them to an audio file as metadata:
 ```bash
-./GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
+python3 GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
 ```
 The `-t` argument is optional, this just sets the *TITLE* tag which, as far as I could see, is not used anywhere in the Glyph Composer right now.
 
