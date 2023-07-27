@@ -70,7 +70,7 @@ When exporting the sound I always used the *opus* codec because the Glyph Compos
 4) **Export**
 
 ### Creating the Glyph format with Audacity
-To make our lives easier we can utilize Audacities Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslater](./GlyphTranslater.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
+To make our lives easier we can utilize Audacities Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslator](./GlyphTranslator.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
 
 I would recommend saving your Audacity project regularly.
 
@@ -133,9 +133,9 @@ Another example with one exponential interpolation (`-EXP`) and line one and two
 1) **File -> Export -> Export Labels**
 
 #### Converting Labels to Glyph format
-Now that we have a Labels file we can use the [GlyphTranslater](./GlyphTranslater.py) to get our desired files like this:
+Now that we have a Labels file we can use the [GlyphTranslator](./GlyphTranslator.py) to get our desired files like this:
 ```bash
-python3 GlyphTranslater.py MyLabelFile.txt
+python3 GlyphTranslator.py MyLabelFile.txt
 ```
 Assuming your Label file was called `MyLabelFile.txt` it will spit out two files called `MyLabelFile.glypha` and `MyLabelFile.glyphc1` in your current working directory.
 
@@ -149,7 +149,7 @@ Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two f
 You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
 
 #### Write to an audio file
-When you have both your `.glypha` and `.glyphc1` files (via Audacity and the GlyphTranslater method or otherwise) you can write them to an audio file as metadata:
+When you have both your `.glypha` and `.glyphc1` files (via Audacity and the GlyphTranslator method or otherwise) you can write them to an audio file as metadata:
 ```bash
 python3 GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
 ```
