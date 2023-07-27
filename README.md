@@ -63,7 +63,7 @@ I would recommend using [Audacity](https://www.audacityteam.org/) to make your l
 ### Cutting the sound
 You can skip to [Creating the Glyph format with Audacity](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length.
 
-When exporting the sound I always used the *opus* codec because the Glyph Composer uses this format.
+When exporting the sound always use the *opus* codec:
 1) **Export audio:** Files -> Export -> Export Audio...
 2) **Select the right codec in the dropdown:** Select Opus - default settings are fine
 3) **Change the extension to *ogg* when naming your file!**
