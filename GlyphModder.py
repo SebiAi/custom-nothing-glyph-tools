@@ -6,6 +6,7 @@ import subprocess
 import argparse
 import os
 import zlib
+import json
 from termcolor import cprint
 
 base64_padding = '=='
@@ -23,10 +24,7 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
 
 # Check the requirements
 def checkRequirements():
-    # Check if exiftool is installed - extract metadata from files
-    if subprocess.run(['exiftool', "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
-        printCriticalError("exiftool could not be found.")
-    # Check if ffmpeg is installed - write metadata back to files because exiftool does not support ogg files
+    # Check if ffmpeg is installed - read/write metadata
     if subprocess.run(['ffmpeg', "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         printCriticalError("ffmpeg could not be found.")
 
@@ -109,9 +107,14 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
     os.rename(tmp_file, file)
 
 def read_metadata(file: str):
-    # Pass the file to exiftool to extract the metadata
-    author = subprocess.check_output(['exiftool', '-b', '-AUTHOR', file]).removesuffix(b'\n').decode('utf-8')
-    custom1 = subprocess.check_output(['exiftool', '-b', '-CUSTOM1', file]).removesuffix(b'\n').decode('utf-8')
+    # Get the metadata from the file with ffmpeg (first audio stream only)
+    ffmpeg_json = json.loads(subprocess.check_output(['ffprobe', '-v', 'quiet', '-of', 'json', '-show_streams', '-select_streams', 'a:0', file]).decode('utf-8'))
+
+    try:
+        author = str(ffmpeg_json['streams'][0]['tags']['AUTHOR'])
+        custom1 = str(ffmpeg_json['streams'][0]['tags']['CUSTOM1'])
+    except KeyError:
+        printCriticalError("AUTHOR or CUSTOM1 metadata is missing. Please check the file.")
 
     if author == "" or custom1 == "":
         printCriticalError("AUTHOR or CUSTOM1 metadata is empty. Please check the file.")
