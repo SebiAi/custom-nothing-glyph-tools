@@ -52,8 +52,9 @@ cd custom-nothing-glyph-tools
 
 #### Install the necessary python dependencies
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
+Sometimes it is also just `pip` instead of `pip3`.
 
 ## :sparkles: Making a custom Glyph composition
 I would recommend using [Audacity](https://www.audacityteam.org/) to make your life easier. You can use it to cut your audio to the right length, layer effects on it, set Labels (which will come in handy later) and more.
