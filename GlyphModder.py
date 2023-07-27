@@ -7,7 +7,7 @@ import argparse
 import os
 import zlib
 import json
-from termcolor import cprint
+from termcolor import cprint, colored
 
 base64_padding = '=='
 
@@ -86,16 +86,16 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
         printCriticalError("AUTHOR or CUSTOM1 metadata is empty. Please check the files.")
     
     # Print the metadata
-    print("Author: ", author)
-    print("Custom1:", custom1)
+    #print("Author: ", author)
+    #print("Custom1:", custom1)
 
     # Compress the strings with zlib
     compressed_author = zlib.compress(author, zlib.Z_BEST_COMPRESSION)
     compressed_custom1 = zlib.compress(custom1, zlib.Z_BEST_COMPRESSION)
 
     # Print the metadata
-    print("\nCompressed Author: ", compressed_author)
-    print("Compressed Custom1:", compressed_custom1)
+    #print("\nCompressed Author: ", compressed_author)
+    #print("Compressed Custom1:", compressed_custom1)
 
     # Encode
     encoded_author = encode_base64(compressed_author)
@@ -106,20 +106,24 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
     encoded_custom1 = '\n'.join(encoded_custom1[i:i+76] for i in range(0, len(encoded_custom1), 76))
 
     # Print the metadata
-    print("\nBase 64 Author:  " + encoded_author)
-    print("Base 64 Custom1: " + encoded_custom1)
+    #print("\nBase 64 Author:  " + encoded_author)
+    #print("Base 64 Custom1: " + encoded_custom1)
 
     # Tmp file name
     tmp_file = os.path.splitext(os.path.basename(file))[0] + '_new.ogg'
 
     # Write the metadata back to the file
-    subprocess.run([ffmpeg, '-hide_banner', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
+    subprocess.run([ffmpeg, '-v', 'quiet', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
 
     # Delete the old file - needed for Windows or else os.rename() will fail
     os.remove(file)
 
     # Copy back the file
     os.rename(tmp_file, file)
+
+    # Print number of bytes written
+    print(f"Wrote {colored(len(bytearray(encoded_author, 'utf-8')), attrs=['bold'])} bytes of AUTHOR metadata")
+    print(f"Wrote {colored(len(bytearray(encoded_custom1, 'utf-8')), attrs=['bold'])} bytes of CUSTOM1 metadata")
 
 def read_metadata(file: str, ffprobe: str):
     # Get the metadata from the file with ffmpeg (first audio stream only)
@@ -134,9 +138,13 @@ def read_metadata(file: str, ffprobe: str):
     if author == "" or custom1 == "":
         printCriticalError("AUTHOR or CUSTOM1 metadata is empty. Please check the file.")
 
+    # Print number of bytes read
+    print(f"Read {colored(len(bytearray(author, 'utf-8')), attrs=['bold'])} bytes of AUTHOR metadata")
+    print(f"Read {colored(len(bytearray(custom1, 'utf-8')), attrs=['bold'])} bytes of CUSTOM1 metadata")
+
     # Print the metadata
-    print("Base 64 Author:  " + author)
-    print("Base 64 Custom1: " + custom1)
+    #print("Base 64 Author:  " + author)
+    #print("Base 64 Custom1: " + custom1)
 
     # Decode
     decoded_author = decode_base64(author)
@@ -146,16 +154,16 @@ def read_metadata(file: str, ffprobe: str):
     filename = os.path.splitext(os.path.basename(sys.argv[1]))[0]
 
     # Print the metadata
-    print("\nDecoded Author: ", decoded_author)
-    print("Decoded Custom1:", decoded_custom1)
+    #print("\nDecoded Author: ", decoded_author)
+    #print("Decoded Custom1:", decoded_custom1)
     
     # Decompress the decoded strings with zlib
     decompressed_author = zlib.decompress(decoded_author)
     decompressed_custom1 = zlib.decompress(decoded_custom1)
 
     # Print the metadata
-    print("\nDecompressed Author: ", decompressed_author)
-    print("Decompressed Custom1:", decompressed_custom1)
+    #print("\nDecompressed Author: ", decompressed_author)
+    #print("Decompressed Custom1:", decompressed_custom1)
 
     # Write the decoded and decompressed strings to a file
     with open(f"{filename}.glypha", 'wb') as f:
