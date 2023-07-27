@@ -24,9 +24,12 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
 
 # Check the requirements
 def checkRequirements():
-    # Check if ffmpeg is installed - read/write metadata
+    # Check if ffmpeg is installed - write metadata
     if subprocess.run(['ffmpeg', "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         printCriticalError("ffmpeg could not be found.")
+    # Check if ffprobe is installed - read metadata
+    if subprocess.run(['ffprobe', "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        printCriticalError("ffprobe could not be found.")
 
 
 # Perform argument checks
@@ -108,11 +111,11 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
 
 def read_metadata(file: str):
     # Get the metadata from the file with ffmpeg (first audio stream only)
-    ffmpeg_json = json.loads(subprocess.check_output(['ffprobe', '-v', 'quiet', '-of', 'json', '-show_streams', '-select_streams', 'a:0', file]).decode('utf-8'))
+    ffprobe_json = json.loads(subprocess.check_output(['ffprobe', '-v', 'quiet', '-of', 'json', '-show_streams', '-select_streams', 'a:0', file]).decode('utf-8'))
 
     try:
-        author = str(ffmpeg_json['streams'][0]['tags']['AUTHOR'])
-        custom1 = str(ffmpeg_json['streams'][0]['tags']['CUSTOM1'])
+        author = str(ffprobe_json['streams'][0]['tags']['AUTHOR'])
+        custom1 = str(ffprobe_json['streams'][0]['tags']['CUSTOM1'])
     except KeyError:
         printCriticalError("AUTHOR or CUSTOM1 metadata is missing. Please check the file.")
 

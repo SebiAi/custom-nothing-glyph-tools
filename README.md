@@ -37,7 +37,8 @@ Works on both Nothing devices.
 # :pencil2: Usage
 ## :memo: Requirements
 * \[*Required*\] **[python3](https://www.python.org/downloads/)** - To run the scripts
-* \[*Required*\] **[ffmpeg](https://ffmpeg.org/download.html)** - To read/write metadata to/from the sound file
+* \[*Required*\] **[ffmpeg](https://ffmpeg.org/download.html)** - To write metadata to the sound file
+* \[*Required*\] **[ffprobe](https://ffmpeg.org/download.html)** - To read metadata from the sound file (should be included in almost every ffmpeg install)
 * \[*Optional*\] **[Audacity](https://www.audacityteam.org/)** - Create custom compositions more easily with Labels
 
     :arrow_right: *ffmpeg must be in PATH. There is currently no way to provide a custom path to the executable without editing the script.*
