@@ -171,6 +171,11 @@ Congrats, you can now transfer the audio file to your Nothing phone and import i
 ***
 
 # :interrobang: Troubleshooting
+## I can't find the modified audio file after using GlyphModder
+The file was modified in place, no other files were generated.
+
+If you want to confirm that the metadata was written correctly see [here](#glyph-composer-does-not-import-my-file).
+
 ## Glyph Composer does not import my file
 Make sure that the file has the right codec and the metadata is present:
 ```bash
