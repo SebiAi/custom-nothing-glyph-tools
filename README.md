@@ -48,6 +48,7 @@ Works on both Nothing devices.
 git clone https://github.com/SebiAi/custom-nothing-glyph-tools.git
 cd custom-nothing-glyph-tools
 ```
+If you don't feel comfortable using git then you can also [download an archive file here](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip).
 
 #### Install the necessary python dependencies
 ```bash
