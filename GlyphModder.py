@@ -106,7 +106,7 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
     subprocess.run(['ffmpeg', '-hide_banner', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
 
     # Copy back the file
-    subprocess.run(['mv', tmp_file, file])
+    os.rename(tmp_file, file)
 
 def read_metadata(file: str):
     # Pass the file to exiftool to extract the metadata
