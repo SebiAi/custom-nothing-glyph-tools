@@ -41,7 +41,7 @@ Works on both Nothing devices.
 * \[*Required*\] **[ffprobe](https://ffmpeg.org/download.html)** - To read metadata from the sound file (should be included in almost every ffmpeg install)
 * \[*Optional*\] **[Audacity](https://www.audacityteam.org/)** - Create custom compositions more easily with Labels
 
-    :arrow_right: *ffmpeg must be in PATH. There is currently no way to provide a custom path to the executable without editing the script.*
+    :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
 
 ## :rocket: Setup
 #### Clone the repo
@@ -146,12 +146,16 @@ python3 GlyphModder.py MyGlyphCreation.ogg
 ```
 Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two files called `MyGlyphCreation.glypha` and `MyGlyphCreation.glyphc1` in your current working directory.
 
+You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
+
 #### Write to an audio file
 When you have both your `.glypha` and `.glyphc1` files (via Audacity and the GlyphTranslater method or otherwise) you can write them to an audio file as metadata:
 ```bash
 python3 GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
 ```
 The `-t` argument is optional, this just sets the *TITLE* tag which, as far as I could see, is not used anywhere in the Glyph Composer right now.
+
+You can provide the path to *ffmpeg* with the `--ffmpeg` argument if it can not be found in PATH.
 
 > **:warning: Important**
 

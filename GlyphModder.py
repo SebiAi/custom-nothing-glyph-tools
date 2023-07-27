@@ -19,17 +19,27 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
     parser.add_argument('FILE', help="The file to read from or write to.", type=str, nargs=1)
     parser.add_argument('-w', help="Write the metadata back from the files instead of reading. - You need to provide the file with the author data first, then the file with the custom1 data.", type=str, nargs=2, metavar=('AUTHOR_FILE', 'CUSTOM1_FILE'))
     parser.add_argument('-t', help="What title to write into the metadata. (default: 'MyCustomSong')", default=['MyCustomSong'], type=str, nargs=1, metavar=('TITLE'))
+    parser.add_argument('--ffmpeg', help="Path to ffmpeg executable. (default: 'ffmpeg' - looks in PATH)", default=['ffmpeg'], type=str, nargs=1, metavar=('FFMPEG_PATH'))
+    parser.add_argument('--ffprobe', help="Path to ffprobe executable. (default: 'ffprobe' - looks in PATH)", default=['ffprobe'], type=str, nargs=1, metavar=('FFPROBE_PATH'))
 
     return parser
 
 # Check the requirements
-def checkRequirements():
-    # Check if ffmpeg is installed - write metadata
-    if subprocess.run(['ffmpeg', "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
-        printCriticalError("ffmpeg could not be found.")
-    # Check if ffprobe is installed - read metadata
-    if subprocess.run(['ffprobe', "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
-        printCriticalError("ffprobe could not be found.")
+def checkRequirements(ffmpeg: str, ffprobe: str, write: bool):
+    if write:
+        try:
+            # Check if ffmpeg is installed - write metadata
+            if subprocess.run([ffmpeg, "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+                printCriticalError(f"ffmpeg could not be found. ({ffmpeg})")
+        except FileNotFoundError:
+            printCriticalError(f"ffmpeg could not be found. ({ffmpeg})")
+    else:
+        try:
+            # Check if ffprobe is installed - read metadata
+            if subprocess.run([ffprobe, "-version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+                printCriticalError(f"ffprobe could not be found. ({ffprobe})")
+        except FileNotFoundError:
+            printCriticalError(f"ffprobe could not be found. ({ffprobe})")
 
 
 # Perform argument checks
@@ -66,7 +76,7 @@ def decode_base64(encoded_string: str) -> bytes:
 def encode_base64(bytes: bytes) -> str:
     return base64.b64encode(bytes).decode('utf-8').removesuffix(base64_padding)
 
-def write_metadata(file: str, author_file: str, custom1_file: str, custom_title: str):
+def write_metadata(file: str, author_file: str, custom1_file: str, custom_title: str, ffmpeg: str):
     with open(author_file, 'rb') as f:
         author = f.read()
     with open(custom1_file, 'rb') as f:
@@ -103,15 +113,14 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
     tmp_file = os.path.splitext(os.path.basename(file))[0] + '_new.ogg'
 
     # Write the metadata back to the file
-    #subprocess.run(['ffmpeg', '-hide_banner', '-i', file, '-map_metadata', '0:s:a:0', '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
-    subprocess.run(['ffmpeg', '-hide_banner', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
+    subprocess.run([ffmpeg, '-hide_banner', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
 
     # Copy back the file
     os.rename(tmp_file, file)
 
-def read_metadata(file: str):
+def read_metadata(file: str, ffprobe: str):
     # Get the metadata from the file with ffmpeg (first audio stream only)
-    ffprobe_json = json.loads(subprocess.check_output(['ffprobe', '-v', 'quiet', '-of', 'json', '-show_streams', '-select_streams', 'a:0', file]).decode('utf-8'))
+    ffprobe_json = json.loads(subprocess.check_output([ffprobe, '-v', 'quiet', '-of', 'json', '-show_streams', '-select_streams', 'a:0', file]).decode('utf-8'))
 
     try:
         author = str(ffprobe_json['streams'][0]['tags']['AUTHOR'])
@@ -162,7 +171,7 @@ def read_metadata(file: str):
 args = buildArgumentsParser().parse_args()
 
 # Check the requirements
-checkRequirements()
+checkRequirements(args.ffmpeg[0], args.ffprobe[0], bool(args.w))
 
 # Perform all the checks before downloading the video
 try:
@@ -172,9 +181,9 @@ except Exception as e:
 
 if args.w:
     # Write the metadata back to the file
-    write_metadata(args.FILE[0], args.w[0], args.w[1], args.t[0])
+    write_metadata(args.FILE[0], args.w[0], args.w[1], args.t[0], args.ffmpeg[0])
 else:
     # Read the metadata from the file
-    read_metadata(args.FILE[0])
+    read_metadata(args.FILE[0], args.ffprobe[0])
 
 cprint("Done!", color="green", attrs=["bold"])
