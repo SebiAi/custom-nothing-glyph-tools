@@ -15,7 +15,7 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 ***
 
 # :safety_vest: Need help?
-If you need help feel free to reach out to me on Discord: @sebiai
+If you need help look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to reach out to me on Discord: @sebiai
 
 ***
 
@@ -167,6 +167,56 @@ Congrats, you can now transfer the audio file to your Nothing phone and import i
 
 # Hardware limitations
 * On the Phone (1) at least the Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound.
+
+***
+
+# :interrobang: Troubleshooting
+## Glyph Composer does not import my file
+Make sure that the file has the right codec and the metadata is present:
+```bash
+ffprobe MyGlyphCreation.ogg
+```
+It should spit out something like this:
+```
+Input #0, ogg, from 'MyGlyphCreation.ogg':
+  Duration: 00:00:10.01, start: 0.000000, bitrate: 146 kb/s
+  Stream #0:0: Audio: opus, 48000 Hz, stereo, fltp
+    Metadata:
+      encoder         : Lavf58.76.100
+      TITLE           : MyCustomSong
+      ALBUM           : CUSTOM
+      AUTHOR          : eNrtxqENAAAIAzBPwieI/X8dhg+wTU0zOV1xd3d3d3d3d3d3d3d3d/f3F8ocpN8=
+      COMPOSER        : Spacewar Glyph Composer
+      CUSTOM1         : eNoljVsKAEEIwy60A+r4qPe/2E7pj8FAiZ340vvYh8S7HjBiPB7ivUQ1ZexS3owkUJxlDGWOUZZf
+                      : yqrmrs24awVahVFhVIAKUAEqrAqrwg8LSR98
+```
+Important are:
+* Audio: **opus**
+* The extension `.ogg`
+* The presence of the metadata tags TITLE, ALBUM, AUTHOR, COMPOSITOR and CUSTOM1 (the order is irrelevant)
+
+### Wrong codec
+You have two options:
+* Reexport with audacity (see [here](#cutting-the-sound))
+* Convert with ffmpeg (replace `MyGlyphCreation.ogg` with your audio): `ffmpeg -i MyGlyphCreation.ogg -strict -2 -c:a opus -map_metadata 0:s:a:0 output.ogg`
+
+### Wrong extension
+See [Wrong codec](#wrong-codec)
+
+### No or missing metadata
+Did you run the [GlyphModder](./GlyphModder.py) correctly? See [here](#write-to-an-audio-file).
+
+# No glyphs light up
+See [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file).
+
+## I can import my audio but my glyphs don't light up
+When you use the linear or exponential mode make sure that your Labels cover a range like this left Label:
+![Audacity ranged Labels example](./assets/audacity_ranged_labels_example.png)
+
+You can make the right Label ranged if you drag on the left or right part of it.
+
+## Some of my glyphs don't light up
+See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-but-my-glyphs-dont-light-up).
 
 ***
 
