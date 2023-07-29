@@ -39,7 +39,7 @@ Works on both Nothing devices.
 * \[*Required*\] **[python3](https://www.python.org/downloads/)** - To run the scripts
 * \[*Required*\] **[ffmpeg](https://ffmpeg.org/download.html)** - To write metadata to the sound file
 * \[*Required*\] **[ffprobe](https://ffmpeg.org/download.html)** - To read metadata from the sound file (should be included in almost every ffmpeg install)
-* \[*Optional*\] **[Audacity](https://www.audacityteam.org/)** - Create custom compositions more easily with Labels
+* \[*Optional*\] **[Audacity&reg;](https://www.audacityteam.org/)** - Create custom compositions more easily with Labels
 
     :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
 
@@ -58,10 +58,10 @@ pip3 install -r requirements.txt
 Sometimes it is also just `pip` instead of `pip3`.
 
 ## :sparkles: Making a custom Glyph composition
-I would recommend using [Audacity](https://www.audacityteam.org/) to make your life easier. You can use it to cut your audio to the right length, layer effects on it, set Labels (which will come in handy later) and more.
+I would recommend using [Audacity&reg;](https://www.audacityteam.org/) to make your life easier. You can use it to cut your audio to the right length, layer effects on it, set Labels (which will come in handy later) and more.
 
 ### Cutting the sound
-You can skip to [Creating the Glyph format with Audacity](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length.
+You can skip to [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length.
 
 When exporting the sound always use the *opus* codec:
 1) **Export audio:** Files -> Export -> Export Audio...
@@ -69,13 +69,13 @@ When exporting the sound always use the *opus* codec:
 3) **Change the extension to *ogg* when naming your file!**
 4) **Export**
 
-### Creating the Glyph format with Audacity
-To make our lives easier we can utilize Audacities Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslator](./GlyphTranslator.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
+### Creating the Glyph format with Audacity&reg;
+To make our lives easier we can utilize Audacity&reg;'s Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslator](./GlyphTranslator.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
 
-I would recommend saving your Audacity project regularly.
+I would recommend saving your Audacity&reg; project regularly.
 
 #### Add the Labels track
-1) **Open your audio with Audacity**
+1) **Open your audio with Audacity&reg;**
 2) **Add the Labels track:** Tracks -> Add New -> Label Track
 
 #### Creating and removing Labels
@@ -149,7 +149,7 @@ Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two f
 You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
 
 #### Write to an audio file
-When you have both your `.glypha` and `.glyphc1` files (via Audacity and the GlyphTranslator method or otherwise) you can write them to an audio file as metadata:
+When you have both your `.glypha` and `.glyphc1` files (via Audacity&reg; and the GlyphTranslator method or otherwise) you can write them to an audio file as metadata:
 ```bash
 python3 GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
 ```
@@ -202,7 +202,7 @@ Important are:
 
 ### Wrong codec
 You have two options:
-* Reexport with audacity (see [here](#cutting-the-sound))
+* Reexport with Audacity&reg; (see [here](#cutting-the-sound))
 * Convert with ffmpeg (replace `MyGlyphCreation.ogg` with your audio): `ffmpeg -i MyGlyphCreation.ogg -strict -2 -c:a opus -map_metadata 0:s:a:0 output.ogg`
 
 ### Wrong extension
