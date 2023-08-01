@@ -6,6 +6,10 @@ This repo is intended to be a collection of tools and scripts to make it easy to
 
 https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1cf9-4c0e-9835-792bf1b09a58
 
+
+## Regarding the update (1.3.0)
+> It seems like the latest update of the Nothing Glyph Composer with the Swedish House Mafia pack enabled Nothing Phone 2 exclusive compositions which seem to use all of the available Glyphs on the Phone 2. I am looking into that right now.
+
 ***
 
 # :pushpin: Disclaimer
