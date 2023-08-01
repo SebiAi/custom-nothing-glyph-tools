@@ -151,7 +151,6 @@ def audacity_to_glyphs(file: str):
 
     # Define the stepsizes in ms
     TIME_STEP_SIZE = 16
-    LIGHT_STEP_SIZE = 16
     MAX_LIGHT_LV = 4080
 
     # Calculate the number of lines in the AUTHOR file + 5 extra lines for margin
@@ -168,8 +167,8 @@ def audacity_to_glyphs(file: str):
             toTime: int = get_divisable_by(round(label['to']), TIME_STEP_SIZE)
             deltaTime: int = max(0, int((toTime - fromTime) / TIME_STEP_SIZE) - 1)
             glyph: int = int(label['glyph'] - 1)
-            fromLightLV: int = max(1, get_divisable_by(round(label['fromLV'] * MAX_LIGHT_LV / 100.0), LIGHT_STEP_SIZE))
-            toLightLV: int = max(1, get_divisable_by(round(label['toLV'] * MAX_LIGHT_LV / 100.0), LIGHT_STEP_SIZE))
+            fromLightLV: int = max(1, round(label['fromLV'] * MAX_LIGHT_LV / 100.0))
+            toLightLV: int = max(1, round(label['toLV'] * MAX_LIGHT_LV / 100.0))
             mode: str = str(label['mode'])
 
             # Debug print all the values
@@ -185,9 +184,9 @@ def audacity_to_glyphs(file: str):
             for j, row in enumerate(range(int(fromTime / 16), int(fromTime / 16) + deltaTime + 1)):
                 # Calculate the light level depending on the mode
                 if mode == "LIN": # Linear
-                    lightLV = get_divisable_by(round(fromLightLV + ((toLightLV - fromLightLV) / max(1, deltaTime)) * j), LIGHT_STEP_SIZE)
+                    lightLV = round(fromLightLV + ((toLightLV - fromLightLV) / max(1, deltaTime)) * j)
                 elif mode == "EXP": # Exponential
-                    lightLV = get_divisable_by(round(fromLightLV * ((toLightLV / fromLightLV) ** (j / max(1, deltaTime)))), LIGHT_STEP_SIZE)
+                    lightLV = round(fromLightLV * ((toLightLV / fromLightLV) ** (j / max(1, deltaTime))))
                 
                 # Assert
                 assert lightLV >= 0 and lightLV <= MAX_LIGHT_LV, f"Light level {lightLV} is out of range [0, {MAX_LIGHT_LV}]"

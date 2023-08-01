@@ -263,7 +263,7 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   3) USB Line
   4) USB Dot
 
-  can have a light value from 0 to 4080 and it appears that the smallest step is 16. If the data is longer than the audio it will not be played.
+  can have a light value from 0 to 4080 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
 
   The new line consists of Carriage Return (CR) and Line Feed (LF): `\r\n`
   The data ends with a final new line `\r\n`.
@@ -287,10 +287,10 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   This is always `Spacewar Glyph Composer`. If this does not match the Glyph Composer will not import the file.
   
   ### CUSTOM1
-  This is mainly data for the Glyph Composer so it can display the timeline when playing the file. After decoding and decompressing each dot in the app is defined by a timestamp (in ms and 16 ms steps) and a Glyph id (see [AUTHOR](#author)) separated by a dash (`-`). Between each dot is a comma (`,`) and at the end of the line also.
+  This is mainly data for the Glyph Composer so it can display the timeline when playing the file. After decoding and decompressing each dot in the app is defined by a timestamp (in ms and 1 ms steps) and a Glyph id (see [AUTHOR](#author)) separated by a dash (`-`). Between each dot is a comma (`,`) and at the end of the line also.
   
   There are no new lines in this file, all dots are after one another.
-  It is possible to supply timestamps which are not dividable by 16 - this is not recommended as these points should match the data in the *ALBUM* tag. It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data.
+  It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data.
 </details>
 
 ***
