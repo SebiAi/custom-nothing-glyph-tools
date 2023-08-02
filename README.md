@@ -27,7 +27,7 @@ If you need help look at the [Troubleshooting](#interrobang-troubleshooting) cha
 ## OS
 * Linux :white_check_mark:
 * Windows :white_check_mark:
-* Mac :question: - \[*To be tested - please reach out to me if you manage to get it working!*\]
+* Mac :white_check_mark:
 
 I have only tested the scripts on Linux. Somebody else managed to do it on Windows. There *should* be nothing preventing them to run on MacOS.
 ## Phones
