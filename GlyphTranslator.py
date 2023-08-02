@@ -132,7 +132,7 @@ def audacity_to_glyphs(file: str):
             #print(f"Row {i + 1}: {fromTime} - {toTime} ({deltaTime}) | {text} -> {glyph} {fromLightLV} {toLightLV} {mode}")
 
             # Add the Label to the list
-            labels.append({"from": fromTime, "to": toTime, "delta": deltaTime, "glyph": glyph, "fromLV": fromLightLV, "toLV": toLightLV, "mode": mode})
+            labels.append({"from": fromTime, "to": toTime, "delta": deltaTime, "glyph": glyph, "fromLV": fromLightLV, "toLV": toLightLV, "mode": mode, "line": i + 1})
     
     # Check if we found the end
     if not endLabel:
@@ -178,6 +178,7 @@ def audacity_to_glyphs(file: str):
             custom1File.write(f"{fromTime}-{glyph},")
 
             # AUTHOR
+            overwrites = 0
             for j, row in enumerate(range(int(fromTime / TIME_STEP_SIZE), int(fromTime / TIME_STEP_SIZE) + deltaTime + 1)):
                 # Calculate the light level depending on the mode
                 if mode == "LIN": # Linear
@@ -190,8 +191,15 @@ def audacity_to_glyphs(file: str):
                 # Assert
                 assert lightLV >= 0 and lightLV <= MAX_LIGHT_LV, f"Light level {lightLV} is out of range [0, {MAX_LIGHT_LV}]"
 
+                # Check if there is already a value present
+                if author_data[row][glyph] != 0:
+                    overwrites += 1
                 # Write the light level to the author data
                 author_data[row][glyph] = lightLV
+            
+            # Print warning if there were overwrites
+            if overwrites > 0:
+                printWarning(f"Row {label['line']} overwrote {overwrites} value(s) for glyph {glyph + 1}.")
     
     # Write the AUTHOR file
     with open(f"{filename}.glypha", "w", newline='') as custom1File:
