@@ -178,8 +178,6 @@ def audacity_to_glyphs(file: str):
             custom1File.write(f"{fromTime}-{glyph},")
 
             # AUTHOR
-            tmp = range(int(fromTime / TIME_STEP_SIZE), int(toTime / TIME_STEP_SIZE) + 1)
-            tmp1 = range(0, deltaTime + 1)
             for j, row in enumerate(range(int(fromTime / TIME_STEP_SIZE), int(fromTime / TIME_STEP_SIZE) + deltaTime + 1)):
                 # Calculate the light level depending on the mode
                 if mode == "LIN": # Linear
