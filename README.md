@@ -40,10 +40,10 @@ Works on both Nothing devices.
 
 # :pencil2: Usage
 ## :memo: Requirements
-* \[*Required*\] **[python3](https://www.python.org/downloads/)** - To run the scripts
-* \[*Required*\] **[ffmpeg](https://ffmpeg.org/download.html)** - To write metadata to the sound file
-* \[*Required*\] **[ffprobe](https://ffmpeg.org/download.html)** - To read metadata from the sound file (should be included in almost every ffmpeg install)
-* \[*Optional*\] **[Audacity&reg;](https://www.audacityteam.org/)** - Create custom compositions more easily with Labels
+* \[*Required*\] [**python3**](https://www.python.org/downloads/) - To run the scripts
+* \[*Required*\] [**ffmpeg**](https://ffmpeg.org/download.html) - To write metadata to the sound file
+* \[*Required*\] [**ffprobe**](https://ffmpeg.org/download.html) - To read metadata from the sound file (should be included in almost every ffmpeg install)
+* \[*Optional*\] [**Audacity&reg;**](https://www.audacityteam.org/) - Create custom compositions more easily with Labels
 
     :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
 
@@ -182,7 +182,7 @@ The file was modified in place, no other files were generated.
 If you want to confirm that the metadata was written correctly see [here](#glyph-composer-does-not-import-my-file).
 
 ## Glyph Composer does not import my file
-Make sure that the file has the right codec and the metadata is present:
+Make sure that the file has the right codec and that the metadata is present:
 ```bash
 ffprobe MyGlyphCreation.ogg
 ```
@@ -246,6 +246,7 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   * AUTHOR
   * COMPOSER
   * CUSTOM1
+  * CUSTOM2
   
   The *AUTHOR* and *CUSTOM1* tags contain both *Base64* encoded and then *zlib compressed* data (Best Compression (no preset dictionary) - see [here](https://en.wikipedia.org/wiki/List_of_file_signatures)).
   
@@ -253,18 +254,42 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   Contains the title given in the Glyph composer. Weirdly enough the Glyph Composer does not use this tag when displaying the name of the composition - the filename is used instead.
   
   ### ALBUM
-  Saves what "pack" was used when the composition was created. Can be changed without any effect on the audio or lights. It does display in the Glyph Composer.
+  Saves what sound pack was used when the composition was created. Can be changed without any effect on the audio or lights (could affect the preview in the *Glyph Composer*). It does display in the *Glyph Composer*.
   
   ### AUTHOR
-  After decoding and decompressing it contains the Glyph light data in a csv like manner where in each line we have the 5 Glyphs separated and followed by a comma (`,`). Each line corresponds to 16ms. Each Glyph
+  After decoding and decompressing it contains the Glyph light data in a csv like manner where in each line we have the *5 Glyphs*/*33 Zones* separated and followed by a comma (`,`). Each line corresponds to 16ms.
   
-  0) Camera
-  1) Diagonal
-  2) Battery/Wireless Charger
-  3) USB Line
-  4) USB Dot
+  Depending on if the [*CUSTOM2*](#custom2) tag is set to `33cols` we have, what I will call, the *5 Glyphs* or *33 Zones* mode:
+  * Not set => *5 Glyphs* mode - 5 columns
+  * Set => *33 Zones* mode - 33 columms (**Nothing Phone (2) exclusive**)
+  
+  #### Indexes for the Glyphs
+  Depending on the mode we have different indexes for the Glyphs:
+  ##### *5 Glyphs* mode
+  | Index | Glyph    |
+  |:-----:|:---------|
+  |   0   | Camera   |
+  |   1   | Diagonal |
+  |   2   | Battery  |
+  |   3   | USB Line |
+  |   4   | USB Dot  |
 
-  can have a light value from 0 to 4080 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
+  ##### *33 Zones* mode
+  | Index | Glyph                                | Direction          |
+  |:-----:|:-------------------------------------|:-------------------|
+  |   0   | Camera top                           | -                  |
+  |   1   | Camera bottom                        | -                  |
+  |   2   | Diagonal                             | -                  |
+  |  3-18 | Battery top right                    | From right to left |
+  |   19  | Battery top left                     | -                  |
+  |   20  | Battery top vertical (left side)     | -                  |
+  |   21  | Battery bottom left                  | -                  |
+  |   22  | Battery bottom right                 | -                  |
+  |   23  | Battery bottom vertical (right side) | -                  |
+  |   24  | USB Dot                              | -                  |
+  | 25-32 | USB Line                             | From bottom to top |
+
+  Each Glyph can have a light value from 0 to 4080 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
 
   The new line consists of Carriage Return (CR) and Line Feed (LF): `\r\n`
   The data ends with a final new line `\r\n`.
@@ -273,7 +298,7 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   
   This might be because of how the light data is stored in the app itself which are csv files for every audio clip which are combined.
 
-  *Example:*
+  *Example 5 Glyphs:*
   ```csv
   0,0,4080,0,0,
   0,0,4080,0,2032,
@@ -282,16 +307,38 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   0,0,0,0,0,
 
   ```
-  The *Battery/Wireless Charger* Glyph is fully on for 32ms and the *USB Dot* Glyph only for 16ms after 16ms at about 50% brightness.
+  The *Battery* Glyph is fully on for 32ms and the *USB Dot* Glyph is only on for 16ms after 16ms (after the start) at about 50% brightness.
+
+  *Example 33 Zones:*
+  ```csv
+  0,0,0,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,0,0,2709,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,0,0,1791,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,919,919,919,919,919,919,919,919,919,919,919,919,919,919,919,919,0,0,919,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,0,0,245,0,0,0,0,0,0,0,0,0,0,0,
+
+  ```
   
   ### COMPOSER
-  This is always `Spacewar Glyph Composer`. If this does not match the Glyph Composer will not import the file.
+  This depends on what device the composition was created on:
+  * Phone (1): `Spacewar Glyph Composer`
+  * Phone (2): `Pong Glyph Composer`
+
+  If this does not match the Glyph Composer will not import the file.
+
+  It ***is*** totally possible to import a Phone (2) composition **IF** the *CUSTOM2* tag is **NOT** set, which infers that no *33 Zone* sound pack was used.
   
   ### CUSTOM1
   This is mainly data for the Glyph Composer so it can display the timeline when playing the file. After decoding and decompressing each dot in the app is defined by a timestamp (in ms and 1 ms steps) and a Glyph id (see [AUTHOR](#author)) separated by a dash (`-`). Between each dot is a comma (`,`) and at the end of the line also.
   
   There are no new lines in this file, all dots are after one another.
-  It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data.
+  It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data (could affect the preview in the *Glyph Composer*).
+
+  ### CUSTOM2
+  This indicates if the saved data in the *AUTHOR* tag uses the *33 Zone* addressing instead of the *5 Glyphs* addressing.
+
+  This tag will only be present if the composition was made on a Nothing Phone (2) and with a *33 Zone* sound pack (e.g.: Swedish House Mafia) therefore this composition can only be played back on a Nothing Phone (2).
+
+  It *can* be manually imported on a Nothing Phone (1) by moving the audio file to `Ringtones/Compositions` but it will interpret the lighting data in the *5 Glyphs* mode (see [*Author*](#author) tag).
 </details>
 
 ***
