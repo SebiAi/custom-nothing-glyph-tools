@@ -7,7 +7,7 @@ import csv
 import re
 from termcolor import cprint
 
-REGEX_PATTERN_TEXT = '^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN))?$'
+REGEX_PATTERN_TEXT = '^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 
 # +------------------------------------+
 # |                                    |
@@ -18,7 +18,7 @@ REGEX_PATTERN_TEXT = '^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN))?$'
 # Build the arguments parser
 def buildArgumentsParser() -> argparse.ArgumentParser:
     # Parse the arguments with argparse (https://docs.python.org/3/library/argparse.html)
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, description="Transform Audacity Labels to Glyphs format.", epilog="audacity label format:\n  The text part of the exported Labels file is constructed like this: 'glyphId-lightLevelFrom[-lightLevelTo[-Mode]]'\n  AND must match this regex: '" + REGEX_PATTERN_TEXT + "', where the lightlevels are given in percent (0-100). When no mode is given 'LIN' will be used.\n\n  To convey the end of the audio file a final Label called 'END' MUST be pressent.\n\n  'LIN' - Linear\n  'EXP' - Exponential\n\n  Examples:\n    1-100\n    2-0-100-LIN\n    2-50-LIN\n\nCreated by: Sebastian Aigner (aka. SebiAi)")
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, description="Transform Audacity Labels to Glyphs format.", epilog="audacity label format:\n  The text part of the exported Labels file is constructed like this: 'glyphId-lightLevelFrom[-lightLevelTo[-Mode]]'\n  AND must match this regex: '" + REGEX_PATTERN_TEXT + "', where the lightlevels are given in percent (0-100). When no mode is given 'LIN' will be used.\n\n  To convey the end of the audio file a final Label called 'END' MUST be pressent.\n\n  'LIN' - Linear\n  'EXP' - Exponential\n  'LOG' - Logarithmic\n  https://www.desmos.com/calculator/92ajzgfbat\n\n  Examples:\n    1-100\n    2-0-100-LIN\n    2-50-LIN\n\nCreated by: Sebastian Aigner (aka. SebiAi)")
 
     parser.add_argument('FILE', help="An absolute or relative path to the file.", type=str, nargs=1)
     #parser.add_argument('-r', help="Try to reverse the Glyph format back into Audacity labels. You need to provide paths to the author and custom1 file.", type=str, nargs=1, metavar=('AUTHOR_FILE'))
@@ -186,6 +186,8 @@ def audacity_to_glyphs(file: str):
                     lightLV = round(fromLightLV + ((toLightLV - fromLightLV) / max(1, deltaTime)) * j)
                 elif mode == "EXP": # Exponential
                     lightLV = round(fromLightLV * ((toLightLV / fromLightLV) ** (j / max(1, deltaTime))))
+                elif mode == "LOG": # Logarithmic
+                    lightLV = round(-toLightLV*(toLightLV/fromLightLV)**(-j/max(1, deltaTime)) + fromLightLV + toLightLV)
                 
                 # Assert
                 assert lightLV >= 0 and lightLV <= MAX_LIGHT_LV, f"Light level {lightLV} is out of range [0, {MAX_LIGHT_LV}]"

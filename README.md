@@ -89,15 +89,16 @@ You can now add Labels by clicking on your desired location on the Label Track a
 Each Label should be named like this: `glyphId-lightLevelFrom[-lightLevelTo[-Mode]]`
 * **glyphId**: 1 to 5 (Camera, Diagonal, Battery/Wireless Charger, USB Line, USB Dot)
 * **lightLevelFrom** and **lightLevelTo**: In percent 0 to 100. When no *lightLevelTo* is provided *lightLevelFrom* will be used as the from and to value.
-* **Mode**: Currently there are two modes supported:
+* **Mode**: Currently there are three modes supported ([Desmos Graphs](https://www.desmos.com/calculator/92ajzgfbat)):
     * LIN: Linear Interpolation (default)
     * EXP: Exponential Interpolation
+    * LOG: Logarithmic Interpolation
 
 The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
 
 If you like regex patterns, the name of the Label should match this one (thanks [Joel05](https://github.com/SebiAi/custom-nothing-glyph-tools/issues/1)):
 ```regex
-^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN))?$
+^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$
 ```
 
 > **:warning: Important**
@@ -219,7 +220,7 @@ Did you run the [GlyphModder](./GlyphModder.py) correctly? See [here](#write-to-
 See [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file).
 
 ## I can import my audio but my glyphs don't light up
-When you use the linear or exponential mode make sure that your Labels cover a range like this left Label:
+When you use the linear, exponential or logarithmic mode make sure that your Labels cover a range like this left Label:
 ![Audacity ranged Labels example](./assets/audacity_ranged_labels_example.png)
 
 You can make the right Label ranged if you drag on the left or right part of it.
