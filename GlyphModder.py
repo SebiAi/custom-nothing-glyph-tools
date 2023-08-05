@@ -70,6 +70,10 @@ def printError(message, start: str = ""):
 def printWarning(message, start: str = ""):
     cprint(start + "WARNING: " + message, color="yellow", attrs=["bold"])
 
+# Print info message
+def printInfo(message, start: str = ""):
+    cprint(start + "INFO: " + message, color="cyan")
+
 def decode_base64(encoded_string: str) -> bytes:
     return base64.b64decode(encoded_string + base64_padding)
 
@@ -112,8 +116,15 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
     # Tmp file name
     tmp_file = os.path.splitext(os.path.basename(file))[0] + '_new.ogg'
 
-    # Write the metadata back to the file
-    subprocess.run([ffmpeg, '-v', 'quiet', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-c', 'copy', '-y', tmp_file])
+    # Detect the mode (5 Glyphs = Spacewar, 33 Zones = Pong) - very simple, count the number of commas in one line
+    if author.decode('utf-8').splitlines()[0].count(',') < 32:
+        # Write the metadata back to the file (5 Glyphs)
+        printInfo(f"Auto detected Phone (1) and Phone (2) compatibility mode.")
+        subprocess.run([ffmpeg, '-v', 'quiet', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-metadata:s:a:0', 'CUSTOM2=', '-c', 'copy', '-y', tmp_file])
+    else:
+        # Write the metadata back to the file (33 Zones)
+        printInfo(f"Auto detected Phone (2) mode.")
+        subprocess.run([ffmpeg, '-v', 'quiet', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Pong Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-metadata:s:a:0', 'CUSTOM2=33cols', '-c', 'copy', '-y', tmp_file])
 
     # Delete the old file - needed for Windows or else os.rename() will fail
     os.remove(file)

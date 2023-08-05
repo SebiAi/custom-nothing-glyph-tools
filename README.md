@@ -6,10 +6,6 @@ This repo is intended to be a collection of tools and scripts to make it easy to
 
 https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1cf9-4c0e-9835-792bf1b09a58
 
-
-## Regarding the update (1.3.0)
-> It seems like the latest update of the Nothing Glyph Composer with the Swedish House Mafia pack enabled Nothing Phone 2 exclusive compositions which seem to use all of the available Glyphs on the Phone 2. I am looking into that right now.
-
 ***
 
 # :pushpin: Disclaimer
@@ -29,12 +25,12 @@ If you need help look at the [Troubleshooting](#interrobang-troubleshooting) cha
 * Windows :white_check_mark:
 * Mac :white_check_mark:
 
-I have only tested the scripts on Linux. Somebody else managed to do it on Windows. There *should* be nothing preventing them to run on MacOS.
+I have only tested the scripts on Linux. Multiple people managed to do it on Windows and MacOS.
 ## Phones
-* Nothing Phone 1 :white_check_mark:
-* Nothing Phone 2 :white_check_mark:
+* Nothing Phone (1) :white_check_mark:
+* Nothing Phone (2) :white_check_mark:
 
-Works on both Nothing devices.
+Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 
 ***
 
@@ -86,10 +82,12 @@ I would recommend saving your Audacity&reg; project regularly.
 You can now add Labels by clicking on your desired location on the Label Track and pressing <kbd>CONTROL</kbd> + <kbd>b</kbd>. To remove one Label right-click on the Labels name and choose *Delete Label*. More info [here](https://manual.audacityteam.org/man/removing_labels_examples.html).
 
 #### Naming format
-Each Label should be named like this: `glyphId-lightLevelFrom[-lightLevelTo[-Mode]]`
-* **glyphId**: 1 to 5 (Camera, Diagonal, Battery/Wireless Charger, USB Line, USB Dot)
-* **lightLevelFrom** and **lightLevelTo**: In percent 0 to 100. When no *lightLevelTo* is provided *lightLevelFrom* will be used as the from and to value.
-* **Mode**: Currently there are three modes supported ([Desmos Graphs](https://www.desmos.com/calculator/92ajzgfbat)):
+Each Label should be named like this: `[#]glyphId-lightLevelFrom[-lightLevelTo[-Mode]]`
+* **#** *(Optional)*: Just the `#` symbol to indicate that you want to address one of the 33 individual Zones on Phone (2).
+* **glyphId**: See [glyphId](#glyphid) below.
+* **lightLevelFrom** : In percent 0 to 100.
+* **lightLevelTo** *(Optional)*: In percent 0 to 100. The default is *lightLevelFrom*.
+* **Mode** *(Optional)*: Currently there are three modes supported ([Desmos Graphs](https://www.desmos.com/calculator/92ajzgfbat)):
     * LIN: Linear Interpolation (default)
     * EXP: Exponential Interpolation
     * LOG: Logarithmic Interpolation
@@ -98,14 +96,35 @@ The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in t
 
 If you like regex patterns, the name of the Label should match this one (thanks [Joel05](https://github.com/SebiAi/custom-nothing-glyph-tools/issues/1)):
 ```regex
-^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$
+^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$
 ```
 
 > **:warning: Important**
 
-**At the end of the audio there MUST be a Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
+**At the end of the audio there MUST be a non ranged Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
 
-Example 1:
+##### glyphId
+Depending on which Phone you want to make the composition for there are two modes that I have called the *Compatibility* or *Phone2* mode:
+![Mode decision chart](./assets/Mode%20decision%20chart.png)
+
+After you've made your decision continue to the respective section:
+* [Compatibility mode](#compatibility-mode)
+* [Phone2 mode](#phone2-mode)
+
+###### Compatibility mode
+* You can **NOT** use the `#` symbol in front which is used to control one of the 33 Zones of Phone (2).
+* The `glyphId` can only be 1 to 5 which correspond to the individual Glyphs:
+
+| glyphId | Glyph    |
+|:-------:|:---------|
+|    1    | Camera   |
+|    2    | Diagonal |
+|    3    | Battery  |
+|    4    | USB Line |
+|    5    | USB Dot  |
+
+
+Example c1:
 ```
 0.031441	0.031441	2-0-100-LIN
 0.074091	0.074091	2-100-0-LIN
@@ -115,7 +134,7 @@ Example 1:
 ```
 In this example, the Mode `-LIN` is not necessary because it is the default but makes it more readable.
 
-Example 2:
+Example c2:
 ```
 0.031441	0.031441	2-0-100
 0.074091	0.074091	2-100-0
@@ -123,9 +142,9 @@ Example 2:
 0.242847	0.242847	3-100-0
 0.296312	0.296312	END
 ```
-This is a minimalized version of *Example 1*.
+This is a minimalized version of *Example c1*.
 
-Example 3:
+Example c3:
 ```
 0.031441	0.031441	2-100
 0.074091	0.074091	3-100-0
@@ -133,6 +152,102 @@ Example 3:
 0.296312	0.296312	END
 ```
 Another example with one exponential interpolation (`-EXP`) and line one and two are minimalized. They expand to `2-100-100-LIN` and `3-100-0-LIN`.
+
+Please continue at the [Exporting Labels](#exporting-labels) section.
+
+###### Phone2 mode
+The `glyphId` can only be 1 to 11 which correspond to the individual Glyphs:
+
+| glyphId | Glyph                                |
+|:-------:|:-------------------------------------|
+|    1    | Camera top                           |
+|    2    | Camera bottom                        |
+|    3    | Diagonal                             |
+|    4    | Battery top right                    |
+|    5    | Battery top left                     |
+|    6    | Battery top vertical (left side)     |
+|    7    | Battery bottom left                  |
+|    8    | Battery bottom right                 |
+|    9    | Battery bottom vertical (right side) |
+|    10   | USB Line                             |
+|    11   | USB Dot                              |
+
+Do **NOT** prepend the `#` symbol! This is for addressing each individual Zone - see below.
+
+If you want even more control you can control each individual Zone with the Zone ids:
+| Index | Glyph                                | Direction          |
+|:-----:|:-------------------------------------|:-------------------|
+|   1   | Camera top                           | -                  |
+|   2   | Camera bottom                        | -                  |
+|   3   | Diagonal                             | -                  |
+|  4-19 | Battery top right                    | From right to left |
+|   20  | Battery top left                     | -                  |
+|   21  | Battery top vertical (left side)     | -                  |
+|   22  | Battery bottom left                  | -                  |
+|   23  | Battery bottom right                 | -                  |
+|   24  | Battery bottom vertical (right side) | -                  |
+|   25  | USB Dot                              | -                  |
+| 26-33 | USB Line                             | From bottom to top |
+
+Example p1:
+```
+1.000000	2.000000	1-100
+2.500000	3.500000	2-100
+4.000000	5.000000	3-100
+5.500000	6.500000	4-100
+7.000000	8.000000	5-100
+8.500000	9.500000	6-100
+10.000000	11.000000	7-100
+11.500000	12.500000	8-100
+13.000000	14.000000	9-100
+14.500000	15.500000	10-100
+16.000000	17.000000	11-100
+18.000000	18.000000	END
+```
+Go through each of the 11 Glyphs where each Glyph is on for 1s and with 0.5s delay in between.
+
+Example p2:
+```
+1.000000	2.000000	#1-100
+2.500000	3.500000	#2-100
+4.000000	5.000000	#3-100
+5.500000	6.500000	#4-100
+7.000000	8.000000	#5-100
+8.500000	9.500000	#6-100
+10.000000	11.000000	#7-100
+11.500000	12.500000	#8-100
+13.000000	14.000000	#9-100
+14.500000	15.500000	#10-100
+16.000000	17.000000	#11-100
+17.500000	18.500000	#12-100
+19.000000	20.000000	#13-100
+20.500000	21.500000	#14-100
+22.000000	23.000000	#15-100
+23.500000	24.500000	#16-100
+25.000000	26.000000	#17-100
+26.500000	27.500000	#18-100
+28.000000	29.000000	#19-100
+29.500000	30.500000	#20-100
+31.000000	32.000000	#21-100
+32.500000	33.500000	#22-100
+34.000000	35.000000	#23-100
+35.500000	36.500000	#24-100
+37.000000	38.000000	#25-100
+38.500000	39.500000	#26-100
+40.000000	41.000000	#27-100
+41.500000	42.500000	#28-100
+43.000000	44.000000	#29-100
+44.500000	45.500000	#30-100
+46.000000	47.000000	#31-100
+47.500000	48.500000	#32-100
+49.000000	50.000000	#33-100
+51.000000	51.000000	END
+```
+Same as *Example p1* except for lighting up all the Glpyhs we control the individual Zones.
+
+Looking at the examples of the *Compatibility* mode can also help.
+
+Please continue at the [Exporting Labels](#exporting-labels) section.
 
 #### Exporting Labels
 1) **File -> Export -> Export Labels**
@@ -144,15 +259,18 @@ python3 GlyphTranslator.py MyLabelFile.txt
 ```
 Assuming your Label file was called `MyLabelFile.txt` it will spit out two files called `MyLabelFile.glypha` and `MyLabelFile.glyphc1` in your current working directory.
 
-### Read and write the Glyph format data to an audio file
-#### Read from an audio file
-```bash
-python3 GlyphModder.py MyGlyphCreation.ogg
+> **:warning: Attention**
+
+If see this message in the output:
 ```
-Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two files called `MyGlyphCreation.glypha` and `MyGlyphCreation.glyphc1` in your current working directory.
+INFO: Auto detected Phone (1) and Phone (2) compatibility mode.
+INFO: If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.
+```
+act according to this:
+* You are using ***Compatibility*** mode: Do NOT follow the advice - this is intended behaviour.
+* You are using ***Phone2*** mode: Please add the `--disableCompatibility` parameter to the command to use the right Glyphs.
 
-You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
-
+### Read and write the Glyph format data to an audio file
 #### Write to an audio file
 When you have both your `.glypha` and `.glyphc1` files (via Audacity&reg; and the GlyphTranslator method or otherwise) you can write them to an audio file as metadata:
 ```bash
@@ -168,10 +286,22 @@ You can provide the path to *ffmpeg* with the `--ffmpeg` argument if it can not 
 
 Congrats, you can now transfer the audio file to your Nothing phone and import it into the Glyph Composer app!
 
+#### Read from an audio file
+This is used when you want to modify a composition but you don't have the Audacity&reg;/Label file.
+
+```bash
+python3 GlyphModder.py MyGlyphCreation.ogg
+```
+Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two files called `MyGlyphCreation.glypha` and `MyGlyphCreation.glyphc1` in your current working directory.
+
+You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
+
+It is almost impossible to convert the `.glypha` and `.glyphc1` files back to an Audacity&reg; Label file therefore you would need to edit both files manually. More info on that is in the [The technical details](#wrench-the-technical-details) section.
+
 ***
 
 # Hardware limitations
-* On the Phone (1) at least the Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound.
+* On the Phone (1) at least the Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound. When doing this there is a small chance that the audio and the light sequence get desynced over time. The only solution until now is to don't make fast light sequences.
 
 ***
 
@@ -179,7 +309,23 @@ Congrats, you can now transfer the audio file to your Nothing phone and import i
 ## I can't find the modified audio file after using GlyphModder
 The file was modified in place, no other files were generated.
 
-If you want to confirm that the metadata was written correctly see [here](#glyph-composer-does-not-import-my-file).
+If you want to confirm that the metadata was written correctly see [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file).
+
+## File is not supported on this device
+If you get this error message:
+```
+Import failed. File is not supported on this device.
+```
+You are trying to import a Phone (2) exclusive (*Phone2* mode) composition on a Phone (1).
+
+If you created this composition please only use `glyphId`s that are compatible with your device. See [glyphId](#glyphid).
+
+# File is not created by Composer
+If you get this error message:
+```
+Import failed. File is not created by Composer.
+```
+You are trying to import an audio file with no metadata. See [No or missing metadata](#no-or-missing-metadata).
 
 ## Glyph Composer does not import my file
 Make sure that the file has the right codec and that the metadata is present:
@@ -203,18 +349,18 @@ Input #0, ogg, from 'MyGlyphCreation.ogg':
 Important are:
 * Audio: **opus**
 * The extension `.ogg`
-* The presence of the metadata tags TITLE, ALBUM, AUTHOR, COMPOSITOR and CUSTOM1 (the order is irrelevant)
+* The presence of the metadata tags TITLE, ALBUM, AUTHOR, COMPOSITOR and CUSTOM1 (the order is irrelevant) - Optionally the CUSTOM2 tag if the composition is for Phone (2).
 
 ### Wrong codec
 You have two options:
-* Reexport with Audacity&reg; (see [here](#cutting-the-sound))
+* Reexport with Audacity&reg; (see [C](#cutting-the-sound))
 * Convert with ffmpeg (replace `MyGlyphCreation.ogg` with your audio): `ffmpeg -i MyGlyphCreation.ogg -strict -2 -c:a opus -map_metadata 0:s:a:0 output.ogg`
 
 ### Wrong extension
 See [Wrong codec](#wrong-codec)
 
 ### No or missing metadata
-Did you run the [GlyphModder](./GlyphModder.py) correctly? See [here](#write-to-an-audio-file).
+Did you run the [GlyphModder](./GlyphModder.py) correctly? See [Cutting the sound](#write-to-an-audio-file).
 
 # No glyphs light up
 See [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file).
@@ -259,13 +405,13 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   ### AUTHOR
   After decoding and decompressing it contains the Glyph light data in a csv like manner where in each line we have the *5 Glyphs*/*33 Zones* separated and followed by a comma (`,`). Each line corresponds to 16ms.
   
-  Depending on if the [*CUSTOM2*](#custom2) tag is set to `33cols` we have, what I will call, the *5 Glyphs* or *33 Zones* mode:
-  * Not set => *5 Glyphs* mode - 5 columns
-  * Set => *33 Zones* mode - 33 columms (**Nothing Phone (2) exclusive**)
+  Depending on if the [*CUSTOM2*](#custom2) tag is set to `33cols` we have, what I will call, the *Compatibility* or *Phone2* mode:
+  * Not set => *Compatibility* mode - 5 columns
+  * Set => *Phone2* mode - 33 columms (**Nothing Phone (2) exclusive**)
   
   #### Indexes for the Glyphs
-  Depending on the mode we have different indexes for the Glyphs:
-  ##### *5 Glyphs* mode
+  Depending on the mode we have different indexes in the csv for the Glyphs:
+  ##### *Compatibility* mode indexes
   | Index | Glyph    |
   |:-----:|:---------|
   |   0   | Camera   |
@@ -274,7 +420,7 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   |   3   | USB Line |
   |   4   | USB Dot  |
 
-  ##### *33 Zones* mode
+  ##### *Phone2* mode indexes
   | Index | Glyph                                | Direction          |
   |:-----:|:-------------------------------------|:-------------------|
   |   0   | Camera top                           | -                  |
@@ -298,7 +444,7 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   
   This might be because of how the light data is stored in the app itself which are csv files for every audio clip which are combined.
 
-  *Example 5 Glyphs:*
+  *Example 5 Glyphs (Compatibility mode):*
   ```csv
   0,0,4080,0,0,
   0,0,4080,0,2032,
@@ -309,7 +455,7 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   ```
   The *Battery* Glyph is fully on for 32ms and the *USB Dot* Glyph is only on for 16ms after 16ms (after the start) at about 50% brightness.
 
-  *Example 33 Zones:*
+  *Example 33 Zones (Phone2 mode):*
   ```csv
   0,0,0,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,2709,0,0,2709,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,1791,0,0,1791,0,0,0,0,0,0,0,0,0,0,0,
@@ -333,12 +479,16 @@ See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-
   There are no new lines in this file, all dots are after one another.
   It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data (could affect the preview in the *Glyph Composer*).
 
+  Keep in mind that the *Glyph Composer* only has 5 Buttons (therefore 5 dot locations) which means that complex custom light animations which address Zones individually can not be properly displayed in the *Glyph Composer*.
+
   ### CUSTOM2
-  This indicates if the saved data in the *AUTHOR* tag uses the *33 Zone* addressing instead of the *5 Glyphs* addressing.
+  This indicates if the saved data in the *AUTHOR* tag uses the *33 Zone* addressing (*Phone2* mode) instead of the *5 Glyphs* (*Compatibility* mode) addressing.
 
   This tag will only be present if the composition was made on a Nothing Phone (2) and with a *33 Zone* sound pack (e.g.: Swedish House Mafia) therefore this composition can only be played back on a Nothing Phone (2).
 
-  It *can* be manually imported on a Nothing Phone (1) by moving the audio file to `Ringtones/Compositions` but it will interpret the lighting data in the *5 Glyphs* mode (see [*Author*](#author) tag).
+  If it is present it ALWAYS has the value `33cols`.
+
+  It *can* be manually imported on a Nothing Phone (1) by moving the audio file to `Ringtones/Compositions` but the phone will interpret the lighting data in the *Compatibility* mode (see [*Author*](#author) tag).
 </details>
 
 ***

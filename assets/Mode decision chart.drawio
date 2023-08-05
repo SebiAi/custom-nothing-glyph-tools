@@ -1,0 +1,56 @@
+<mxfile host="app.diagrams.net" modified="2023-08-05T12:41:39.645Z" agent="Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0" etag="gfnXYnYviLoMFdLlGXbA" version="21.6.6">
+  <diagram name="Page-1" id="ecbQCNU281YQKIfTsu2G">
+    <mxGraphModel dx="1430" dy="753" grid="1" gridSize="5" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="4681" pageHeight="3300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pplkPzIiq9D_k61micS5-5" value="Phone (2)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pplkPzIiq9D_k61micS5-1" target="pplkPzIiq9D_k61micS5-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="480" />
+              <mxPoint x="1123" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-13" value="Phone (1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.375;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pplkPzIiq9D_k61micS5-1" target="pplkPzIiq9D_k61micS5-10">
+          <mxGeometry x="-0.5543" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="930" y="480" />
+              <mxPoint x="745" y="480" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-1" value="For which Phone?" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="900" y="362.5" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.625;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pplkPzIiq9D_k61micS5-3" target="pplkPzIiq9D_k61micS5-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-12" value="Yes, 5 Glyphs are&lt;br&gt;enough for me" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="pplkPzIiq9D_k61micS5-11">
+          <mxGeometry x="-0.5632" y="-2" relative="1" as="geometry">
+            <mxPoint x="17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-15" value="No, I want to use all my 11 Glyphs and&lt;br&gt;be able to individually control all 33 Zones" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pplkPzIiq9D_k61micS5-3" target="pplkPzIiq9D_k61micS5-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-3" value="Do you want to make the composition compatible with Phone (1) at the expense of only using 5 Glyphs like Phone (1)?" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="520" width="165" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pplkPzIiq9D_k61micS5-6" target="pplkPzIiq9D_k61micS5-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-6" value="START HERE" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="910" y="245" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-10" value="You are using&lt;br&gt;&lt;i&gt;Compatibility&lt;/i&gt; mode" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="700" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pplkPzIiq9D_k61micS5-14" value="You are using&lt;i&gt;&lt;br&gt;Phone2&lt;/i&gt; mode" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="1062.5" y="700" width="120" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

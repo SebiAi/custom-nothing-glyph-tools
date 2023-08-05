@@ -5,9 +5,47 @@ import argparse
 import os
 import csv
 import re
-from termcolor import cprint
+from termcolor import cprint, colored
+from enum import Enum
 
-REGEX_PATTERN_TEXT = '^([1-5])-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
+REGEX_PATTERN_TEXT = '^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
+
+# XXX: The preview is not accurate if individual zones are addressed. The preview is only accurate if the whole glyph is addressed.
+
+# +------------------------------------+
+# |                                    |
+# |         Global Constants           |
+# |                                    |
+# +------------------------------------+
+
+# Enum definition for the global mode
+## 'Compatibility': Compatibility mode for Phone (1) and Phone (2)
+## 'Phone2': Phone (2) only mode (includes Glyph and Zone control)
+GlobalMode = Enum('GlobalMode', ['Compatibility', 'Phone2'])
+
+# Definition of the Glyphs for the Phone2 mode - defines the zones for each glyph and the index of the glyph
+GlyphsPhone2: list[list[int]] = [
+    [0], # GLYPH_CAMERA_TOP
+    [1], # GLYPH_CAMERA_BOTTOM
+    [2], # GLYPH_DIAGONAL
+    range(3, 19), # GLYPH_BATTERY_TOP_RIGHT
+    [19], # GLYPH_BATTERY_TOP_LEFT
+    [20], # GLYPH_BATTERY_TOP_VERTICAL
+    [21], # GLYPH_BATTERY_BOTTOM_LEFT
+    [22], # GLYPH_BATTERY_BOTTOM_RIGHT
+    [23], # GLYPH_BATTERY_BOTTOM_VERTICAL
+    range(25, 33), # GLYPH_USB_LINE
+    [24] # GLYPH_USB_DOT
+]
+
+# Map the 5 Glyphs to the 11 Glyphs
+Glyphs5To11Mapping: list[list[int]] = [
+    [0, 1], # GLYPH_CAMERA
+    [2], # GLYPH_DIAGONAL
+    [3, 4, 5, 6, 7, 8], # GLYPH_BATTERY
+    [9], # GLYPH_USB_LINE
+    [10] # GLYPH_USB_DOT
+]
 
 # +------------------------------------+
 # |                                    |
@@ -21,6 +59,7 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, description="Transform Audacity Labels to Glyphs format.", epilog="audacity label format:\n  The text part of the exported Labels file is constructed like this: 'glyphId-lightLevelFrom[-lightLevelTo[-Mode]]'\n  AND must match this regex: '" + REGEX_PATTERN_TEXT + "', where the lightlevels are given in percent (0-100). When no mode is given 'LIN' will be used.\n\n  To convey the end of the audio file a final Label called 'END' MUST be pressent.\n\n  'LIN' - Linear\n  'EXP' - Exponential\n  'LOG' - Logarithmic\n  https://www.desmos.com/calculator/92ajzgfbat\n\n  Examples:\n    1-100\n    2-0-100-LIN\n    2-50-LIN\n\nCreated by: Sebastian Aigner (aka. SebiAi)")
 
     parser.add_argument('FILE', help="An absolute or relative path to the file.", type=str, nargs=1)
+    parser.add_argument('--disableCompatibility', help="Force the Phone (2) mode if it is not automatically detected.", action='store_true')
     #parser.add_argument('-r', help="Try to reverse the Glyph format back into Audacity labels. You need to provide paths to the author and custom1 file.", type=str, nargs=1, metavar=('AUTHOR_FILE'))
 
     return parser
@@ -61,6 +100,10 @@ def printError(message, start: str = ""):
 def printWarning(message, start: str = ""):
     cprint(start + "WARNING: " + message, color="yellow", attrs=["bold"])
 
+# Print info message
+def printInfo(message, start: str = ""):
+    cprint(start + "INFO: " + message, color="cyan")
+
 # +------------------------------------+
 # |                                    |
 # |             Functions              |
@@ -70,7 +113,7 @@ def printWarning(message, start: str = ""):
 def get_divisable_by(number: int, divisor: int) -> int:
     return number - (number % divisor)
 
-def audacity_to_glyphs(file: str):
+def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     # Constants for the csv file
     FROM = 0
     TO = 1
@@ -85,6 +128,7 @@ def audacity_to_glyphs(file: str):
     # Parse input csv file
     labels: list[dict[str, Any]] = []
     endLabel: dict[str, Any] = None
+    globalModeState: GlobalMode = GlobalMode['Compatibility']
     with open(file, newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter='\t', strict=True, skipinitialspace=True)
         for i, row in enumerate(reader):
@@ -123,7 +167,19 @@ def audacity_to_glyphs(file: str):
                     printWarning(f"Row {i + 1} text is invalid. Skipping.")
                 continue
 
-            glyph = int(result.group(1))
+            glyph_str = result.group(1)
+            isZone: bool = False
+            # Update the global mode state
+            if glyph_str.startswith('#'):
+                isZone = True
+                glyph_str = glyph_str[1:]
+                globalModeState = GlobalMode['Phone2']
+
+            id = int(glyph_str)
+            # Update the global mode state
+            if id > 5:
+                globalModeState = GlobalMode['Phone2']
+
             fromLightLV = int(result.group(2))
             toLightLV = int(result.group(3)) if result.group(3) is not None else fromLightLV
             mode = result.group(4) if result.group(4) is not None else "LIN"
@@ -132,7 +188,7 @@ def audacity_to_glyphs(file: str):
             #print(f"Row {i + 1}: {fromTime} - {toTime} ({deltaTime}) | {text} -> {glyph} {fromLightLV} {toLightLV} {mode}")
 
             # Add the Label to the list
-            labels.append({"from": fromTime, "to": toTime, "delta": deltaTime, "glyph": glyph, "fromLV": fromLightLV, "toLV": toLightLV, "mode": mode, "line": i + 1})
+            labels.append({"from": fromTime, "to": toTime, "delta": deltaTime, "id": id, "fromLV": fromLightLV, "toLV": toLightLV, "mode": mode, "isZone": isZone, "line": i + 1})
     
     # Check if we found the end
     if not endLabel:
@@ -146,6 +202,17 @@ def audacity_to_glyphs(file: str):
     if not all(labels[i]["from"] <= labels[i + 1]["from"] for i in range(len(labels) - 1)):
         printCriticalError(f"Labels are not sorted by time.")
     
+    # Inform the user about the global mode state
+    if disableCompatibility:
+        globalModeState = GlobalMode['Phone2']
+        printInfo(f"Using forced Phone (2) mode.")
+    else:
+        if globalModeState == GlobalMode['Compatibility']:
+            printInfo(f"Auto detected Phone (1) and Phone (2) compatibility mode.")
+            printInfo(f"If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.")
+        else:
+            printInfo(f"Auto detected Phone (2) mode.")
+
     # Get the filename without extension of the input file
     filename = os.path.splitext(os.path.basename(file))[0]
 
@@ -156,8 +223,8 @@ def audacity_to_glyphs(file: str):
     # Calculate the number of lines in the AUTHOR file + 5 extra lines for margin
     numLines = int(get_divisable_by(int(endLabel['to'] + TIME_STEP_SIZE), TIME_STEP_SIZE) / TIME_STEP_SIZE + 5)
 
-    # Prepare and prefill the author data
-    author_data: list[list[int]] = [[0 for x in range(5)] for y in range(numLines)]
+    # Prepare and prefill the author data depending on the global mode state
+    author_data: list[list[int]] = [[0 for x in range(5)] for y in range(numLines)] if globalModeState == GlobalMode['Compatibility'] else [[0 for x in range(33)] for y in range(numLines)]
 
     # Generate AUTHOR data and write the CUSTOM1 file
     with open(f"{filename}.glyphc1", "w") as custom1File:
@@ -166,16 +233,37 @@ def audacity_to_glyphs(file: str):
             fromTime: int = get_divisable_by(round(label['from']), TIME_STEP_SIZE)
             toTime: int = get_divisable_by(round(label['to']), TIME_STEP_SIZE)
             deltaTime: int = max(0, int((toTime - fromTime) / TIME_STEP_SIZE) - 1)
-            glyph: int = int(label['glyph'] - 1)
+            id: int = int(label['id'] - 1)
             fromLightLV: int = max(1, round(label['fromLV'] * MAX_LIGHT_LV / 100.0))
             toLightLV: int = max(1, round(label['toLV'] * MAX_LIGHT_LV / 100.0))
             mode: str = str(label['mode'])
+            isZone: bool = bool(label['isZone'])
 
             # Debug print all the values
             #print(f"Entry {i + 1}: {fromTime} - {toTime} ({deltaTime}) | {glyph} {fromLightLV} {toLightLV} {mode}")
 
+            # Get the glyph index
+            ## Return the index of the first occurence of 'glyph' in the GlyphsPhone2 list[list[int]]
+            #| globalModeState | isZone || glyphIndex                                     |
+            #|-----------------|--------||------------------------------------------------|
+            #| Compatibility   | False  || use id                                         |
+            #| Compatibility   | True   || INVALID                                        |
+            #| Phone2          | False  || use id                                         |
+            #| Phone2          | True   || search for id in GlyphsPhone2 and return index |
+            glyphIndex = next((i for i, glyphSet in enumerate(GlyphsPhone2) if id in glyphSet)) if isZone else id
+
+            # Get the columns we need to write to
+            #| globalModeState | isZone || columns                            |
+            #|-----------------|--------||------------------------------------|
+            #| Compatibility   | False  || use id                             |
+            #| Compatibility   | True   || INVALID                            |
+            #| Phone2          | False  || get list with id from GlyphsPhone2 |
+            #| Phone2          | True   || use id                             |
+            columns = GlyphsPhone2[glyphIndex] if globalModeState == GlobalMode['Phone2'] and not isZone else [id]
+
             # CUSTOM1 (time in ms-glyph,)
-            custom1File.write(f"{fromTime}-{glyph},")
+            ## Map the 11 Glyphs to the 5 Glyphs and write the time and the glyph index
+            custom1File.write(f"{fromTime}-{next((i for i, glyphMapping in enumerate(Glyphs5To11Mapping) if glyphIndex in glyphMapping))},")
 
             # AUTHOR
             overwrites = 0
@@ -191,15 +279,19 @@ def audacity_to_glyphs(file: str):
                 # Assert
                 assert lightLV >= 0 and lightLV <= MAX_LIGHT_LV, f"Light level {lightLV} is out of range [0, {MAX_LIGHT_LV}]"
 
-                # Check if there is already a value present
-                if author_data[row][glyph] != 0:
-                    overwrites += 1
-                # Write the light level to the author data
-                author_data[row][glyph] = lightLV
+                for column in columns:
+                    # Check if there is already a value present
+                    if author_data[row][column] != 0:
+                        overwrites += 1
+                    # Write the light level to the author data
+                    author_data[row][column] = lightLV
             
             # Print warning if there were overwrites
             if overwrites > 0:
-                printWarning(f"Row {label['line']} overwrote {overwrites} value(s) for glyph {glyph + 1}.")
+                if isZone:
+                    printWarning(f"Row {label['line']} overwrote {overwrites} value(s) for zone {columns[0] + 1}.")
+                else:
+                    printWarning(f"Row {label['line']} overwrote {overwrites} value(s) for glyph {glyphIndex + 1}.")
     
     # Write the AUTHOR file
     with open(f"{filename}.glypha", "w", newline='') as custom1File:
@@ -226,7 +318,7 @@ def main() -> int:
         printCriticalError(str(e))
 
     # Normal mode - convert Audacity Labels to Glyphs format
-    audacity_to_glyphs(args.FILE[0])
+    audacity_to_glyphs(args.FILE[0], args.disableCompatibility)
 
     cprint("Done!", color="green", attrs=["bold"])
 
