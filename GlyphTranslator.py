@@ -10,8 +10,6 @@ from enum import Enum
 
 REGEX_PATTERN_TEXT = '^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 
-# XXX: The preview is not accurate if individual zones are addressed. The preview is only accurate if the whole glyph is addressed.
-
 # +------------------------------------+
 # |                                    |
 # |         Global Constants           |

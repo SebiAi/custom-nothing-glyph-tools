@@ -85,7 +85,7 @@ You can now add Labels by clicking on your desired location on the Label Track a
 Each Label should be named like this: `[#]glyphId-lightLevelFrom[-lightLevelTo[-Mode]]`
 * **#** *(Optional)*: Just the `#` symbol to indicate that you want to address one of the 33 individual Zones on Phone (2).
 * **glyphId**: See [glyphId](#glyphid) below.
-* **lightLevelFrom** : In percent 0 to 100.
+* **lightLevelFrom**: In percent 0 to 100.
 * **lightLevelTo** *(Optional)*: In percent 0 to 100. The default is *lightLevelFrom*.
 * **Mode** *(Optional)*: Currently there are three modes supported ([Desmos Graphs](https://www.desmos.com/calculator/92ajzgfbat)):
     * LIN: Linear Interpolation (default)
@@ -261,7 +261,7 @@ Assuming your Label file was called `MyLabelFile.txt` it will spit out two files
 
 > **:warning: Attention**
 
-If see this message in the output:
+If you see this message in the output:
 ```
 INFO: Auto detected Phone (1) and Phone (2) compatibility mode.
 INFO: If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.
@@ -353,7 +353,7 @@ Important are:
 
 ### Wrong codec
 You have two options:
-* Reexport with Audacity&reg; (see [C](#cutting-the-sound))
+* Reexport with Audacity&reg; (see [Cutting the sound](#cutting-the-sound))
 * Convert with ffmpeg (replace `MyGlyphCreation.ogg` with your audio): `ffmpeg -i MyGlyphCreation.ogg -strict -2 -c:a opus -map_metadata 0:s:a:0 output.ogg`
 
 ### Wrong extension
