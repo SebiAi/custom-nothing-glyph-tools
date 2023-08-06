@@ -126,30 +126,30 @@ After you've made your decision continue to the respective section:
 
 Example c1:
 ```
-0.031441	0.031441	2-0-100-LIN
-0.074091	0.074091	2-100-0-LIN
-0.198122	0.198122	3-0-100-LIN
-0.242847	0.242847	3-100-0-LIN
-0.296312	0.296312	END
+0.000000	1.000000	2-0-100-LIN
+1.000000	2.000000	2-100-0-LIN
+2.000000	3.000000	3-0-100-LIN
+3.000000	4.000000	3-100-0-LIN
+5.000000	5.000000	END
 ```
 In this example, the Mode `-LIN` is not necessary because it is the default but makes it more readable.
 
 Example c2:
 ```
-0.031441	0.031441	2-0-100
-0.074091	0.074091	2-100-0
-0.198122	0.198122	3-0-100
-0.242847	0.242847	3-100-0
-0.296312	0.296312	END
+0.000000	1.000000	2-0-100
+1.000000	2.000000	2-100-0
+2.000000	3.000000	3-0-100
+3.000000	4.000000	3-100-0
+5.000000	5.000000	END
 ```
 This is a minimalized version of *Example c1*.
 
 Example c3:
 ```
-0.031441	0.031441	2-100
-0.074091	0.074091	3-100-0
-0.198122	0.198122	4-0-100-EXP
-0.296312	0.296312	END
+0.000000	0.500000	2-100
+0.000000	1.000000	3-100-0
+0.500000	1.500000	4-0-100-EXP
+2.000000	2.000000	END
 ```
 Another example with one exponential interpolation (`-EXP`) and line one and two are minimalized. They expand to `2-100-100-LIN` and `3-100-0-LIN`.
 
