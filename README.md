@@ -61,7 +61,7 @@ Sometimes it is also just `pip` instead of `pip3`.
 I would recommend using [Audacity&reg;](https://www.audacityteam.org/) to make your life easier. You can use it to cut your audio to the right length, layer effects on it, set Labels (which will come in handy later) and more.
 
 ### Cutting the sound
-You can skip to [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length.
+You can skip to [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length and the right codec (`opus`).
 
 When exporting the sound always use the *opus* codec:
 1) **Export audio:** Files -> Export -> Export Audio...
