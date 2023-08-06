@@ -123,7 +123,7 @@ After you've made your decision continue to the respective section:
 |    4    | USB Line |
 |    5    | USB Dot  |
 
-![Glyph Ids Compativility mode](assets/Glyph%20Ids%20Compatibility%20mode.png)
+<img src="assets/Glyph%20Ids%20Compatibility%20mode.png" alt="Glyph Ids Compatibility mode" width="25%"/>
 
 Example c1:
 ```
@@ -173,7 +173,7 @@ The `glyphId` can only be 1 to 11 which correspond to the individual Glyphs:
 |    10   | USB Line                             |
 |    11   | USB Dot                              |
 
-![Glyph Ids Phone2 mode](assets/Glyph%20Ids%20Phone2%20mode.png)
+<img src="assets/Glyph%20Ids%20Phone2%20mode.png" alt="Glyph Ids Phone2 mode" width="25%"/>
 
 Do **NOT** prepend the `#` symbol! This is for addressing each individual Zone - see below.
 
@@ -192,7 +192,7 @@ If you want even more control you can control each individual Zone with the Zone
 |   25  | USB Dot                              | -                  |
 | 26-33 | USB Line                             | From bottom to top |
 
-![Glyph Ids Phone2 mode - Zones](assets/Glyph%20Ids%20Phone2%20mode%20-%20Zones.png)
+<img src="assets/Glyph%20Ids%20Phone2%20mode%20-%20Zones.png" alt="Glyph Ids Phone2 mode - Zones" width="25%"/>
 
 Example p1:
 ```
