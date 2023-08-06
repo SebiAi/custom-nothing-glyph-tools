@@ -8,6 +8,11 @@ https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1c
 
 ***
 
+# :clapper: Simple tutorial Video
+https://www.youtube.com/watch?v=YlJBqQxSgWA
+
+***
+
 # :pushpin: Disclaimer
 > These scripts are provided as-is without any warranty. I and all other contributors are not responsible for any damage, misuse or other kind of physical or mental damage which results in the use of these scripts.
 This repo is in no way shape or form affiliated with Nothing Technology Limited (NOTHING).
