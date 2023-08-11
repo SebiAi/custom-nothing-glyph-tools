@@ -198,8 +198,9 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     # Sort the end labels and get the last one
     if len(endLabels) > 1:
         endLabels.sort(key=lambda x: x["to"])
-        endLabel = endLabels[-1]
         printInfo(f"Found {len(endLabels)} 'END' labels. Using the last one in row {endLabel['line']}.")
+    endLabel = endLabels[-1]
+    
     
     # Remove all labels that are after the END label
     oldLabelSize = len(labels)
