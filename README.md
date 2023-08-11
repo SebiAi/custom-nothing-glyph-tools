@@ -81,7 +81,7 @@ I would recommend saving your Audacity&reg; project regularly.
 
 #### Add the Labels track
 1) **Open your audio with Audacity&reg;**
-2) **Add the Labels track:** Tracks -> Add New -> Label Track
+2) **Add the Labels track:** Tracks -> Add New -> Label Track (you can add multiple tracks)
 
 #### Creating and removing Labels
 You can now add Labels by clicking on your desired location on the Label Track and pressing <kbd>CONTROL</kbd> + <kbd>b</kbd>. To remove one Label right-click on the Labels name and choose *Delete Label*. More info [here](https://manual.audacityteam.org/man/removing_labels_examples.html).
