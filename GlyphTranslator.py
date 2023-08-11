@@ -126,15 +126,11 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     # Parse input csv file
     labels: list[dict[str, Any]] = []
     endLabel: dict[str, Any] = None
+    endLabels: list[dict[str, Any]] = []
     globalModeState: GlobalMode = GlobalMode['Compatibility']
     with open(file, newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter='\t', strict=True, skipinitialspace=True)
         for i, row in enumerate(reader):
-            # Check if we have more lines after the end
-            if endLabel:
-                printWarning(f"There is more data after the 'END' label in row {i}. This data will be ignored.")
-                break
-
             # Check if the row is valid
             if len(row) != 3:
                 printWarning(f"Row {i + 1} is invalid. Skipping.")
@@ -152,8 +148,7 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
             
             # Check if the text matches "END" to indicate the end of the audio file
             if text == "END":
-                #print(f"Row {i + 1}: {fromTime} - {toTime} ({deltaTime}) | {text} -> END")
-                endLabel = {"from": fromTime, "to": toTime, "delta": deltaTime}
+                endLabels.append({"from": fromTime, "to": toTime, "delta": deltaTime, "line": i + 1})
                 continue
 
             # Get the values from the text
@@ -181,15 +176,12 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
             fromLightLV = int(result.group(2))
             toLightLV = int(result.group(3)) if result.group(3) is not None else fromLightLV
             mode = result.group(4) if result.group(4) is not None else "LIN"
-            
-            # Debug print all the values
-            #print(f"Row {i + 1}: {fromTime} - {toTime} ({deltaTime}) | {text} -> {glyph} {fromLightLV} {toLightLV} {mode}")
 
             # Add the Label to the list
             labels.append({"from": fromTime, "to": toTime, "delta": deltaTime, "id": id, "fromLV": fromLightLV, "toLV": toLightLV, "mode": mode, "isZone": isZone, "line": i + 1})
     
     # Check if we found the end
-    if not endLabel:
+    if len(endLabels) == 0:
         printCriticalError(f"No 'END' label found. Please set a Label at the end of the audio file with the name 'END'.")
 
     # Check if we have any labels
@@ -198,7 +190,22 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     
     # Check if the labels are sorted
     if not all(labels[i]["from"] <= labels[i + 1]["from"] for i in range(len(labels) - 1)):
-        printCriticalError(f"Labels are not sorted by time.")
+        # Inform user
+        printInfo(f"Labels are not sorted by time. Sorting them now.")
+        # Sort the labels
+        labels.sort(key=lambda x: x["from"])
+    
+    # Sort the end labels and get the last one
+    if len(endLabels) > 1:
+        endLabels.sort(key=lambda x: x["to"])
+        endLabel = endLabels[-1]
+        printInfo(f"Found {len(endLabels)} 'END' labels. Using the last one in row {endLabel['line']}.")
+    
+    # Remove all labels that are after the END label
+    oldLabelSize = len(labels)
+    labels = [label for label in labels if label["to"] < endLabel["to"]]
+    if len(labels) != oldLabelSize:
+        printWarning(f"Removed {oldLabelSize - len(labels)} labels that were after the 'END' label.")
     
     # Inform the user about the global mode state
     if disableCompatibility:
