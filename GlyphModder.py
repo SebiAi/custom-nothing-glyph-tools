@@ -80,6 +80,59 @@ def decode_base64(encoded_string: str) -> bytes:
 def encode_base64(bytes: bytes) -> str:
     return base64.b64encode(bytes).decode('utf-8').removesuffix(base64_padding)
 
+def ffmpeg_write_metadata(ffmpeg: str, file: str, tmp_file: str, metadata: dict[str, str]):
+    # Beginning of the ffmpeg command
+    ffmpeg_command = [ffmpeg, '-v', 'quiet', '-i', file]
+
+    # Loop through the metadata and add it to the ffmpeg command
+    for key_escaped, value_escaped in metadata.items():
+        ffmpeg_command += ['-metadata:s:a:0', f'{key_escaped}={value_escaped}']
+    
+    # Add the end parameters to the ffmpeg command
+    ffmpeg_command += ['-c', 'copy', '-y', '-fflags', '+bitexact', '-flags:v', '+bitexact', '-flags:a', '+bitexact', tmp_file]
+
+    # If OS is Windows and the ffmpeg command is longer than 32764 characters, we need to save the metadata to a file and pass it to ffmpeg
+    if os.name == 'nt' and len(' '.join(ffmpeg_command)) > 32764:
+        # Print info
+        printInfo("ffmpeg command is longer than 32764 characters which is the limit on Windows. Saving metadata to file and passing it to ffmpeg.")
+        
+        # Save the metadata to a file in tmp folder
+        metadata_to_remove: list[str] = []
+        metadata_file = 'FFMETADATAFILE'
+        with open(metadata_file, 'w', newline='\n') as f:
+            f.write(';FFMETADATA1')
+            for key, value in metadata.items():
+                if key == "":
+                    continue
+                if value == "":
+                    # Add to the remove list (this will only be needed when we need to use the metadata file solution)
+                    metadata_to_remove.append(key)
+                # Escape '=', ';', '#', '\', '\n' in the key and value
+                key_escaped = key.replace('\\', '\\\\').replace('=', '\\=').replace(';', '\\;').replace('#', '\\#').replace('\n', '\\\n')
+                value_escaped = value.replace('\\', '\\\\').replace('=', '\\=').replace(';', '\\;').replace('#', '\\#').replace('\n', '\\\n')
+                f.write(f'\n{key_escaped}={value_escaped}')
+        
+        # Build new ffmpeg command
+        ffmpeg_command = [ffmpeg, '-v', 'quiet', '-i', file, '-i', metadata_file, '-c', 'copy', '-y', '-map_metadata', '1']
+        for m in metadata_to_remove:
+            # The tag gets removed if it is already present in the input file metadata (does not work with just the file pass method)
+            ffmpeg_command += ['-metadata:s:a:0', f"{m}="]
+        ffmpeg_command += ['-fflags', '+bitexact', '-flags:v', '+bitexact', '-flags:a', '+bitexact', tmp_file]
+
+        # Run new ffmpeg command
+        subprocess.run(ffmpeg_command)
+
+        # Delete the metadata file
+        os.remove(metadata_file)
+    else:
+        subprocess.run(ffmpeg_command)
+    
+    # Delete the old file - needed for Windows or else os.rename() will fail
+    os.remove(file)
+
+    # Copy back the file
+    os.rename(tmp_file, file)
+
 def write_metadata(file: str, author_file: str, custom1_file: str, custom_title: str, ffmpeg: str):
     with open(author_file, 'rb') as f:
         author = f.read()
@@ -114,23 +167,18 @@ def write_metadata(file: str, author_file: str, custom1_file: str, custom_title:
     #print("Base 64 Custom1: " + encoded_custom1)
 
     # Tmp file name
-    tmp_file = os.path.splitext(os.path.basename(file))[0] + '_new.ogg'
+    split_file = os.path.splitext(file)
+    tmp_file = split_file[0] + '_new' + split_file[1]
 
     # Detect the mode (5 Glyphs = Spacewar, 33 Zones = Pong) - very simple, count the number of commas in one line
     if author.decode('utf-8').splitlines()[0].count(',') < 32:
         # Write the metadata back to the file (5 Glyphs)
         printInfo(f"Auto detected Phone (1) and Phone (2) compatibility mode.")
-        subprocess.run([ffmpeg, '-v', 'quiet', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Spacewar Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-metadata:s:a:0', 'CUSTOM2=', '-c', 'copy', '-y', tmp_file])
+        ffmpeg_write_metadata(ffmpeg, file, tmp_file, {'TITLE': custom_title, 'ALBUM': 'CUSTOM', 'AUTHOR': encoded_author, 'COMPOSER': 'Spacewar Glyph Composer', 'CUSTOM1': encoded_custom1, 'CUSTOM2': ''})
     else:
         # Write the metadata back to the file (33 Zones)
         printInfo(f"Auto detected Phone (2) mode.")
-        subprocess.run([ffmpeg, '-v', 'quiet', '-i', file, '-metadata:s:a:0', 'TITLE=' + custom_title, '-metadata:s:a:0', 'ALBUM=CUSTOM', '-metadata:s:a:0', 'AUTHOR=' + encoded_author, '-metadata:s:a:0', 'COMPOSER=Pong Glyph Composer', '-metadata:s:a:0', 'CUSTOM1=' + encoded_custom1, '-metadata:s:a:0', 'CUSTOM2=33cols', '-c', 'copy', '-y', tmp_file])
-
-    # Delete the old file - needed for Windows or else os.rename() will fail
-    os.remove(file)
-
-    # Copy back the file
-    os.rename(tmp_file, file)
+        ffmpeg_write_metadata(ffmpeg, file, tmp_file, {'TITLE': custom_title, 'ALBUM': 'CUSTOM', 'AUTHOR': encoded_author, 'COMPOSER': 'Pong Glyph Composer', 'CUSTOM1': encoded_custom1, 'CUSTOM2': '33cols'})
 
     # Print number of bytes written
     print(f"Wrote {colored(len(bytearray(encoded_author, 'utf-8')), attrs=['bold'])} bytes of AUTHOR metadata")
