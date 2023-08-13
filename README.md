@@ -370,7 +370,7 @@ You have two options:
 See [Wrong codec](#wrong-codec)
 
 ### No or missing metadata
-Did you run the [GlyphModder](./GlyphModder.py) correctly? See [Cutting the sound](#write-to-an-audio-file).
+Did you run the [GlyphModder](./GlyphModder.py) correctly? See [Write to an audio file](#write-to-an-audio-file).
 
 # No glyphs light up
 See [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file).
