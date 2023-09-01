@@ -79,6 +79,8 @@ To make our lives easier we can utilize Audacity&reg;'s Labels functionality and
 
 I would recommend saving your Audacity&reg; project regularly.
 
+You can also use the [MidiToLabel](./MidiToLabel.py) script to transform MIDI files to Audacity Labels. Use the `--help` command on the script to learn more.
+
 #### Add the Labels track
 1) **Open your audio with Audacity&reg;**
 2) **Add the Labels track:** Tracks -> Add New -> Label Track (you can add multiple tracks)
