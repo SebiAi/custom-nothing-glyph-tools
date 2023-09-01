@@ -56,7 +56,7 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
     # Parse the arguments with argparse (https://docs.python.org/3/library/argparse.html)
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, description="Transform Audacity Labels to Glyphs format.", epilog="audacity label format:\n  The text part of the exported Labels file is constructed like this: 'glyphId-lightLevelFrom[-lightLevelTo[-Mode]]'\n  AND must match this regex: '" + REGEX_PATTERN_TEXT + "', where the lightlevels are given in percent (0-100). When no mode is given 'LIN' will be used.\n\n  To convey the end of the audio file a final Label called 'END' MUST be pressent.\n\n  'LIN' - Linear\n  'EXP' - Exponential\n  'LOG' - Logarithmic\n  https://www.desmos.com/calculator/92ajzgfbat\n\n  Examples:\n    1-100\n    2-0-100-LIN\n    2-50-LIN\n\nCreated by: Sebastian Aigner (aka. SebiAi)")
 
-    parser.add_argument('FILE', help="An absolute or relative path to the file.", type=str, nargs=1)
+    parser.add_argument('FILE', help="An absolute or relative path to the Label file.", type=str, nargs=1)
     parser.add_argument('--disableCompatibility', help="Force the Phone (2) mode if it is not automatically detected.", action='store_true')
     #parser.add_argument('-r', help="Try to reverse the Glyph format back into Audacity labels. You need to provide paths to the author and custom1 file.", type=str, nargs=1, metavar=('AUTHOR_FILE'))
 
@@ -117,12 +117,6 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     TO = 1
     TEXT = 2
 
-    # Constants for the text interpretation
-    TEXT_GLYPH = 0
-    TEXT_FROMLIGHTLV = 1
-    TEXT_TOLIGHTLV = 2
-    TEXT_MODE = 3
-
     # Parse input csv file
     labels: list[dict[str, Any]] = []
     endLabel: dict[str, Any] = None
@@ -173,6 +167,7 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
             if id > 5:
                 globalModeState = GlobalMode['Phone2']
 
+            # Determine the light levels and mode
             fromLightLV = int(result.group(2))
             toLightLV = int(result.group(3)) if result.group(3) is not None else fromLightLV
             mode = result.group(4) if result.group(4) is not None else "LIN"
@@ -191,7 +186,7 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     # Check if the labels are sorted
     if not all(labels[i]["from"] <= labels[i + 1]["from"] for i in range(len(labels) - 1)):
         # Inform user
-        printInfo(f"Labels are not sorted by time. Sorting them now.")
+        printInfo(f"Labels are not sorted by time. This is perfectly normal when using multiple Label tracks. Sorting them now.")
         # Sort the labels
         labels.sort(key=lambda x: x["from"])
     
