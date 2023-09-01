@@ -332,7 +332,7 @@ You are trying to import a Phone (2) exclusive (*Phone2* mode) composition on a 
 
 If you created this composition please only use `glyphId`s that are compatible with your device. See [glyphId](#glyphid).
 
-# File is not created by Composer
+## File is not created by Composer
 If you get this error message:
 ```
 Import failed. File is not created by Composer.
@@ -375,7 +375,7 @@ See [Wrong codec](#wrong-codec)
 ### No or missing metadata
 Did you run the [GlyphModder](./GlyphModder.py) correctly? See [Write to an audio file](#write-to-an-audio-file).
 
-# No glyphs light up
+## No glyphs light up
 See [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file).
 
 ## I can import my audio but my glyphs don't light up
