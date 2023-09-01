@@ -338,6 +338,7 @@ If you get this error message:
 Import failed. File is not created by Composer.
 ```
 You are trying to import an audio file with no metadata. See [No or missing metadata](#no-or-missing-metadata).
+Avoid using a third party file explorer app to import the audio file and use Android's built in instead. Apps like Solid Explorer may try to modify the file and the import will fail.
 
 ## Glyph Composer does not import my file
 Make sure that the file has the right codec and that the metadata is present:
