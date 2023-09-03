@@ -5,6 +5,7 @@ import argparse
 import os
 import csv
 import re
+import zlib
 from termcolor import cprint, colored
 from enum import Enum
 
@@ -58,6 +59,7 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
 
     parser.add_argument('FILE', help="An absolute or relative path to the Label file.", type=str, nargs=1)
     parser.add_argument('--disableCompatibility', help="Force the Phone (2) mode if it is not automatically detected.", action='store_true')
+    parser.add_argument('--watermark', help="An absolute or relative path to the watermark file. It will be embeded into the glypha file.", type=str, nargs=1)
     #parser.add_argument('-r', help="Try to reverse the Glyph format back into Audacity labels. You need to provide paths to the author and custom1 file.", type=str, nargs=1, metavar=('AUTHOR_FILE'))
 
     return parser
@@ -77,6 +79,11 @@ def performChecks(args: dict):
         else:
             # We are in normal mode -> Audacity file must exist
             raise Exception(f"Audacity file does not exist: '{args['FILE'][0]}'")
+    
+    # Check if the watermark file exists
+    if args.get('watermark', None) is not None:
+        if not os.path.isfile(args['watermark'][0]):
+            raise Exception(f"Watermark file does not exist: '{args['watermark'][0]}'")
 
     # Check if we need to write the metadata back
     if args.get('r', False):
@@ -111,7 +118,7 @@ def printInfo(message, start: str = ""):
 def get_divisable_by(number: int, divisor: int) -> int:
     return number - (number % divisor)
 
-def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
+def audacity_to_glyphs(file: str, disableCompatibility: bool = False, watermarkPath: str = None):
     # Constants for the csv file
     FROM = 0
     TO = 1
@@ -227,7 +234,7 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
     author_data: list[list[int]] = [[0 for x in range(5)] for y in range(numLines)] if globalModeState == GlobalMode['Compatibility'] else [[0 for x in range(33)] for y in range(numLines)]
 
     # Generate AUTHOR data and write the CUSTOM1 file
-    with open(f"{filename}.glyphc1", "w") as custom1File:
+    with open(f"{filename}.glyphc1", "w") as authorFile:
         for i, label in enumerate(labels):
             # Get values
             fromTime: int = get_divisable_by(round(label['from']), TIME_STEP_SIZE)
@@ -263,7 +270,7 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
 
             # CUSTOM1 (time in ms-glyph,)
             ## Map the 11 Glyphs to the 5 Glyphs and write the time and the glyph index
-            custom1File.write(f"{fromTime}-{next((i for i, glyphMapping in enumerate(Glyphs5To11Mapping) if glyphIndex in glyphMapping))},")
+            authorFile.write(f"{fromTime}-{next((i for i, glyphMapping in enumerate(Glyphs5To11Mapping) if glyphIndex in glyphMapping))},")
 
             # AUTHOR
             overwrites = 0
@@ -293,9 +300,43 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False):
                 else:
                     printWarning(f"Row {label['line']} overwrote {overwrites} value(s) for glyph {glyphIndex + 1}.")
     
+    # Get the watermark data
+    if watermarkPath:
+        watermarkData = encode_watermark_from_file(watermarkPath, len(author_data[0]))
+
     # Write the AUTHOR file
-    with open(f"{filename}.glypha", "w", newline='') as custom1File:
-        csv.writer(custom1File, delimiter=',', lineterminator=',\r\n', strict=True).writerows(author_data)
+    with open(f"{filename}.glypha", "w", newline='') as authorFile:
+        csvWriter = csv.writer(authorFile, delimiter=',', lineterminator=',\r\n', strict=True)
+        csvWriter.writerows(author_data)
+        if watermarkPath:
+            csvWriter.writerows(watermarkData)
+            printInfo("Embeded watermark into the glypha file.", start="\n")
+
+# Encode the watermark to the AUTHOR format from a file
+def encode_watermark_from_file(watermarkPath: str, numColumns: int) -> list[list[int]]:
+    # Read the watermark file
+    with open(watermarkPath, "rb") as watermarkFile:
+        watermark: bytes = zlib.compress(watermarkFile.read(), zlib.Z_BEST_COMPRESSION)
+    
+    output: list[list[int]] = [[0 for x in range(numColumns)]]
+    # Add header
+    output[0][0] = 4081
+    output[0][1] = len(watermark)
+    # Process the watermark
+    for i, byte in enumerate(watermark):
+        # Offset i by 2 because of the header
+        i += 2
+        # Calculate the row and column
+        row = int(i / numColumns)
+        column = i % numColumns
+        # Check if we need a new row
+        if len(output) <= row:
+            output.append([0 for x in range(numColumns)])
+        # Write the byte
+        output[row][column] = byte
+    
+    # Return the output
+    return output
 
 
 # +------------------------------------+
@@ -318,7 +359,7 @@ def main() -> int:
         printCriticalError(str(e))
 
     # Normal mode - convert Audacity Labels to Glyphs format
-    audacity_to_glyphs(args.FILE[0], args.disableCompatibility)
+    audacity_to_glyphs(args.FILE[0], args.disableCompatibility, args.watermark[0] if args.watermark is not None else None)
 
     cprint("Done!", color="green", attrs=["bold"])
 

@@ -269,6 +269,8 @@ Now that we have a Labels file we can use the [GlyphTranslator](./GlyphTranslato
 ```bash
 python3 GlyphTranslator.py MyLabelFile.txt
 ```
+You can also add a watermark by writing your watermark to a text file and passing it to the script like this: `--watermark MyWatermarkFile.txt`
+
 Assuming your Label file was called `MyLabelFile.txt` it will spit out two files called `MyLabelFile.glypha` and `MyLabelFile.glyphc1` in your current working directory.
 
 > **:warning: Attention**
