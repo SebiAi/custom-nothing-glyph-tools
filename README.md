@@ -313,11 +313,18 @@ It is almost impossible to convert the `.glypha` and `.glyphc1` files back to an
 ***
 
 # Hardware limitations
-* On the Phone (1) at least the Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound. When doing this there is a small chance that the audio and the light sequence get desynced over time. The only solution until now is to don't make fast light sequences.
+* The Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound. When doing this there is a small chance that the audio and the light sequence get desynced over time. The only solution until now is to don't make fast light sequences.
+* In some unknown cases the light sequence gets desynced from the audio when set as a ringtone or notification sound. If you know more feel free to reach out.
 
 ***
 
 # :interrobang: Troubleshooting
+## ModuleNotFoundError: No module named 'termcolor'
+You did not properly install the requirements. Try executing
+```bash
+python3 -m pip install -r requirements.txt
+```
+
 ## I can't find the modified audio file after using GlyphModder
 The file was modified in place, no other files were generated.
 
@@ -386,6 +393,9 @@ You can make the right Label ranged if you drag on the left or right part of it.
 
 ## Some of my glyphs don't light up
 See [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-but-my-glyphs-dont-light-up).
+
+## The Glyphs are not alligned or desync with the audio
+See [Hardware limitations](#hardware-limitations)
 
 ***
 
