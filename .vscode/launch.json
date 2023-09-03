@@ -1,0 +1,55 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GlyphTranslator with Watermark",
+            "type": "python",
+            "request": "launch",
+            "program": "GlyphTranslator.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--watermark",
+                "TestWaterMark.txt",
+                "Examples/Compatibility mode/Ricky/Ricky.txt"]
+        },
+        {
+            "name": "GlyphTranslator NO Watermark",
+            "type": "python",
+            "request": "launch",
+            "program": "GlyphTranslator.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "Examples/Compatibility mode/Ricky/Ricky.txt"]
+        },
+        {
+            "name": "GlyphModder write",
+            "type": "python",
+            "request": "launch",
+            "program": "GlyphModder.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "-t",
+                "Ricky",
+                "-w",
+                "Ricky.glypha",
+                "Ricky.glyphc1",
+                "Ricky.ogg"]
+        },
+        {
+            "name": "GlyphModder read",
+            "type": "python",
+            "request": "launch",
+            "program": "GlyphModder.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "Ricky.ogg"]
+        }
+    ]
+}
