@@ -131,7 +131,7 @@ def ffmpeg_write_metadata(ffmpeg: str, file: str, tmp_file: str, metadata: dict[
         # Save the metadata to a file in tmp folder
         metadata_to_remove: list[str] = []
         metadata_file = 'FFMETADATAFILE'
-        with open(metadata_file, 'w', newline='\n') as f:
+        with open(metadata_file, 'w', newline='\n', encoding='utf-8') as f:
             f.write(';FFMETADATA1')
             for key, value in metadata.items():
                 if key == "":
@@ -140,8 +140,8 @@ def ffmpeg_write_metadata(ffmpeg: str, file: str, tmp_file: str, metadata: dict[
                     # Add to the remove list (this will only be needed when we need to use the metadata file solution)
                     metadata_to_remove.append(key)
                 # Escape '=', ';', '#', '\', '\n' in the key and value
-                key_escaped = key.replace('\\', '\\\\').replace('=', '\\=').replace(';', '\\;').replace('#', '\\#').replace('\n', '\\\n')
-                value_escaped = value.replace('\\', '\\\\').replace('=', '\\=').replace(';', '\\;').replace('#', '\\#').replace('\n', '\\\n')
+                key_escaped = key.replace('\r', '').replace('\\', '\\\\').replace('=', '\\=').replace(';', '\\;').replace('#', '\\#').replace('\n', '\\\n')
+                value_escaped = value.replace('\r', '').replace('\\', '\\\\').replace('=', '\\=').replace(';', '\\;').replace('#', '\\#').replace('\n', '\\\n')
                 f.write(f'\n{key_escaped}={value_escaped}')
         
         # Build new ffmpeg command
