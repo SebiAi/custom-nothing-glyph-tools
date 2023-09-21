@@ -25,7 +25,6 @@ call :basicInstall
 goto :restartScript
 
 :basicInstall
-cls
 winget install Gyan.FFmpeg
 echo.
 winget install Python.Python.3.11
