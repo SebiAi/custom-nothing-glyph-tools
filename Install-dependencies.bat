@@ -19,9 +19,9 @@ if /i "%install%"=="n" goto :basicInstall
 else goto :install
 
 :fullInstall
-call :basicInstall
 winget install Audacity.Audacity
 echo.
+call :basicInstall
 goto :restartScript
 
 :basicInstall
