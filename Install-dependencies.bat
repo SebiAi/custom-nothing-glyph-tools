@@ -22,7 +22,7 @@ else goto :install
 call :basicInstall
 winget install Audacity.Audacity
 echo.
-goto :end
+goto :restartScript
 
 :basicInstall
 cls
