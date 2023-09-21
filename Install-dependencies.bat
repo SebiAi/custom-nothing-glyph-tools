@@ -39,6 +39,7 @@ goto :refrenv
 pause
 
 :installPythonStuff
+cls
 pip install -r requirements.txt
 echo.
 
