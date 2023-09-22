@@ -54,12 +54,14 @@ if "%file_hash%"=="%hash%" (
     echo The hashes do not match.
     goto :manualInstall
 )
+cls
 
 :: Install WinGet
 powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle"
 :: if the installation doesn't fail, try if winget works now
 if %errorlevel%==0 goto :tryWinget
-
+cls
+echo Automatic installation failed.
 :: if the installation fails, try to install it from the Microsoft Store manually
 :manualInstall
 echo Please install/update AppInstaller from the Microsoft Store.
