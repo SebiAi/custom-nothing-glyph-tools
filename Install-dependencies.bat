@@ -113,5 +113,4 @@ exit
 powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile "%~dp0/.tmp/refrenv.bat""
 
 call %~dp0/.tmp/refrenv.bat
-pause
 goto :installPythonStuff
