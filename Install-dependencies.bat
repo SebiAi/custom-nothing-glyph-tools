@@ -1,4 +1,5 @@
 @echo off
+title Install dependencies for Custom Glyphs
 REM Maybe add a Windows Version check here?
 
 :: ---------------------------check for admin rights-----------------------------------------------------
