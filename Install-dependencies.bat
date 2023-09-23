@@ -29,7 +29,7 @@ if %errorlevel%==0 goto :install
 cls
 :: ---------------------------automated WinGet install--------------------------------------------------
 setlocal
-echo Downloading WinGet
+echo Downloading WinGet and its dependencies...
 
 :: Download the latest version of WinGet and save it to the .tmp folder as WinGet.msixbundle
 powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "%~dp0/.tmp/WinGet.msixbundle""
@@ -57,8 +57,12 @@ if "%file_hash%"=="%hash%" (
 )
 cls
 
+:: Download winget dependencies (Microsoft.VCLibs, Microsoft.UI.Xaml) and save them to the .tmp folder (https://learn.microsoft.com/en-us/windows/package-manager/winget/#install-winget-on-windows-sandbox)
+powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx""
+powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile "%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
+
 :: Install WinGet
-powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle"
+powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle" -DependencyPath "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx,%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
 :: if the installation doesn't fail, try if winget works now
 if %errorlevel%==0 goto :tryWinget
 cls
