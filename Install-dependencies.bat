@@ -1,6 +1,5 @@
 @echo off
 title Install dependencies for Custom Glyphs
-REM Maybe add a Windows Version check here?
 
 setlocal 
 :: Run the PowerShell command and save the output to a variable
@@ -11,10 +10,9 @@ for /f %%i in ('powershell -command "[System.Environment]::OSVersion.Version.Bui
 :: Check if the build version is greater than or equal to 16299
 set "threshold=16299"
 if %build% geq %threshold% (
-    echo Die Build-Version %build% ist größer oder gleich 16299.
+    echo Windows build is supported.
 ) else (
-    REM echo Version = %build%
-    REM show a popup window and wait for user confirmation
+    :: Inform the user that the build version is not supported and exit
     powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('This Windows build (%build%) is not supported.' + [Environment]::NewLine + [Environment]::NewLine + 'Please update your Windows installation to build %threshold% or higher!', 'Windows build not supported', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
     exit
 )
