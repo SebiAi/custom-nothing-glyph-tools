@@ -15,7 +15,7 @@ if %build% geq %threshold% (
 ) else (
     :: Inform the user that the build version is not supported and exit
     powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('This Windows build (%build%) is not supported.' + [Environment]::NewLine + [Environment]::NewLine + 'Please update your Windows installation to build %threshold% or higher!', 'Windows build not supported', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
-    exit
+    exit /b 1
 )
 
 :: ---------------------------check for admin rights-----------------------------------------------------
