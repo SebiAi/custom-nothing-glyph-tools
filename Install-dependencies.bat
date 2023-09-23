@@ -1,7 +1,8 @@
 @echo off
+setlocal
+
 title Install dependencies for Custom Glyphs
 
-setlocal 
 :: Run the PowerShell command and save the output to a variable
 for /f %%i in ('powershell -command "[System.Environment]::OSVersion.Version.Build"') do (
     set "build=%%i"
@@ -16,7 +17,6 @@ if %build% geq %threshold% (
     powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('This Windows build (%build%) is not supported.' + [Environment]::NewLine + [Environment]::NewLine + 'Please update your Windows installation to build %threshold% or higher!', 'Windows build not supported', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
     exit
 )
-endlocal
 
 :: ---------------------------check for admin rights-----------------------------------------------------
 @(
@@ -44,7 +44,6 @@ winget
 if %errorlevel%==0 goto :install
 cls
 :: ---------------------------automated WinGet install--------------------------------------------------
-setlocal
 echo Downloading WinGet and its dependencies...
 
 :: Download the latest version of WinGet and save it to the .tmp folder as WinGet.msixbundle
@@ -91,8 +90,6 @@ start ms-windows-store://pdp/?ProductId=9nblggh4nns1
 echo.
 pause
 goto :tryWinget
-
-endlocal
 
 :install
 cls
