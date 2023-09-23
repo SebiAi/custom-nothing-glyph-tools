@@ -2,6 +2,24 @@
 title Install dependencies for Custom Glyphs
 REM Maybe add a Windows Version check here?
 
+setlocal 
+:: Run the PowerShell command and save the output to a variable
+for /f %%i in ('powershell -command "[System.Environment]::OSVersion.Version.Build"') do (
+    set "build=%%i"
+)
+
+:: Check if the build version is greater than or equal to 16299
+set "threshold=16299"
+if %build% geq %threshold% (
+    echo Die Build-Version %build% ist größer oder gleich 16299.
+) else (
+    REM echo Version = %build%
+    REM show a popup window and wait for user confirmation
+    powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('This Windows build (%build%) is not supported.' + [Environment]::NewLine + [Environment]::NewLine + 'Please update your Windows installation to build %threshold% or higher!', 'Windows build not supported', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
+    exit
+)
+endlocal
+
 :: ---------------------------check for admin rights-----------------------------------------------------
 @(
     (
@@ -62,7 +80,7 @@ powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64
 powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile "%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
 
 :: Install WinGet
-powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle" -DependencyPath "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx,%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
+powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle" -DependencyPath "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx, %~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
 :: if the installation doesn't fail, try if winget works now
 if %errorlevel%==0 goto :tryWinget
 cls
