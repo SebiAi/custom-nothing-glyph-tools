@@ -48,6 +48,8 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 
     :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
 
+    :arrow_right: If you are on ***Windows*** you can use (double click) the [Install-dependencies.bat](./Install-dependencies.bat) script to install all requirements.
+
 ## :rocket: Setup
 #### Clone the repo
 ```bash
