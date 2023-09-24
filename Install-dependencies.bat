@@ -193,6 +193,9 @@ echo.
 call :PrintInfo "Refreshing environment variables..."
 @(
     (
+        :: Download code from @badrelmers on GitHub to refresh environment variables.
+        :: This downloaded code is part of badrelmers/RefrEnv (https://github.com/badrelmers/RefrEnv) which is released under the GPL-3.0 license.
+        :: Go to https://github.com/badrelmers/RefrEnv/blob/main/LICENSE for full license details.
         powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile "%~dp0/.tmp/refrenv.bat""
     ) && (
         call %~dp0/.tmp/refrenv.bat
