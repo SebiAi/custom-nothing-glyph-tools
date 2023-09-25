@@ -4,64 +4,60 @@ setlocal
 :start
 
 :: check if python is installed
-python --version >nul 2>&1
-if not "%errorlevel%"=="0" (
-    cls
-    call :PrintWarning "Python is not installed."
-    call :PrintInfo "Maybe run the Install-Dependencies.bat first."
-    echo.
-    :: ask if the user wants to run the Install-Dependencies.bat now
-    echo Press y to run the Install-Dependencies.bat or any other key to cancel.
-    set /p "runInstallDependencies="
-    if /i "%runInstallDependencies%"=="y" (
+@(
+    (
+        python --version >nul 2>&1
+    ) || (
         cls
-        call :PrintInfo "Running the Install-Dependencies.bat."
+        call :PrintWarning "Python is not installed."
+        call :PrintInfo "Consider running the Install-Dependencies.bat first."
         echo.
-        echo Press any key to continue.
-        pause >nul
-        call Install-Dependencies.bat
-        goto :start
-    ) else (
-        cls
-        call :PrintInfo "Python is not installed. Please install it manually."
-        echo.
-        echo Press any key to continue.
-        pause >nul
-        goto :eof
+        goto :runInstallDependencies
     )
-    goto :start
 )
 
 :: check if ffmpeg is installed
-ffmpeg -version >nul 2>&1
-if not "%errorlevel%"=="0" (
-    cls
-    echo ffmpeg is not installed.
-    echo Maybe run the Install-Dependencies.bat first.
-    echo.
-    :: ask if the user wants to run the Install-Dependencies.bat now
-    echo Press y to run the Install-Dependencies.bat or any other key to cancel.
-    set /p "runInstallDependencies="
-    if /i "%runInstallDependencies%"=="y" (
+@(
+    (
+        ffmpeg -version >nul 2>&1
+    ) || (
         cls
-        echo Running the Install-Dependencies.bat.
+        call :PrintWarning "ffmpeg is not installed."
+        call :PrintInfo "Consider running the Install-Dependencies.bat first."
         echo.
-        echo Press any key to continue.
-        pause >nul
-        call Install-Dependencies.bat
-    ) else (
-        cls
-        echo Press any key to continue.
-        pause >nul
-        goto :eof
+        goto :runInstallDependencies
     )
-    goto :start
 )
 
+goto :checkIfToolsDirectoryExists
+
+:: create a goto label for the case that either python or ffmpeg is not installed and the user wants to run the Install-Dependencies.bat
+:runInstallDependencies
+:: ask if the user wants to run the Install-Dependencies.bat now
+echo Press y to run the Install-Dependencies.bat or any other key to cancel.
+set /p "runInstallDependencies="
+if /i "%runInstallDependencies%"=="y" (
+    cls
+    call :PrintInfo "Running the Install-Dependencies.bat."
+    echo.
+    echo Press any key to continue.
+    pause >nul
+    call Install-Dependencies.bat
+    goto :start
+) else (
+    cls
+    call :PrintWarning "Python is not installed. Please install it manually."
+    echo.
+    echo Press any key to continue.
+    pause >nul
+    goto :eof
+)
+
+:checkIfToolsDirectoryExists
 :: check if the GlyphTranslator.py and GlyphModder.py files exist
 if not exist GlyphTranslator.py (
     cls
-    echo The file GlyphTranslator.py does not exist.
+    call :PrintWarning "The file GlyphTranslator.py does not exist."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -70,7 +66,7 @@ if not exist GlyphTranslator.py (
 
 if not exist GlyphModder.py (
     cls
-    echo The file GlyphModder.py does not exist.
+    call :PrintWarning "The file GlyphModder.py does not exist."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -88,21 +84,26 @@ if "%glyphName%"=="" goto :askForGlyphName
 
 :: create a new folder for the custom glyph and change to it
 set "glyphFolder=%~dp0%glyphName%"
-if exist "%glyphFolder%" (
-    cls
-    :: ask if the user wants to continue if the folder already exists
-    echo The folder %glyphFolder% already exists.
-    echo.
-    echo Press y to continue or any other key to cancel. 
-    set /p "continue="
-    if /i not "%continue%"=="y" goto :eof
+if not exist "%glyphFolder%" (
+    md "%glyphFolder%"
+    call :PrintInfo "created new Directory %cd%. Please add the files for the new glyph to this folder."
+    goto :getToGlyphFolder
 )
-if not exist "%glyphFolder%" md "%glyphFolder%"
+
+cls
+:: ask if the user wants to continue if the folder already exists
+call :PrintWarning "The folder %glyphFolder% already exists."
+echo.
+set /p continue="Press y to continue or any other key to cancel. "
+echo "%continue%"=="y"
+pause
+if /i not "%continue%"=="y" goto :eof
+call :PrintInfo "opened Directory %cd%. Please add the files for the new glyph to this folder."
+
+:getToGlyphFolder
 cd /d "%glyphFolder%"
 :: open the new folder in the file explorer
 explorer "%glyphFolder%"
-
-echo created new Directory %cd%. Please add the files for the new glyph to this folder.
 echo.
 echo Press any key to continue.
 pause >nul
@@ -113,7 +114,7 @@ set "folderEmpty=true"
 for /f "delims=" %%i in ('dir /b /a-d') do set "folderEmpty=false"
 if "%folderEmpty%"=="true" (
     cls
-    echo The folder %cd% is empty. Please add the files.
+    call :PrintWarning "The folder %cd% is empty. Please add the files."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -126,7 +127,7 @@ set "txtFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.txt') do set "txtFileName=%%i"
 if "%txtFileName%"=="" (
     cls
-    echo The folder %cd% does not seem to contain a labels file. Please add a labels file.
+    call :PrintWarning "The folder %cd% does not seem to contain a labels file. Please add a labels file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -135,11 +136,11 @@ if "%txtFileName%"=="" (
 
 :: ask if the user wants to disable compatibility mode
 cls
-echo Press y to disable compatibility mode or any other key to continue with compatibility mode.
-set /p "disableCompatibilityMode="
+
+set /p disableCompatibilityMode="Press y to disable compatibility mode or any other key to continue with compatibility mode. "
 if /i "%disableCompatibilityMode%"=="y" (
     cls
-    echo Compatibility mode disabled.
+    call :PrintInfo "Compatibility mode disabled."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -151,17 +152,20 @@ if /i "%disableCompatibilityMode%"=="y" (
 cls
 echo.
 :: take the filename of the .txt file and use it as parameter for GlyphTranslator
-python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
-
-:: check if the command was successful
-if not "%errorlevel%"=="0" (
-    cls
-    echo The file %txtFileName% does not seem to be a valid labels file. Please add a valid labels file.
-    echo.
-    echo Press any key to continue.
-    pause >nul
-    goto :checkFolderContainsOneTxtFile
+@(
+    (
+        python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
+    ) || (
+        cls
+        call :PrintError "The file %txtFileName% does not seem to be a valid labels file. Please add a valid labels file."
+        echo.
+        echo Press any key to continue.
+        pause >nul
+        goto :checkFolderContainsOneTxtFile
+    )
 )
+
+timeout /t 3
 
 :: check if the folder contains 1 .glypha file and add the filename to a variable
 :checkFolderContainsOneGlyphaFile
@@ -169,7 +173,7 @@ set "glyphaFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.glypha') do set "glyphaFileName=%%i"
 if "%glyphaFileName%"=="" (
     cls
-    echo The folder %cd% does not seem to contain a valid glyph file. Please add a valid glyph file.
+    call :PrintWarning "The folder %cd% does not seem to contain a valid glypha file. Please add a valid glypha file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -182,7 +186,7 @@ set "glyphc1FileName="
 for /f "delims=" %%i in ('dir /b /a-d *.glyphc1') do set "glyphc1FileName=%%i"
 if "%glyphc1FileName%"=="" (
     cls
-    echo The folder %cd% does not seem to contain a valid glyph file. Please add a valid glyph file.
+    call :PrintWarning "The folder %cd% does not seem to contain a valid glyphc1 file. Please add a valid glyphc1 file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -195,7 +199,7 @@ set "oggFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.ogg') do set "oggFileName=%%i"
 if "%oggFileName%"=="" (
     cls
-    echo The folder %cd% does not seem to contain a valid sound file. Please add a valid sound file.
+    call :PrintWarning "The folder %cd% does not seem to contain a valid sound file. Please add a valid sound file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -209,7 +213,7 @@ python %toolsDirectory%/GlyphModder.py -t "%glyphName%" -w "%glyphaFileName%" "%
 :: check if the command was successful
 if not "%errorlevel%"=="0" (
     cls
-    echo The files %glyphaFileName% %glyphc1FileName% %oggFileName% do not seem to be valid files. Please add valid files.
+    call :PrintError "At least one of these files (%glyphaFileName%, %glyphc1FileName%, %oggFileName%) does not seem to be a valid file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -220,13 +224,13 @@ pause
 
 :: ask if the user wants to delete the folder
 cls
-echo The glyph %glyphName% was created successfully.
+call :PrintInfo "The glyph %glyphName% was created successfully."
 echo.
 echo Press y to delete the folder %glyphFolder% or any other key to keep the folder.
 set /p "deleteFolder="
 if /i "%deleteFolder%"=="y" (
     cls
-    echo The folder %glyphFolder% will be deleted.
+    call :PrintWarning "The folder %glyphFolder% will be deleted."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -234,7 +238,7 @@ if /i "%deleteFolder%"=="y" (
     rd /s /q "%glyphFolder%"
 ) else (
     cls
-    echo The folder %glyphFolder% will be kept.
+    call :PrintInfo "The folder %glyphFolder% will be kept."
     echo.
     echo Press any key to continue.
     pause >nul
