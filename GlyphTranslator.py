@@ -7,6 +7,7 @@ import csv
 import re
 import zlib
 from termcolor import cprint, colored
+from colorama import just_fix_windows_console
 from enum import Enum
 
 REGEX_PATTERN_TEXT = '^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
@@ -346,6 +347,9 @@ def encode_watermark_from_file(watermarkPath: str, numColumns: int) -> list[list
 # +------------------------------------+
 
 def main() -> int:
+    # Fix the windows console - needed for correct color output
+    just_fix_windows_console()
+
     # Parse the arguments
     args = buildArgumentsParser().parse_args()
 

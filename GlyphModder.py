@@ -9,6 +9,7 @@ import zlib
 import json
 import csv
 from termcolor import cprint, colored
+from colorama import just_fix_windows_console
 from enum import Enum
 
 base64_padding = '=='
@@ -382,6 +383,9 @@ def encode_watermark(watermark: str, numColumns: int) -> list[list[int]]:
 # +------------------------------------+
 
 def main() -> int:
+    # Fix the windows console - needed for correct color output
+    just_fix_windows_console()
+    
     # Parse the arguments
     args = buildArgumentsParser().parse_args()
 
