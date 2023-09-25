@@ -7,21 +7,24 @@ setlocal
 python --version >nul 2>&1
 if not "%errorlevel%"=="0" (
     cls
-    echo Python is not installed.
-    echo Maybe run the Install-Dependencies.bat first.
+    call :PrintWarning "Python is not installed."
+    call :PrintInfo "Maybe run the Install-Dependencies.bat first."
     echo.
     :: ask if the user wants to run the Install-Dependencies.bat now
     echo Press y to run the Install-Dependencies.bat or any other key to cancel.
     set /p "runInstallDependencies="
     if /i "%runInstallDependencies%"=="y" (
         cls
-        echo Running the Install-Dependencies.bat.
+        call :PrintInfo "Running the Install-Dependencies.bat."
         echo.
         echo Press any key to continue.
         pause >nul
         call Install-Dependencies.bat
+        goto :start
     ) else (
         cls
+        call :PrintInfo "Python is not installed. Please install it manually."
+        echo.
         echo Press any key to continue.
         pause >nul
         goto :eof
@@ -236,3 +239,16 @@ if /i "%deleteFolder%"=="y" (
     echo Press any key to continue.
     pause >nul
 )
+
+
+:PrintError
+powershell Write-Host -ForegroundColor Red '[ERROR] %*'
+exit /b 0
+
+:PrintWarning
+powershell Write-Host -ForegroundColor Yellow '[WARNING] %*'
+exit /b 0
+
+:PrintInfo
+powershell Write-Host -ForegroundColor DarkCyan '[INFO] %*'
+exit /b 0
