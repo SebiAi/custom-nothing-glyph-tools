@@ -86,22 +86,21 @@ REM create a new folder for the custom glyph and change to it
 set "glyphFolder=%~dp0%glyphName%"
 if not exist "%glyphFolder%" (
     md "%glyphFolder%"
-    call :PrintInfo "created new Directory %cd%. Please add the files for the new glyph to this folder."
-    goto :getToGlyphFolder
+    cd /d "%glyphFolder%"
+    call :PrintInfo "created new Directory ""%~dp0%glyphName%""". Please add the files for the new glyph to this folder."
+    goto :openGlyphFolder
 )
 
 cls
 REM ask if the user wants to continue if the folder already exists
-call :PrintWarning "The folder %glyphFolder% already exists."
+call :PrintWarning "The folder ""%glyphFolder%""" already exists."
 echo.
 set /p continue="Press y to continue or any other key to cancel. "
-echo "%continue%"=="y"
-pause
 if /i not "%continue%"=="y" goto :eof
-call :PrintInfo "opened Directory %cd%. Please add the files for the new glyph to this folder."
-
-:getToGlyphFolder
 cd /d "%glyphFolder%"
+call :PrintInfo "opened Directory ""%cd%""". Please add the files for the new glyph to this folder."
+
+:openGlyphFolder
 REM open the new folder in the file explorer
 explorer "%glyphFolder%"
 echo.
@@ -114,7 +113,7 @@ set "folderEmpty=true"
 for /f "delims=" %%i in ('dir /b /a-d') do set "folderEmpty=false"
 if "%folderEmpty%"=="true" (
     cls
-    call :PrintWarning "The folder %cd% is empty. Please add the files."
+    call :PrintWarning "The folder ""%cd%""" is empty. Please add the files."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -127,7 +126,7 @@ set "txtFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.txt') do set "txtFileName=%%i"
 if "%txtFileName%"=="" (
     cls
-    call :PrintWarning "The folder %cd% does not seem to contain a labels file. Please add a labels file."
+    call :PrintWarning "The folder ""%cd%""" does not seem to contain a labels file. Please add a labels file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -157,7 +156,7 @@ REM take the filename of the .txt file and use it as parameter for GlyphTranslat
         python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
     ) || (
         cls
-        call :PrintError "The file %txtFileName% does not seem to be a valid labels file. Please add a valid labels file."
+        call :PrintError "The file ""%txtFileName%""" does not seem to be a valid labels file. Please add a valid labels file."
         echo.
         echo Press any key to continue.
         pause >nul
@@ -173,7 +172,7 @@ set "glyphaFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.glypha') do set "glyphaFileName=%%i"
 if "%glyphaFileName%"=="" (
     cls
-    call :PrintWarning "The folder %cd% does not seem to contain a valid glypha file. Please add a valid glypha file."
+    call :PrintWarning "The folder ""%cd%""" does not seem to contain a valid glypha file. Please add a valid glypha file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -186,7 +185,7 @@ set "glyphc1FileName="
 for /f "delims=" %%i in ('dir /b /a-d *.glyphc1') do set "glyphc1FileName=%%i"
 if "%glyphc1FileName%"=="" (
     cls
-    call :PrintWarning "The folder %cd% does not seem to contain a valid glyphc1 file. Please add a valid glyphc1 file."
+    call :PrintWarning "The folder ""%cd%""" does not seem to contain a valid glyphc1 file. Please add a valid glyphc1 file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -199,7 +198,7 @@ set "oggFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.ogg') do set "oggFileName=%%i"
 if "%oggFileName%"=="" (
     cls
-    call :PrintWarning "The folder %cd% does not seem to contain a valid sound file. Please add a valid sound file."
+    call :PrintWarning "The folder ""%cd%""" does not seem to contain a valid sound file. Please add a valid sound file."
     echo.
     echo Press any key to continue.
     pause >nul
@@ -224,26 +223,29 @@ pause
 
 REM ask if the user wants to delete the folder
 cls
-call :PrintInfo "The glyph %glyphName% was created successfully."
+call :PrintInfo "The glyph ""%glyphName%""" was created successfully."
 echo.
-echo Press y to delete the folder %glyphFolder% or any other key to keep the folder.
-set /p "deleteFolder="
-if /i "%deleteFolder%"=="y" (
-    cls
-    call :PrintWarning "The folder %glyphFolder% will be deleted."
-    echo.
-    echo Press any key to continue.
-    pause >nul
-    cd /d %toolsDirectory%
-    rd /s /q "%glyphFolder%"
-) else (
-    cls
-    call :PrintInfo "The folder %glyphFolder% will be kept."
-    echo.
-    echo Press any key to continue.
-    pause >nul
-)
+:askForDeletion
+set /p "continueRunning=Do you want to delete the folder "%glyphName%"? [y/n]: "
+if /i "%continueRunning%" equ "n" exit /b 0
+if /i "%continueRunning%" neq "y" goto :askForDeletion
 
+cls
+call :PrintWarning "The folder ""%glyphFolder%""" will be deleted."
+echo.
+echo Press any key to continue.
+pause >nul
+cd /d %toolsDirectory%
+rd /s /q "%glyphFolder%"
+goto :eof
+
+:dontDeleteFolder
+cls
+call :PrintInfo "The folder ""%glyphFolder%""" will be kept."
+echo.
+echo Press any key to continue.
+pause >nul
+goto :eof
 
 :PrintError
 powershell Write-Host -ForegroundColor Red '[ERROR] %*'
