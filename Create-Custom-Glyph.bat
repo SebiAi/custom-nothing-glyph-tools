@@ -1,8 +1,9 @@
 @echo off
 title Create Custom Glyph
 setlocal
-:start
+set "refreshedEnv=false"
 
+:start
 REM check if python is installed
 @(
     (
@@ -33,6 +34,14 @@ goto :checkIfToolsDirectoryExists
 
 REM create a goto label for the case that either python or ffmpeg is not installed and the user wants to run the Install-Dependencies.bat
 :runInstallDependencies
+REM try to refresh the environment variables before trying to call the Install-Dependencies.bat
+setlocal EnableDelayedExpansion
+if "%refreshedEnv%"=="false" (
+    call :tryRefreshEnv
+    set "refreshedEnv=true"
+    goto :start
+)
+
 REM ask if the user wants to run the Install-Dependencies.bat now
 echo Press y to run the Install-Dependencies.bat or any other key to cancel.
 set /p "runInstallDependencies="
@@ -40,9 +49,10 @@ if /i "%runInstallDependencies%"=="y" (
     cls
     call :PrintInfo "Running the Install-Dependencies.bat."
     echo.
-    echo Press any key to continue.
+    start Install-Dependencies.bat
+    set "refreshedEnv=false"
+    echo Press any key when the Install-Dependencies.bat has finished.
     pause >nul
-    call Install-Dependencies.bat
     goto :start
 ) else (
     cls
@@ -52,6 +62,7 @@ if /i "%runInstallDependencies%"=="y" (
     pause >nul
     goto :eof
 )
+endlocal
 
 :checkIfToolsDirectoryExists
 REM check if the GlyphTranslator.py and GlyphModder.py files exist
@@ -227,7 +238,7 @@ call :PrintInfo "The glyph ""%glyphName%""" was created successfully."
 echo.
 :askForDeletion
 set /p "continueRunning=Do you want to delete the folder "%glyphName%"? [y/n]: "
-if /i "%continueRunning%" equ "n" exit /b 0
+if /i "%continueRunning%" equ "n" goto :dontDeleteFolder
 if /i "%continueRunning%" neq "y" goto :askForDeletion
 
 cls
@@ -257,4 +268,38 @@ exit /b 0
 
 :PrintInfo
 powershell Write-Host -ForegroundColor DarkCyan '[INFO] %*'
+exit /b 0
+
+:tryRefreshEnv
+REM Check if the folder ".tmp" exists and create it if it doesn't
+if exist "%~dp0/.tmp" (
+    call :PrintInfo "The folder "".tmp""" exists - using it."
+) else (
+    REM Create the folder ".tmp" and hide it
+    mkdir "%~dp0/.tmp"
+    attrib +h "%~dp0/.tmp" /s /d
+)
+
+call :PrintInfo "Refreshing environment variables..."
+@(
+    (
+        REM Download code from @badrelmers on GitHub to refresh environment variables.
+        REM This downloaded code is part of badrelmers/RefrEnv (https://github.com/badrelmers/RefrEnv) which is released under the GPL-3.0 license.
+        REM Go to https://github.com/badrelmers/RefrEnv/blob/main/LICENSE for full license details.
+        powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile "%~dp0/.tmp/refrenv.bat""
+    ) && (
+        call %~dp0/.tmp/refrenv.bat
+        call :CleanUp
+        exit /b 0
+    ) || (
+        REM Download failed - inform the user
+        call :PrintWarning "Could not refresh environment."
+        pause
+        call :CleanUp
+        exit /b 0
+    )
+)
+
+:CleanUp
+rd /S /Q "%~dp0/.tmp"
 exit /b 0
