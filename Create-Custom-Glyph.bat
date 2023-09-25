@@ -58,8 +58,7 @@ if "%refreshedEnv%"=="false" (
 )
 
 REM ask if the user wants to run the Install-Dependencies.bat now
-echo Press y to run the Install-Dependencies.bat or any other key to cancel.
-set /p "runInstallDependencies="
+set /p runInstallDependencies="Do you want to run the Install-Dependencies.bat now? [y/n]: "
 if /i "%runInstallDependencies%"=="y" (
     echo.
     call :PrintInfo "Running the Install-Dependencies.bat."
@@ -121,7 +120,7 @@ echo.
 REM ask if the user wants to continue if the folder already exists
 call :PrintWarning "The folder ""%glyphFolder%""" already exists."
 echo.
-set /p continue="Press y to continue or any other key to cancel. "
+set /p continue="Do you want to continue? [y/n]: "
 if /i not "%continue%"=="y" goto :eof
 cd /d "%glyphFolder%"
 call :PrintInfo "opened Directory ""%cd%""". Please add the files for the new glyph to this folder."
@@ -162,7 +161,7 @@ if "%txtFileName%"=="" (
 REM ask if the user wants to disable compatibility mode
 echo.
 
-set /p disableCompatibilityMode="Press y to disable compatibility mode or any other key to continue with compatibility mode. "
+set /p disableCompatibilityMode="Do you want to disable compatibility mode? [y/n]: "
 if /i "%disableCompatibilityMode%"=="y" (
     echo.
     call :PrintInfo "Compatibility mode disabled."
