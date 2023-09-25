@@ -49,7 +49,7 @@ if /i "%runInstallDependencies%"=="y" (
     cls
     call :PrintInfo "Running the Install-Dependencies.bat."
     echo.
-    start Install-Dependencies.bat
+    powershell Start-Process -FilePath './Install-Dependencies.bat'
     set "refreshedEnv=false"
     echo Press any key when the Install-Dependencies.bat has finished.
     pause >nul
