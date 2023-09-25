@@ -57,6 +57,7 @@ if "%refreshedEnv%"=="false" (
     goto :start
 )
 
+:askForInstallDependencies
 REM ask if the user wants to run the Install-Dependencies.bat now
 set /p runInstallDependencies="Do you want to run the Install-Dependencies.bat now? [y/n]: "
 if /i "%runInstallDependencies%"=="y" (
@@ -68,7 +69,8 @@ if /i "%runInstallDependencies%"=="y" (
     echo Press any key when the Install-Dependencies.bat has finished.
     pause >nul
     goto :start
-) else (
+) 
+if /i "%runInstallDependencies%"=="n" (
     echo.
     call :PrintWarning "Python is not installed. Please install it manually."
     echo.
@@ -76,6 +78,7 @@ if /i "%runInstallDependencies%"=="y" (
     pause >nul
     goto :eof
 )
+else goto :askForInstallDependencies
 endlocal
 
 :checkIfToolsDirectoryExists
@@ -102,8 +105,8 @@ REM get current directory and save it to a variable
 set "toolsDirectory=%cd%"
 
 REM ask for a name for the new glyph
-:askForGlyphName
 echo.
+:askForGlyphName
 set /p glyphName="Enter a title for the new glyph: "
 if "%glyphName%"=="" goto :askForGlyphName
 
@@ -120,8 +123,10 @@ echo.
 REM ask if the user wants to continue if the folder already exists
 call :PrintWarning "The folder ""%glyphFolder%""" already exists."
 echo.
+:askForContinue
 set /p continue="Do you want to continue? [y/n]: "
-if /i not "%continue%"=="y" goto :eof
+if /i "%continue%"=="n" goto :eof
+if /i "%continue%" neq "y" goto :askForContinue
 cd /d "%glyphFolder%"
 call :PrintInfo "opened Directory ""%cd%""". Please add the files for the new glyph to this folder."
 
@@ -160,7 +165,7 @@ if "%txtFileName%"=="" (
 
 REM ask if the user wants to disable compatibility mode
 echo.
-
+:askForDisableCompatibilityMode
 set /p disableCompatibilityMode="Do you want to disable compatibility mode? [y/n]: "
 if /i "%disableCompatibilityMode%"=="y" (
     echo.
@@ -169,9 +174,11 @@ if /i "%disableCompatibilityMode%"=="y" (
     echo Press any key to continue.
     pause >nul
     set "disableCompatibilityMode=--disableCompatibility"
-) else (
+) 
+else if /i "%disableCompatibilityMode%"=="n" (
     set "disableCompatibilityMode="
 )
+else goto :askForDisableCompatibilityMode
 
 echo.
 REM take the filename of the .txt file and use it as parameter for GlyphTranslator
