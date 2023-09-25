@@ -9,11 +9,18 @@ REM check if python is installed
     (
         python --version >nul 2>&1
     ) || (
-        cls
         call :PrintWarning "Python is not installed."
-        call :PrintInfo "Consider running the Install-Dependencies.bat first."
-        echo.
-        goto :runInstallDependencies
+        if "%refreshedEnv%"=="false" (
+            call :PrintInfo "Trying to refresh Environment first."
+            call :tryRefreshEnv
+            set "refreshedEnv=true"
+            goto :start
+        )
+        else (
+            call :PrintInfo "Consider running the Install-Dependencies.bat."
+            echo.
+            goto :runInstallDependencies
+        )
     )
 )
 
@@ -22,11 +29,19 @@ REM check if ffmpeg is installed
     (
         ffmpeg -version >nul 2>&1
     ) || (
-        cls
-        call :PrintWarning "ffmpeg is not installed."
-        call :PrintInfo "Consider running the Install-Dependencies.bat first."
         echo.
-        goto :runInstallDependencies
+        call :PrintWarning "ffmpeg is not installed."
+        if "%refreshedEnv%"=="false" (
+            call :PrintInfo "Trying to refresh Environment first."
+            call :tryRefreshEnv
+            set "refreshedEnv=true"
+            goto :start
+        )
+        else (
+            call :PrintInfo "Consider running the Install-Dependencies.bat first."
+            echo.
+            goto :runInstallDependencies
+        )
     )
 )
 
@@ -46,7 +61,7 @@ REM ask if the user wants to run the Install-Dependencies.bat now
 echo Press y to run the Install-Dependencies.bat or any other key to cancel.
 set /p "runInstallDependencies="
 if /i "%runInstallDependencies%"=="y" (
-    cls
+    echo.
     call :PrintInfo "Running the Install-Dependencies.bat."
     echo.
     powershell Start-Process -FilePath './Install-Dependencies.bat'
@@ -55,7 +70,7 @@ if /i "%runInstallDependencies%"=="y" (
     pause >nul
     goto :start
 ) else (
-    cls
+    echo.
     call :PrintWarning "Python is not installed. Please install it manually."
     echo.
     echo Press any key to continue.
@@ -67,7 +82,7 @@ endlocal
 :checkIfToolsDirectoryExists
 REM check if the GlyphTranslator.py and GlyphModder.py files exist
 if not exist GlyphTranslator.py (
-    cls
+    echo.
     call :PrintWarning "The file GlyphTranslator.py does not exist."
     echo.
     echo Press any key to continue.
@@ -76,7 +91,7 @@ if not exist GlyphTranslator.py (
 )
 
 if not exist GlyphModder.py (
-    cls
+    echo.
     call :PrintWarning "The file GlyphModder.py does not exist."
     echo.
     echo Press any key to continue.
@@ -89,7 +104,7 @@ set "toolsDirectory=%cd%"
 
 REM ask for a name for the new glyph
 :askForGlyphName
-cls
+echo.
 set /p glyphName="Enter a title for the new glyph: "
 if "%glyphName%"=="" goto :askForGlyphName
 
@@ -102,7 +117,7 @@ if not exist "%glyphFolder%" (
     goto :openGlyphFolder
 )
 
-cls
+echo.
 REM ask if the user wants to continue if the folder already exists
 call :PrintWarning "The folder ""%glyphFolder%""" already exists."
 echo.
@@ -123,7 +138,7 @@ REM check if the folder is empty
 set "folderEmpty=true"
 for /f "delims=" %%i in ('dir /b /a-d') do set "folderEmpty=false"
 if "%folderEmpty%"=="true" (
-    cls
+    echo.
     call :PrintWarning "The folder ""%cd%""" is empty. Please add the files."
     echo.
     echo Press any key to continue.
@@ -136,7 +151,7 @@ REM check if the folder contains 1 .txt file
 set "txtFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.txt') do set "txtFileName=%%i"
 if "%txtFileName%"=="" (
-    cls
+    echo.
     call :PrintWarning "The folder ""%cd%""" does not seem to contain a labels file. Please add a labels file."
     echo.
     echo Press any key to continue.
@@ -145,11 +160,11 @@ if "%txtFileName%"=="" (
 )
 
 REM ask if the user wants to disable compatibility mode
-cls
+echo.
 
 set /p disableCompatibilityMode="Press y to disable compatibility mode or any other key to continue with compatibility mode. "
 if /i "%disableCompatibilityMode%"=="y" (
-    cls
+    echo.
     call :PrintInfo "Compatibility mode disabled."
     echo.
     echo Press any key to continue.
@@ -159,14 +174,13 @@ if /i "%disableCompatibilityMode%"=="y" (
     set "disableCompatibilityMode="
 )
 
-cls
 echo.
 REM take the filename of the .txt file and use it as parameter for GlyphTranslator
 @(
     (
         python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
     ) || (
-        cls
+        echo.
         call :PrintError "The file ""%txtFileName%""" does not seem to be a valid labels file. Please add a valid labels file."
         echo.
         echo Press any key to continue.
@@ -182,7 +196,7 @@ REM check if the folder contains 1 .glypha file and add the filename to a variab
 set "glyphaFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.glypha') do set "glyphaFileName=%%i"
 if "%glyphaFileName%"=="" (
-    cls
+    echo.
     call :PrintWarning "The folder ""%cd%""" does not seem to contain a valid glypha file. Please add a valid glypha file."
     echo.
     echo Press any key to continue.
@@ -195,7 +209,7 @@ REM check if the folder contains 1 .glyphc1 file and add the filename to a varia
 set "glyphc1FileName="
 for /f "delims=" %%i in ('dir /b /a-d *.glyphc1') do set "glyphc1FileName=%%i"
 if "%glyphc1FileName%"=="" (
-    cls
+    echo.
     call :PrintWarning "The folder ""%cd%""" does not seem to contain a valid glyphc1 file. Please add a valid glyphc1 file."
     echo.
     echo Press any key to continue.
@@ -208,7 +222,7 @@ REM check if the folder contains 1 .ogg file and add the filename to a variable
 set "oggFileName="
 for /f "delims=" %%i in ('dir /b /a-d *.ogg') do set "oggFileName=%%i"
 if "%oggFileName%"=="" (
-    cls
+    echo.
     call :PrintWarning "The folder ""%cd%""" does not seem to contain a valid sound file. Please add a valid sound file."
     echo.
     echo Press any key to continue.
@@ -222,7 +236,7 @@ python %toolsDirectory%/GlyphModder.py -t "%glyphName%" -w "%glyphaFileName%" "%
 
 REM check if the command was successful
 if not "%errorlevel%"=="0" (
-    cls
+    echo.
     call :PrintError "At least one of these files (%glyphaFileName%, %glyphc1FileName%, %oggFileName%) does not seem to be a valid file."
     echo.
     echo Press any key to continue.
@@ -233,7 +247,6 @@ echo.
 pause
 
 REM ask if the user wants to delete the folder
-cls
 call :PrintInfo "The glyph ""%glyphName%""" was created successfully."
 echo.
 :askForDeletion
@@ -241,7 +254,7 @@ set /p "continueRunning=Do you want to delete the folder "%glyphName%"? [y/n]: "
 if /i "%continueRunning%" equ "n" goto :dontDeleteFolder
 if /i "%continueRunning%" neq "y" goto :askForDeletion
 
-cls
+echo.
 call :PrintWarning "The folder ""%glyphFolder%""" will be deleted."
 echo.
 echo Press any key to continue.
@@ -251,7 +264,7 @@ rd /s /q "%glyphFolder%"
 goto :eof
 
 :dontDeleteFolder
-cls
+echo.
 call :PrintInfo "The folder ""%glyphFolder%""" will be kept."
 echo.
 echo Press any key to continue.
@@ -290,12 +303,14 @@ call :PrintInfo "Refreshing environment variables..."
     ) && (
         call %~dp0/.tmp/refrenv.bat
         call :CleanUp
+        echo.
         exit /b 0
     ) || (
         REM Download failed - inform the user
         call :PrintWarning "Could not refresh environment."
         pause
         call :CleanUp
+        echo.
         exit /b 0
     )
 )
