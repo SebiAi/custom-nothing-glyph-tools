@@ -204,17 +204,24 @@ if "%folderEmpty%"=="true" (
     goto :checkFolderEmpty
 )
 
-REM check if the folder contains 1 .txt file
+:checkFolderContainsWatermarkTxtFile
+REM check if the folder contains 1 watermark.txt file and add the filename to a variable
+for /f "delims=" %%i in ('dir /b /a-d watermark.txt') do set "watermarkFileName=%%i"
+if "%watermarkFileName%"=="" (
+    echo.
+    call :PrintInfo "The folder ""%cd%""" does not seem to contain a watermark.txt file. Continuing without watermark."
+  goto :checkFolderContainsOneTxtFile
+)
+
 :checkFolderContainsOneTxtFile
 set "txtFileName="
-for /f "delims=" %%i in ('dir /b /a-d *.txt') do set "txtFileName=%%i"
-if "%txtFileName%"=="" (
-    echo.
-    call :PrintWarning "The folder ""%cd%""" does not seem to contain a labels file. Please add a labels file."
-    echo.
-    echo Press any key to continue.
-    pause >nul
-    goto :checkFolderContainsOneTxtFile
+REM search for another .txt file thats not watermark.txt
+for /f "delims=" %%i in ('dir /b /a-d *.txt ^| findstr /v /i /c:"watermark.txt"') do (
+  REM if another .txt file is found, set txtFileName to the filename
+  if not defined txtFileName (
+    set "txtFileName=%%i"
+    break
+  )
 )
 
 REM ask if the user wants to disable compatibility mode
@@ -237,20 +244,42 @@ if /i "%disableCompatibilityMode%"=="n" (
 goto :askForDisableCompatibilityMode
 
 :runGlyphTranslator
-echo.
 REM take the filename of the .txt file and use it as parameter for GlyphTranslator
-@(
-    (
-        python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
-    ) || (
-        echo.
-        call :PrintError "The file ""%txtFileName%""" does not seem to be a valid labels file. Please add a valid labels file."
-        echo.
-        echo Press any key to continue.
-        pause >nul
-        goto :checkFolderContainsOneTxtFile
+REM if watermark.txt exists, use it as parameter for GlyphTranslator with --watermark watermark.txt
+if "%watermarkFileName%"=="" (
+    echo.
+    call :PrintInfo "Running GlyphTranslator with the file ""%txtFileName%"" as parameter."
+    echo.
+    @(
+        (
+            python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
+        ) || (
+            echo.
+            call :PrintError "The file ""%txtFileName%""" does not seem to be a valid labels file. Please add a valid labels file."
+            echo.
+            echo Press any key to continue.
+            pause >nul
+            goto :checkFolderContainsOneTxtFile
+        )
+    )
+) else (
+    echo.
+    call :PrintInfo "Running GlyphTranslator with the file ""%txtFileName%"" and ""%watermarkFileName%"" as parameter."
+    echo.
+    @(
+        (
+            python %toolsDirectory%/GlyphTranslator.py --watermark "%watermarkFileName%" "%txtFileName%" %disableCompatibilityMode%
+        ) || (
+            echo.
+            call :PrintError "At least one of the files ""%txtFileName%""" ""%watermarkFileName%""" does not seem to be valid file. Please check the files."
+            echo.
+            echo Press any key to continue.
+            pause >nul
+            goto :checkFolderContainsOneTxtFile
+        )
     )
 )
+
 
 timeout /t 3
 
