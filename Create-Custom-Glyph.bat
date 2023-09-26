@@ -109,15 +109,69 @@ echo.
 :askForGlyphName
 set /p glyphName="Enter a title for the new glyph: "
 if "%glyphName%"=="" goto :askForGlyphName
+:: check if the glyphname is too long and if it is ask for a new one
+if "%glyphName:~0,32%" neq "%glyphName%" (
+    echo.
+    call :PrintWarning "The title ""%glyphName%""" is too long. Please enter a title with a maximum of 32 characters.
+    echo.
+    echo Press any key to continue.
+    pause >nul
+    goto :askForGlyphName
+)
+:: check if the glyphName contains any of the following characters: \ / : * ? " < > | and if it does replace them with _ and save the new name to a variable called folderName
+setlocal enabledelayedexpansion
+set "replace=_"
+set "folderName=#!glyphName!"
+:replaceLoop
+for /F "tokens=1 delims=*" %%A in ("!folderName!") do (
+  set "prefix=%%A"
+  set "rest=!folderName:*%%A=!"
+  if defined rest (
+    set "rest=!replace!!rest:~1!"
+    set Again=1
+  ) else set "Again="
+  set "folderName=%%A!rest!"
+)
+if defined again goto :replaceLoop
+set "folderName=!folderName:~1!"
+set folderName=!folderName:^|=^_!
+set folderName=!folderName:^<=^_!
+set folderName=!folderName:^>=^_!
+set folderName=!folderName:/=_!
+set folderName=!folderName:\=_!
+set folderName=!folderName::=_!
+set folderName=!folderName:?=_!
+
+
+if "%glyphName%" neq "!folderName!" (
+    echo.
+    call :PrintWarning "The title ""%glyphName%""" contains one or more invalid characters. The title will be kept and the folder name will be ""!folderName!"".
+    echo.
+    echo Press any key to continue.
+    pause >nul
+)
+
 
 REM create a new folder for the custom glyph and change to it
-set "glyphFolder=%~dp0%glyphName%"
+set "glyphFolder=%~dp0!folderName!"
 if not exist "%glyphFolder%" (
-    md "%glyphFolder%"
+    @(
+        (
+            md "%glyphFolder%"
+        ) || (
+            echo.
+            call :PrintError "Could not create folder ""%~dp0%glyphName%"
+            echo.
+            echo Press any key to continue.
+            pause >nul
+            exit /b 0
+        )
+    )
     cd /d "%glyphFolder%"
     call :PrintInfo "created new Directory ""%~dp0%glyphName%""". Please add the files for the new glyph to this folder."
     goto :openGlyphFolder
 )
+
 
 echo.
 REM ask if the user wants to continue if the folder already exists
@@ -174,12 +228,15 @@ if /i "%disableCompatibilityMode%"=="y" (
     echo Press any key to continue.
     pause >nul
     set "disableCompatibilityMode=--disableCompatibility"
+    goto :runGlyphTranslator
 ) 
-else if /i "%disableCompatibilityMode%"=="n" (
+if /i "%disableCompatibilityMode%"=="n" (
     set "disableCompatibilityMode="
+    goto :runGlyphTranslator
 )
-else goto :askForDisableCompatibilityMode
+goto :askForDisableCompatibilityMode
 
+:runGlyphTranslator
 echo.
 REM take the filename of the .txt file and use it as parameter for GlyphTranslator
 @(
@@ -257,7 +314,7 @@ REM ask if the user wants to delete the folder
 call :PrintInfo "The glyph ""%glyphName%""" was created successfully."
 echo.
 :askForDeletion
-set /p "continueRunning=Do you want to delete the folder "%glyphName%"? [y/n]: "
+set /p "continueRunning=Do you want to delete the folder "%glyphFolder%"? [y/n]: "
 if /i "%continueRunning%" equ "n" goto :dontDeleteFolder
 if /i "%continueRunning%" neq "y" goto :askForDeletion
 
