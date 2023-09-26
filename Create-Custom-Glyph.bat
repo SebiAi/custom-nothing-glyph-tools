@@ -238,16 +238,17 @@ if "%oggFileName%"=="" (
 
 echo.
 REM run the GlyphModder with the filename of the .glypha, .glyphc1 and .ogg file as parameter the CustomTitle will be the folder name
-python %toolsDirectory%/GlyphModder.py -t "%glyphName%" -w "%glyphaFileName%" "%glyphc1FileName%" "%oggFileName%"
-
-REM check if the command was successful
-if not "%errorlevel%"=="0" (
-    echo.
-    call :PrintError "At least one of these files (%glyphaFileName%, %glyphc1FileName%, %oggFileName%) does not seem to be a valid file."
-    echo.
-    echo Press any key to continue.
-    pause >nul
-    goto :checkFolderContainsOneGlyphaFile
+@(
+    (
+        python %toolsDirectory%/GlyphModder.py -t "%glyphName%" -w "%glyphaFileName%" "%glyphc1FileName%" "%oggFileName%"
+    ) || (
+        echo.
+        call :PrintError "At least one of these files (%glyphaFileName%, %glyphc1FileName%, %oggFileName%) does not seem to be a valid file."
+        echo.
+        echo Press any key to continue.
+        pause >nul
+        goto :checkFolderContainsOneGlyphaFile
+    )
 )
 echo.
 pause
