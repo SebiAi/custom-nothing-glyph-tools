@@ -204,24 +204,39 @@ if "%folderEmpty%"=="true" (
     goto :checkFolderEmpty
 )
 
-:checkFolderContainsWatermarkTxtFile
-REM check if the folder contains 1 watermark.txt file and add the filename to a variable
-for /f "delims=" %%i in ('dir /b /a-d watermark.txt') do set "watermarkFileName=%%i"
-if "%watermarkFileName%"=="" (
-    echo.
-    call :PrintInfo "The folder ""%cd%""" does not seem to contain a watermark.txt file. Continuing without watermark."
-  goto :checkFolderContainsOneTxtFile
-)
+call :tmpExists
 
-:checkFolderContainsOneTxtFile
-set "txtFileName="
-REM search for another .txt file thats not watermark.txt
-for /f "delims=" %%i in ('dir /b /a-d *.txt ^| findstr /v /i /c:"watermark.txt"') do (
-  REM if another .txt file is found, set txtFileName to the filename
-  if not defined txtFileName (
-    set "txtFileName=%%i"
+:checkFolderContainsLabelTxtFile
+findstr /e /n /r /m /c:".END" *.txt > "%~dp0/.tmp/labelFileName.txt"
+
+REM get the first line of the file and save it to a variable
+set /p labelFileName=<"%~dp0/.tmp/labelFileName.txt"
+rd /s /q "%~dp0/.tmp"
+if not defined labelFileName (
+  call :PrintInfo "The folder ""%cd%""" does not seem to contain a valid label file."
+  echo.
+  echo Press any key to retry.
+  pause >nul
+  goto :checkFolderContainsLabelTxtFile
+)
+call :PrintInfo "The label file ""%labelFileName%""" was found."
+
+call :CleanUp
+
+:checkFolderContainsAnotherTxtFile
+set "watermarkFileName="
+REM search for another .txt file thats not labelFileName
+for /f "delims=" %%i in ('dir /b /a-d *.txt ^| findstr /v /i /c:%labelFileName%') do (
+  REM if another .txt file is found, set watermarkFileName to the filename
+  if not defined watermarkFileName (
+    set "watermarkFileName=%%i"
     break
   )
+)
+if defined watermarkFileName (
+    call :PrintInfo "The watermark file ""%watermarkFileName%""" was found."
+) else (
+    call :PrintInfo "No watermark file was found. Continueing without one."
 )
 
 REM ask if the user wants to disable compatibility mode
@@ -248,14 +263,14 @@ REM take the filename of the .txt file and use it as parameter for GlyphTranslat
 REM if watermark.txt exists, use it as parameter for GlyphTranslator with --watermark watermark.txt
 if "%watermarkFileName%"=="" (
     echo.
-    call :PrintInfo "Running GlyphTranslator with the file ""%txtFileName%"" as parameter."
+    call :PrintInfo "Running GlyphTranslator with the file ""%labelFileName%"" as parameter."
     echo.
     @(
         (
-            python %toolsDirectory%/GlyphTranslator.py "%txtFileName%" %disableCompatibilityMode%
+            python %toolsDirectory%/GlyphTranslator.py "%labelFileName%" %disableCompatibilityMode%
         ) || (
             echo.
-            call :PrintError "The file ""%txtFileName%""" does not seem to be a valid labels file. Please add a valid labels file."
+            call :PrintError "The file ""%labelFileName%""" does not seem to be a valid labels file. Please add a valid labels file."
             echo.
             echo Press any key to continue.
             pause >nul
@@ -264,14 +279,14 @@ if "%watermarkFileName%"=="" (
     )
 ) else (
     echo.
-    call :PrintInfo "Running GlyphTranslator with the file ""%txtFileName%"" and ""%watermarkFileName%"" as parameter."
+    call :PrintInfo "Running GlyphTranslator with the file ""%labelFileName%""" and """%watermarkFileName%""" as parameter."
     echo.
     @(
         (
-            python %toolsDirectory%/GlyphTranslator.py --watermark "%watermarkFileName%" "%txtFileName%" %disableCompatibilityMode%
+            python %toolsDirectory%/GlyphTranslator.py --watermark "%watermarkFileName%" "%labelFileName%" %disableCompatibilityMode%
         ) || (
             echo.
-            call :PrintError "At least one of the files ""%txtFileName%""" ""%watermarkFileName%""" does not seem to be valid file. Please check the files."
+            call :PrintError "At least one of the files ""%labelFileName%""" """%watermarkFileName%""" does not seem to be valid file. Please check the files."
             echo.
             echo Press any key to continue.
             pause >nul
@@ -376,8 +391,9 @@ exit /b 0
 powershell Write-Host -ForegroundColor DarkCyan '[INFO] %*'
 exit /b 0
 
-:tryRefreshEnv
+
 REM Check if the folder ".tmp" exists and create it if it doesn't
+:tmpExists
 if exist "%~dp0/.tmp" (
     call :PrintInfo "The folder "".tmp""" exists - using it."
 ) else (
@@ -385,7 +401,10 @@ if exist "%~dp0/.tmp" (
     mkdir "%~dp0/.tmp"
     attrib +h "%~dp0/.tmp" /s /d
 )
+exit /b 0
 
+:tryRefreshEnv
+call :tmpExists
 call :PrintInfo "Refreshing environment variables..."
 @(
     (
