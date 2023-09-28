@@ -198,7 +198,7 @@ setlocal enabledelayedexpansion
         REM python is not installed, install it
         call :PrintWarning "python is not in path."
         REM ask for user to uninstall current found package using powershell -Command "Get-Package Python*" and then install python using winget
-        set /p "reInstall=Do you want to uninstall and reinstall python using winget? [y/n]: "
+        set /p "reInstall=Do you want to uninstall and reinstall python using winget? [y/N]: "
         if /i "!reInstall!"=="y" (
             echo.
             call :PrintInfo "Uninstalling python..."
