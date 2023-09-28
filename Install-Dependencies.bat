@@ -176,7 +176,7 @@ echo.
 REM if Get-Package Python* is not throwing an error check if python is in the path and if it is, skip the installation
 @(
     (
-        powershell -Command "Get-Package Python*"
+        powershell -Command "Get-Package 'Python 3*'" >nul 2>&1
     ) && (
         call :PrintInfo "python is already installed. Skipping..."
     ) || (
