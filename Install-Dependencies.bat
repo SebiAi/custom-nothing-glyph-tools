@@ -152,7 +152,7 @@ REM Ask the user if they want to install Audacity or not which is optional
 set /p "install=Do you want to install Audacity? [y/n]: "
 if /i "%install%"=="y" goto :fullInstall
 if /i "%install%"=="n" goto :basicInstall
-else goto :install
+goto :install
 
 :fullInstall
 REM Install Audacity
@@ -173,23 +173,53 @@ REM Install the rest of the programs
     )
 )
 echo.
+REM if Get-Package Python* is not throwing an error check if python is in the path and if it is, skip the installation
 @(
     (
-        python --version >nul 2>&1
+        powershell -Command "Get-Package 'Python 3*'" >nul 2>&1
     ) && (
         call :PrintInfo "python is already installed. Skipping..."
-        REM No need to refresh environment variables if python is already working
-        goto :installPythonStuff
     ) || (
         REM python is not installed, install it
         call :PrintInfo "Installing python..."
         winget install Python.Python.3.11
+        goto :refreshEnv
     )
 )
-echo.
+setlocal enabledelayedexpansion
+@(
+    (
+        python --version >nul 2>&1
+    ) && (
+        call :PrintInfo "python is already in PATH. Skipping..."
+        REM No need to refresh environment variables if python is already working
+        goto :installPythonStuff
+    ) || (
+        REM python is not installed, install it
+        call :PrintWarning "python is not in path."
+        REM ask for user to uninstall current found package using powershell -Command "Get-Package Python*" and then install python using winget
+        set /p "reInstall=Do you want to uninstall and reinstall python using winget? [y/N]: "
+        if /i "!reInstall!"=="y" (
+            echo.
+            call :PrintInfo "Uninstalling python..."
+            winget uninstall Python
+            echo.
+            call :PrintInfo "Installing python..."
+            winget install Python.Python.3.11
+            goto :refreshEnv
+        )
+        endlocal
+        call :PrintError "Python is not in PATH! Please add python to the PATH manually. See here: https://docs.python.org/3/using/windows.html#excursus-setting-environment-variables"
+        pause
+        call :CleanUp
+        exit /b 0
+    )
+)
+endlocal
 
 REM ---------------------------Refresh environment variables--------------------------------------------------
-
+:refreshEnv
+echo.
 call :PrintInfo "Refreshing environment variables..."
 @(
     (
@@ -211,6 +241,7 @@ call :PrintInfo "Refreshing environment variables..."
 REM ---------------------------Install python packages--------------------------------------------------
 
 :installPythonStuff
+echo.
 REM Install the python packages
 call :PrintInfo "Installing python packages..."
 python -m pip install -r %~dp0/requirements.txt
