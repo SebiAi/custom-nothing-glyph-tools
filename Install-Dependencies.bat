@@ -169,7 +169,7 @@ REM Install the rest of the programs
     ) || (
         REM ffmpeg is not installed, install it
         call :PrintInfo "Installing ffmpeg..."
-        winget install Gyan.FFmpeg
+        winget install Gyan.FFmpeg.Shared
     )
 )
 echo.
