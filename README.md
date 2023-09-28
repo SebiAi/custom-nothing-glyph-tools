@@ -41,14 +41,14 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 
 # :pencil2: Usage
 ## :memo: Requirements
+If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](./Install-Dependencies.bat) script to install all requirements. If the script issued no warnings or errors you can continue at [Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition).
+
 * \[*Required*\] [**python3**](https://www.python.org/downloads/) - To run the scripts
 * \[*Required*\] [**ffmpeg**](https://ffmpeg.org/download.html) - To write metadata to the sound file
 * \[*Required*\] [**ffprobe**](https://ffmpeg.org/download.html) - To read metadata from the sound file (should be included in almost every ffmpeg install)
 * \[*Optional*\] [**Audacity&reg;**](https://www.audacityteam.org/) - Create custom compositions more easily with Labels
 
     :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
-
-    :arrow_right: If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](./Install-Dependencies.bat) script to install all requirements.
 
 ## :rocket: Setup
 #### Clone the repo
