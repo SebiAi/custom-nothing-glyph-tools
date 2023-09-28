@@ -208,7 +208,8 @@ setlocal enabledelayedexpansion
             winget install Python.Python.3.11
             goto :refreshEnv
         )
-        call :PrintError "Python is not in PATH! Please add python to the PATH manually."
+        endlocal
+        call :PrintError "Python is not in PATH! Please add python to the PATH manually. See here: https://docs.python.org/3/using/windows.html#excursus-setting-environment-variables"
         pause
         call :CleanUp
         exit /b 0
