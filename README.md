@@ -41,7 +41,8 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 
 # :pencil2: Usage
 ## :memo: Requirements
-If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](./Install-Dependencies.bat) script to install all requirements. If the script issued no warnings or errors you can continue at [Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition).
+> [!NOTE]
+> If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](./Install-Dependencies.bat) script to install all requirements. If the script issued no warnings or errors you can continue at [Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition).
 
 * \[*Required*\] [**python3**](https://www.python.org/downloads/) - To run the scripts
 * \[*Required*\] [**ffmpeg**](https://ffmpeg.org/download.html) - To write metadata to the sound file
@@ -56,7 +57,8 @@ If you are on ***Windows*** you can use (double click) the [Install-Dependencies
 git clone https://github.com/SebiAi/custom-nothing-glyph-tools.git
 cd custom-nothing-glyph-tools
 ```
-If you don't feel comfortable using git then you can also [download an archive file here](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip).
+> [!NOTE]
+> If you don't feel comfortable using git then you can also [download an archive file here](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip).
 
 #### Install the necessary python dependencies
 ```bash
@@ -70,18 +72,20 @@ I would recommend using [Audacity&reg;](https://www.audacityteam.org/) to make y
 ### Cutting the sound
 You can skip to [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length and the right codec (`opus`).
 
-When exporting the sound always use the *opus* codec:
-1) **Export audio:** Files -> Export -> Export Audio...
-2) **Select the right codec in the dropdown:** Select Opus - default settings are fine
-3) **Change the extension to *ogg* when naming your file!**
-4) **Export**
+> [!IMPORTANT]
+> When exporting the sound always use the *opus* codec:
+> 1) **Export audio:** Files -> Export -> Export Audio...
+> 2) **Select the right codec in the dropdown:** Select Opus - default settings are fine
+> 3) **Change the extension to *ogg* when naming your file!**
+> 4) **Export**
 
 ### Creating the Glyph format with Audacity&reg;
 To make our lives easier we can utilize Audacity&reg;'s Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslator](./GlyphTranslator.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
 
 I would recommend saving your Audacity&reg; project regularly.
 
-You can also use the [MidiToLabel](./MidiToLabel.py) script to transform MIDI files to Audacity Labels. Use the `--help` command on the script to learn more.
+> [!NOTE]
+> You can also use the [MidiToLabel](./MidiToLabel.py) script to transform MIDI files to Audacity Labels. Use the `--help` command on the script to learn more.
 
 #### Add the Labels track
 1) **Open your audio with Audacity&reg;**
@@ -101,16 +105,16 @@ Each Label should be named like this: `[#]glyphId-lightLevelFrom[-lightLevelTo[-
     * EXP: Exponential Interpolation
     * LOG: Logarithmic Interpolation
 
-The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
+> [!IMPORTANT]
+> The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
 
 If you like regex patterns, the name of the Label should match this one (thanks [Joel05](https://github.com/SebiAi/custom-nothing-glyph-tools/issues/1)):
 ```regex
 ^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$
 ```
 
-> **:warning: Important**
-
-**At the end of the audio there MUST be a non ranged Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
+> [!IMPORTANT]
+> **At the end of the audio there MUST be a non ranged Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
 
 ##### glyphId
 Depending on which Phone you want to make the composition for there are two modes that I have called the *Compatibility* or *Phone2* mode:
@@ -184,7 +188,8 @@ The `glyphId` can only be 1 to 11 which correspond to the individual Glyphs:
 
 <img src="assets/Glyph%20Ids%20Phone2%20mode.png" alt="Glyph Ids Phone2 mode" width="25%"/>
 
-Do **NOT** prepend the `#` symbol! This is for addressing each individual Zone - see below.
+> [!IMPORTANT]
+> Do **NOT** prepend the `#` symbol! This is for addressing each individual Zone - see below.
 
 If you want even more control you can control each individual Zone with the Zone ids:
 | Index | Glyph                                | Direction          |
@@ -271,20 +276,20 @@ Now that we have a Labels file we can use the [GlyphTranslator](./GlyphTranslato
 ```bash
 python3 GlyphTranslator.py MyLabelFile.txt
 ```
-You can also add a watermark by writing your watermark to a text file and passing it to the script like this: `--watermark MyWatermarkFile.txt`
+> [!NOTE]
+> You can also add a watermark by writing your watermark to a text file and passing it to the script like this: `--watermark MyWatermarkFile.txt`
 
 Assuming your Label file was called `MyLabelFile.txt` it will spit out two files called `MyLabelFile.glypha` and `MyLabelFile.glyphc1` in your current working directory.
 
-> **:warning: Attention**
-
-If you see this message in the output:
-```
-INFO: Auto detected Phone (1) and Phone (2) compatibility mode.
-INFO: If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.
-```
-act according to this:
-* You are using ***Compatibility*** mode: Do NOT follow the advice - this is intended behaviour.
-* You are using ***Phone2*** mode: Please add the `--disableCompatibility` parameter to the command to use the right Glyphs.
+> [!IMPORTANT]
+> If you see this message in the output:
+> ```
+> INFO: Auto detected Phone (1) and Phone (2) compatibility mode.
+> INFO: If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.
+> ```
+> act according to this:
+> * You are using ***Compatibility*** mode: Do NOT follow the advice - this is intended behaviour.
+> * You are using ***Phone2*** mode: Please add the `--disableCompatibility` parameter to the command to use the right Glyphs.
 
 ### Read and write the Glyph format data to an audio file
 #### Write to an audio file
@@ -292,13 +297,14 @@ When you have both your `.glypha` and `.glyphc1` files (via Audacity&reg; and th
 ```bash
 python3 GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
 ```
-The `-t` argument is optional, this just sets the *TITLE* tag which, as far as I could see, is not used anywhere in the Glyph Composer right now.
+> [!NOTE]
+> The `-t` argument is optional, this just sets the *TITLE* tag which, as far as I could see, is not used anywhere in the Glyph Composer right now.
 
-You can provide the path to *ffmpeg* with the `--ffmpeg` argument if it can not be found in PATH.
+> [!NOTE]
+> You can provide the path to *ffmpeg* with the `--ffmpeg` argument if it can not be found in PATH.
 
-> **:warning: Important**
-
-**Regarding the `-w` option: The `.glypha` file must be passed before the `.glyphc1` file. The script will still comply but you can not play the file in the Glyph Composer!**
+> [!IMPORTANT]
+> **Regarding the `-w` option: The `.glypha` file must be passed before the `.glyphc1` file. The script will still comply but you can not play the file in the Glyph Composer!**
 
 Congrats, you can now transfer the audio file to your Nothing phone and import it into the Glyph Composer app!
 
@@ -310,7 +316,8 @@ python3 GlyphModder.py MyGlyphCreation.ogg
 ```
 Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two files called `MyGlyphCreation.glypha` and `MyGlyphCreation.glyphc1` in your current working directory.
 
-You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
+> [!NOTE]
+> You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
 
 It is almost impossible to convert the `.glypha` and `.glyphc1` files back to an Audacity&reg; Label file therefore you would need to edit both files manually. More info on that is in the [The technical details](#wrench-the-technical-details) section.
 
