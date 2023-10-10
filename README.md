@@ -8,6 +8,55 @@ https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1c
 
 ***
 
+# :writing_hand: Table of contents
+<!-- TOC Generator settings -->
+<!-- indent characters: '-*+' -->
+<!-- algorithm used to generate anchors: DEFAULT -->
+<!-- Max indent level: 3 -->
+<!-- trim toc indent: True -->
+<!-- oneshot: False -->
+<!-- generate anchors: False -->
+<!-- anchors prefix: '' -->
+<!-- concat spaces: True -->
+<!-- comment style: HTML -->
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [:clapper: Simple tutorial Video](#clapper-simple-tutorial-video)
+- [:pushpin: Disclaimer](#pushpin-disclaimer)
+- [:safety_vest: Need help?](#safety_vest-need-help)
+- [:construction: Compatibility](#construction-compatibility)
+   * [OS](#os)
+   * [Phones](#phones)
+- [:pencil2: Usage](#pencil2-usage)
+   * [:memo: Requirements](#memo-requirements)
+   * [:rocket: Setup](#rocket-setup)
+      + [Clone the repo](#clone-the-repo)
+      + [Install the necessary python dependencies](#install-the-necessary-python-dependencies)
+   * [:sparkles: Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition)
+      + [Cutting the sound](#cutting-the-sound)
+      + [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity)
+      + [Read and write the Glyph format data to an audio file](#read-and-write-the-glyph-format-data-to-an-audio-file)
+- [Hardware limitations](#hardware-limitations)
+- [:interrobang: Troubleshooting](#interrobang-troubleshooting)
+   * [ModuleNotFoundError: No module named 'termcolor'](#modulenotfounderror-no-module-named-termcolor)
+   * [I can't find the modified audio file after using GlyphModder](#i-cant-find-the-modified-audio-file-after-using-glyphmodder)
+   * [File is not supported on this device](#file-is-not-supported-on-this-device)
+   * [File is not created by Composer](#file-is-not-created-by-composer)
+   * [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file)
+      + [Wrong codec](#wrong-codec)
+      + [Wrong extension](#wrong-extension)
+      + [No or missing metadata](#no-or-missing-metadata)
+   * [No glyphs light up](#no-glyphs-light-up)
+   * [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-but-my-glyphs-dont-light-up)
+   * [Some of my glyphs don't light up](#some-of-my-glyphs-dont-light-up)
+   * [The Glyphs are not alligned or desync with the audio](#the-glyphs-are-not-alligned-or-desync-with-the-audio)
+- [:wrench: The technical details](#wrench-the-technical-details)
+- [Pull requests](#pull-requests)
+
+<!-- TOC end -->
+
+***
+
 # :clapper: Simple tutorial Video
 https://www.youtube.com/watch?v=YlJBqQxSgWA
 
@@ -52,7 +101,7 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
     :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
 
 ## :rocket: Setup
-#### Clone the repo
+### Clone the repo
 ```bash
 git clone https://github.com/SebiAi/custom-nothing-glyph-tools.git
 cd custom-nothing-glyph-tools
@@ -60,7 +109,7 @@ cd custom-nothing-glyph-tools
 > [!NOTE]
 > If you don't feel comfortable using git then you can also [download an archive file here](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip).
 
-#### Install the necessary python dependencies
+### Install the necessary python dependencies
 ```bash
 pip3 install -r requirements.txt
 ```
