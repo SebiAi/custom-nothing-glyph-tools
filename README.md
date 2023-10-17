@@ -40,6 +40,7 @@ https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1c
       + [Read and write the Glyph format data to an audio file](#read-and-write-the-glyph-format-data-to-an-audio-file)
 - [Hardware limitations](#hardware-limitations)
 - [:interrobang: Troubleshooting](#interrobang-troubleshooting)
+   * [Locate FFmpeg - Audacity needs the file 'avformat.dll'](#locate-ffmpeg---audacity-needs-the-file-avformatdll)
    * [ModuleNotFoundError: No module named 'termcolor'](#modulenotfounderror-no-module-named-termcolor)
    * [I can't find the modified audio file after using GlyphModder](#i-cant-find-the-modified-audio-file-after-using-glyphmodder)
    * [File is not supported on this device](#file-is-not-supported-on-this-device)
@@ -129,6 +130,10 @@ You can skip to [Creating the Glyph format with Audacity&reg;](#creating-the-gly
 > 2) **Select the right codec in the dropdown:** Select Opus - default settings are fine
 > 3) **Change the extension to *ogg* when naming your file!**
 > 4) **Export**
+
+> [!IMPORTANT]
+> When exporting your audio with Audacity&reg; a popup might appear asking you to *Locate FFmpeg*.
+> This is expected on Windows - follow the steps in [Locate FFmpeg - Audacity needs the file 'avformat.dll'](#locate-ffmpeg---audacity-needs-the-file-avformatdll)
 
 ### Creating the Glyph format with Audacity&reg;
 To make our lives easier we can utilize Audacity&reg;'s Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslator](./GlyphTranslator.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
@@ -385,6 +390,16 @@ It is almost impossible to convert the `.glypha` and `.glyphc1` files back to an
 ***
 
 # :interrobang: Troubleshooting
+## Locate FFmpeg - Audacity needs the file 'avformat.dll'
+![Audacity&reg; - Locate FFmpeg prompt](assets/audacity_locate_ffmpeg_prompt.png)
+
+This error is expected on Windows and can be solved the following way:
+1. Download and extract this file to a location you'll remember (you might need [7-Zip](https://7-zip.org/) to extract it): https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
+2. Then click on the *Browse...* button in Audacity&reg; and navigate to the extracted content
+3. Navigate into the `bin` folder
+4. Select the `avformat.dll` - The filename might differ a little bit
+5. Click *OK* in the Audacity&reg; dialog
+
 ## ModuleNotFoundError: No module named 'termcolor'
 You did not properly install the requirements. Try executing
 ```bash
