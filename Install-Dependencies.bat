@@ -19,6 +19,15 @@ if %build% lss %threshold% (
     exit /b 1
 )
 
+REM ----------------------------------Check for required files-------------------------------------------
+
+REM Check if the file "requirements.txt" exists
+if not exist "%~dp0/requirements.txt" (
+    REM Inform the user that the file "requirements.txt" is missing and exit
+    powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('The file ''requirements.txt'' is missing.' + [Environment]::NewLine + [Environment]::NewLine + 'Please make sure that this script is in the root of the custom-nothing-glyph-tools directory.' + [Environment]::NewLine + [Environment]::NewLine + 'Also DO NOT execute any of the scripts from inside the zip file!', 'File ''requirements.txt'' missing', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
+    exit /b 1
+)
+
 REM ----------------------------------Check for arguments-----------------------------------------------
 
 REM Skip printing info if the user passed the --skip-info argument
