@@ -10,6 +10,7 @@ https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1c
 
 # :writing_hand: Table of contents
 <!-- TOC Generator settings -->
+<!-- Preset: GitHub -->
 <!-- indent characters: '-*+' -->
 <!-- algorithm used to generate anchors: DEFAULT -->
 <!-- Max indent level: 3 -->
@@ -19,6 +20,7 @@ https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1c
 <!-- anchors prefix: '' -->
 <!-- concat spaces: True -->
 <!-- comment style: HTML -->
+<!-- Is a bit buggy with generating the correct links to the headings - please double check -->
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [:clapper: Simple tutorial Video](#clapper-simple-tutorial-video)
