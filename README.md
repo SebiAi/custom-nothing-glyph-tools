@@ -72,7 +72,7 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 ***
 
 # :safety_vest: Need help?
-If you need help look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to reach out to me on Discord: @sebiai
+If you need help look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to use the [Discussion feature on GitHub](https://github.com/SebiAi/custom-nothing-glyph-tools/discussions) or reach out to me on Discord: @sebiai
 
 ***
 
