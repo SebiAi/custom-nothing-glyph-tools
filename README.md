@@ -381,8 +381,8 @@ It is almost impossible to convert the `.glypha` and `.glyphc1` files back to an
 
 # Hardware limitations
 > [!NOTE]
-> The desync between the audio and the light sequence when the composition is set as a ringtone or notification sound seems to be an OS issue.
-> It is to be expected that Nothing&reg; will fix this in the next Nothing&reg; OS update.
+> The desync between the audio and the light sequence when the composition is set as a ringtone or notification sound seems to be an OS issue and only seems to occure on compositions longer than 10 seconds.
+> No fix for this issue is in sight in the near future.
 
 * The Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound. When doing this there is a small chance that the audio and the light sequence get desynced over time. The only solution until now is to don't make fast light sequences.
 * In some unknown cases the light sequence gets desynced from the audio when set as a ringtone or notification sound.
