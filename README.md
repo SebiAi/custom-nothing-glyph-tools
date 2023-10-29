@@ -94,7 +94,7 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 # :pencil2: Usage
 ## :memo: Requirements
 > [!NOTE]
-> If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](./Install-Dependencies.bat) script to install all requirements. If the script issued no warnings or errors you can continue at [Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition).
+> If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](/SebiAi/custom-nothing-glyph-tools/blob/main/Install-Dependencies.bat) script to install all requirements. If the script issued no warnings or errors you can continue at [Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition).
 
 * \[*Required*\] [**python3**](https://www.python.org/downloads/) - To run the scripts
 * \[*Required*\] [**ffmpeg**](https://ffmpeg.org/download.html) - To write metadata to the sound file
