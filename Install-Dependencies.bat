@@ -1,12 +1,12 @@
+@echo off
+setlocal
+
 REM +-----------------------------------------------------------------------------------------------------------------------+
 REM / This script installs the necessary software and packages for the custom-nothing-glyph-tools - if not already present. /
 REM /                                                                                                                       /
 REM / ATTENTION:                                                                                                            /
 REM /   Please do not execute this script standalone. Download AND EXTRACT the project and execute it from there.           /
 REM +-----------------------------------------------------------------------------------------------------------------------+
-
-@echo off
-setlocal
 
 title Install dependencies for Custom Glyphs
 
