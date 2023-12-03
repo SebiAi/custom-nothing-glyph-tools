@@ -1,6 +1,13 @@
 @echo off
 setlocal
 
+REM +-----------------------------------------------------------------------------------------------------------------------+
+REM / This script installs the necessary software and packages for the custom-nothing-glyph-tools - if not already present. /
+REM /                                                                                                                       /
+REM / ATTENTION:                                                                                                            /
+REM /   Please do not execute this script standalone. Download AND EXTRACT the project and execute it from there.           /
+REM +-----------------------------------------------------------------------------------------------------------------------+
+
 title Install dependencies for Custom Glyphs
 
 REM ----------------------------------Check for Windows build-------------------------------------------
@@ -16,6 +23,15 @@ set "threshold=16299"
 if %build% lss %threshold% (
     REM Inform the user that the build version is not supported and exit
     powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('This Windows build (%build%) is not supported.' + [Environment]::NewLine + [Environment]::NewLine + 'Please update your Windows installation to build %threshold% or higher!', 'Windows build not supported', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
+    exit /b 1
+)
+
+REM ----------------------------------Check for required files-------------------------------------------
+
+REM Check if the file "requirements.txt" exists
+if not exist "%~dp0/requirements.txt" (
+    REM Inform the user that the file "requirements.txt" is missing and exit
+    powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('The file ''requirements.txt'' is missing.' + [Environment]::NewLine + [Environment]::NewLine + 'Please make sure that this script is in the root of the custom-nothing-glyph-tools directory.' + [Environment]::NewLine + [Environment]::NewLine + 'Also DO NOT execute any of the scripts from inside the zip file!', 'File ''requirements.txt'' missing', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
     exit /b 1
 )
 
