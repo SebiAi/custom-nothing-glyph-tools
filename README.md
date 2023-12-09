@@ -539,7 +539,7 @@ See [Hardware limitations](#hardware-limitations)
   |   24  | USB Dot                              | -                  |
   | 25-32 | USB Line                             | From bottom to top |
 
-  Each Glyph can have a light value from 0 to 4080 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
+  Each Glyph can have a light value from 0 to 4095 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
 
   The new line consists of Carriage Return (CR) and Line Feed (LF): `\r\n`
   The data ends with a final new line `\r\n`.
@@ -550,8 +550,8 @@ See [Hardware limitations](#hardware-limitations)
 
   *Example 5 Glyphs (Compatibility mode):*
   ```csv
-  0,0,4080,0,0,
-  0,0,4080,0,2032,
+  0,0,4095,0,0,
+  0,0,4095,0,2032,
   0,0,0,0,0,
   0,0,0,0,0,
   0,0,0,0,0,
