@@ -163,8 +163,8 @@ goto :tryWinget
 
 REM ---------------------------Install dependencies-----------------------------------------------------
 
-:install
 REM Ask the user if they want to install Audacity or not which is optional
+:install
 set /p "install=Do you want to install Audacity? [y/n]: "
 if /i "%install%"=="y" goto :fullInstall
 if /i "%install%"=="n" goto :basicInstall
