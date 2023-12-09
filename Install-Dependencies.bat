@@ -122,7 +122,7 @@ call :PrintInfo "Downloading WinGet and its dependencies..."
 )
 
 REM Get hash of WinGet.msixbundle and save it to the .tmp folder as file_hash.txt
-CertUtil -hashfile "%~dp0/.tmp/WinGet.msixbundle" SHA256 > %~dp0/.tmp/file_hash.txt
+CertUtil -hashfile "%~dp0/.tmp/WinGet.msixbundle" SHA256 > "%~dp0/.tmp/file_hash.txt"
 
 REM Get the hash value from the hash.txt file
 (for /L %%i in (1,1,1) do set /P "hash=") < "%~dp0/.tmp/hash.txt"
@@ -244,7 +244,7 @@ call :PrintInfo "Refreshing environment variables..."
         REM Go to https://github.com/badrelmers/RefrEnv/blob/main/LICENSE for full license details.
         powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile "%~dp0/.tmp/refrenv.bat""
     ) && (
-        call %~dp0/.tmp/refrenv.bat
+        call "%~dp0/.tmp/refrenv.bat"
     ) || (
         REM Download failed - inform the user
         call :PrintWarning "Could not refresh environment. Please install the python packages manually: python -m pip install -r requirements.txt"
@@ -260,7 +260,7 @@ REM ---------------------------Install python packages--------------------------
 echo.
 REM Install the python packages
 call :PrintInfo "Installing python packages..."
-python -m pip install -r %~dp0/requirements.txt
+python -m pip install -r "%~dp0/requirements.txt"
 echo.
 
 REM ---------------------------Clean-up--------------------------------------------------
