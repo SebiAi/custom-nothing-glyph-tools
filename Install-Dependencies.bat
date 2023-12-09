@@ -107,13 +107,13 @@ call :PrintInfo "Downloading WinGet and its dependencies..."
 @(
     (
         REM Download the latest version of WinGet and save it to the .tmp folder as WinGet.msixbundle
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "%~dp0/.tmp/WinGet.msixbundle""
+        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile '%~dp0/.tmp/WinGet.msixbundle'"
         REM Get hash of the latest version of WinGet from web and save it to the .tmp folder as hash.txt
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.txt" -OutFile "%~dp0/.tmp/hash.txt""
+        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.txt" -OutFile '%~dp0/.tmp/hash.txt'"
 
         REM Download winget dependencies (Microsoft.VCLibs, Microsoft.UI.Xaml) and save them to the .tmp folder (https://learn.microsoft.com/en-us/windows/package-manager/winget/#install-winget-on-windows-sandbox)
-        powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx""
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile "%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
+        powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile '%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx'"
+        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile '%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx'"
     ) || (
         REM Error downloading
         call :PrintError "Could not download WinGet. Do you have a working internet connection?"
@@ -143,7 +143,7 @@ if "%file_hash%"=="%hash%" (
 REM If the installation doesn't fail, try if winget works now
 @(
     (
-        powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle" -DependencyPath "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx, %~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
+        powershell -Command "Add-AppxPackage '%~dp0/.tmp/WinGet.msixbundle' -DependencyPath "'%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx', '%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx'""
     ) && (
         goto :tryWinget
     )
@@ -242,7 +242,7 @@ call :PrintInfo "Refreshing environment variables..."
         REM Download code from @badrelmers on GitHub to refresh environment variables.
         REM This downloaded code is part of badrelmers/RefrEnv (https://github.com/badrelmers/RefrEnv) which is released under the GPL-3.0 license.
         REM Go to https://github.com/badrelmers/RefrEnv/blob/main/LICENSE for full license details.
-        powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile "%~dp0/.tmp/refrenv.bat""
+        powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile '%~dp0/.tmp/refrenv.bat'"
     ) && (
         call "%~dp0/.tmp/refrenv.bat"
     ) || (
