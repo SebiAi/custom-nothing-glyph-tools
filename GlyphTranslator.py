@@ -206,6 +206,17 @@ def audacity_to_glyphs(file: str, disableCompatibility: bool = False, watermarkP
     
     # Remove all labels that are after the END label
     oldLabelSize = len(labels)
+
+    # Collect labels to be removed
+    labels_to_remove = [label for label in labels if label["to"] > endLabel["to"]]
+
+    # Print labels to be removed
+    if labels_to_remove:
+        printWarning(f"Labels to be removed:")
+        for removed_label in labels_to_remove:
+            printWarning(f"Removed line: {removed_label['line']}")
+        print()
+    
     labels = [label for label in labels if label["to"] <= endLabel["to"]]
     if len(labels) != oldLabelSize:
         printWarning(f"Removed {oldLabelSize - len(labels)} labels that were after the 'END' label.")
