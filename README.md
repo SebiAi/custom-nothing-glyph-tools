@@ -63,6 +63,11 @@ https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1c
 ***
 
 # :clapper: Simple tutorial Video
+> [!CAUTION]
+> This video is **not** exhaustive and is only ment as a visual/audio guide for **creating** a composition.
+> 
+> **For up to date information on how to install dependencies and how to use the scripts read the appropriate sections in this README!**
+
 https://www.youtube.com/watch?v=YlJBqQxSgWA
 
 ***
