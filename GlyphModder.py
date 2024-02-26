@@ -48,7 +48,7 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
 def checkRequirements(ffmpeg: str, ffprobe: str, write: bool):
     # Check if Python version is 3.10 or higher
     if sys.version_info < (3, 10):
-        raise Exception("You need to use Python 3.10 or higher to run this script.")
+        raise Exception(f"You are using Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}. This script requires Python 3.10 or higher.")
     if write:
         try:
             # Check if ffmpeg is installed - write metadata
