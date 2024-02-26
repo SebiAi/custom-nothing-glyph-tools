@@ -4,11 +4,70 @@
 This repo is intended to be a collection of self contained tools and scripts to make it easy to create custom Nothing Glyph Compositions which in turn can be imported into the <i>Nothing Glyph Composer</i>.
 </p>
 
+## Also check out my accompanying tool [*GlyphVisualizer*](https://github.com/SebiAi/GlyphVisualizer)!
+
 https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1cf9-4c0e-9835-792bf1b09a58
 
 ***
 
+# :writing_hand: Table of contents
+<!-- TOC Generator settings -->
+<!-- Preset: GitHub -->
+<!-- indent characters: '-*+' -->
+<!-- algorithm used to generate anchors: DEFAULT -->
+<!-- Max indent level: 3 -->
+<!-- trim toc indent: True -->
+<!-- oneshot: False -->
+<!-- generate anchors: False -->
+<!-- anchors prefix: '' -->
+<!-- concat spaces: True -->
+<!-- comment style: HTML -->
+<!-- Is a bit buggy with generating the correct links to the headings - please double check -->
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [:clapper: Simple tutorial Video](#clapper-simple-tutorial-video)
+- [:pushpin: Disclaimer](#pushpin-disclaimer)
+- [:safety_vest: Need help?](#safety_vest-need-help)
+- [:construction: Compatibility](#construction-compatibility)
+   * [OS](#os)
+   * [Phones](#phones)
+- [:pencil2: Usage](#pencil2-usage)
+   * [:memo: Requirements](#memo-requirements)
+   * [:rocket: Setup](#rocket-setup)
+      + [Clone the repo](#clone-the-repo)
+      + [Install the necessary python dependencies](#install-the-necessary-python-dependencies)
+   * [:sparkles: Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition)
+      + [Cutting the sound](#cutting-the-sound)
+      + [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity)
+      + [Read and write the Glyph format data to an audio file](#read-and-write-the-glyph-format-data-to-an-audio-file)
+- [Hardware limitations](#hardware-limitations)
+- [:interrobang: Troubleshooting](#interrobang-troubleshooting)
+   * [Locate FFmpeg - Audacity needs the file 'avformat.dll'](#locate-ffmpeg---audacity-needs-the-file-avformatdll)
+   * [ModuleNotFoundError: No module named 'termcolor'](#modulenotfounderror-no-module-named-termcolor)
+   * [I can't find the modified audio file after using GlyphModder](#i-cant-find-the-modified-audio-file-after-using-glyphmodder)
+   * [File is not supported on this device](#file-is-not-supported-on-this-device)
+   * [File is not created by Composer](#file-is-not-created-by-composer)
+   * [Glyph Composer does not import my file](#glyph-composer-does-not-import-my-file)
+      + [Wrong codec](#wrong-codec)
+      + [Wrong extension](#wrong-extension)
+      + [No or missing metadata](#no-or-missing-metadata)
+   * [No glyphs light up](#no-glyphs-light-up)
+   * [I can import my audio but my glyphs don't light up](#i-can-import-my-audio-but-my-glyphs-dont-light-up)
+   * [Some of my glyphs don't light up](#some-of-my-glyphs-dont-light-up)
+   * [The Glyphs are not alligned or desync with the audio](#the-glyphs-are-not-alligned-or-desync-with-the-audio)
+- [:wrench: The technical details](#wrench-the-technical-details)
+- [Pull requests](#pull-requests)
+
+<!-- TOC end -->
+
+***
+
 # :clapper: Simple tutorial Video
+> [!CAUTION]
+> This video is **not** exhaustive and is only ment as a visual/audio guide for **creating** a composition.
+> 
+> **For up to date information on how to install dependencies and how to use the scripts read the appropriate sections in this README!**
+
 https://www.youtube.com/watch?v=YlJBqQxSgWA
 
 ***
@@ -20,7 +79,7 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 ***
 
 # :safety_vest: Need help?
-If you need help look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to reach out to me on Discord: @sebiai
+If you need help look at the [Troubleshooting](#interrobang-troubleshooting) chapter. If this does not help either feel free to use the [Discussion feature on GitHub](https://github.com/SebiAi/custom-nothing-glyph-tools/discussions) or reach out to me on Discord: @sebiai
 
 ***
 
@@ -41,6 +100,9 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 
 # :pencil2: Usage
 ## :memo: Requirements
+> [!NOTE]
+> If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](/SebiAi/custom-nothing-glyph-tools/blob/main/Install-Dependencies.bat) script to install all requirements. If the script issued no warnings or errors you can continue at [Making a custom Glyph composition](#sparkles-making-a-custom-glyph-composition).
+
 * \[*Required*\] [**python3**](https://www.python.org/downloads/) - To run the scripts
 * \[*Required*\] [**ffmpeg**](https://ffmpeg.org/download.html) - To write metadata to the sound file
 * \[*Required*\] [**ffprobe**](https://ffmpeg.org/download.html) - To read metadata from the sound file (should be included in almost every ffmpeg install)
@@ -48,17 +110,16 @@ Works on both Nothing devices. Supports all 33 Zones on Phone (2).
 
     :arrow_right: If *ffmpeg* or *ffprobe* are not in PATH they can be passed to the script with the `--ffmpeg` and `--ffprobe` arguments.
 
-    :arrow_right: If you are on ***Windows*** you can use (double click) the [Install-Dependencies.bat](./Install-Dependencies.bat) script to install all requirements.
-
 ## :rocket: Setup
-#### Clone the repo
+### Clone the repo
 ```bash
 git clone https://github.com/SebiAi/custom-nothing-glyph-tools.git
 cd custom-nothing-glyph-tools
 ```
-If you don't feel comfortable using git then you can also [download an archive file here](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip).
+> [!NOTE]
+> If you don't feel comfortable using git then you can also [download an archive file here](https://github.com/SebiAi/custom-nothing-glyph-tools/archive/refs/heads/main.zip).
 
-#### Install the necessary python dependencies
+### Install the necessary python dependencies
 ```bash
 pip3 install -r requirements.txt
 ```
@@ -70,18 +131,24 @@ I would recommend using [Audacity&reg;](https://www.audacityteam.org/) to make y
 ### Cutting the sound
 You can skip to [Creating the Glyph format with Audacity&reg;](#creating-the-glyph-format-with-audacity) if you already have the sound cut to the right length and the right codec (`opus`).
 
-When exporting the sound always use the *opus* codec:
-1) **Export audio:** Files -> Export -> Export Audio...
-2) **Select the right codec in the dropdown:** Select Opus - default settings are fine
-3) **Change the extension to *ogg* when naming your file!**
-4) **Export**
+> [!IMPORTANT]
+> When exporting the sound always use the *opus* codec:
+> 1) **Export audio:** Files -> Export -> Export Audio...
+> 2) **Select the right codec in the dropdown:** Select Opus - default settings are fine
+> 3) **Change the extension to *ogg* when naming your file!**
+> 4) **Export**
+
+> [!IMPORTANT]
+> When exporting your audio with Audacity&reg; a popup might appear asking you to *Locate FFmpeg*.
+> This is expected on Windows - follow the steps in [Locate FFmpeg - Audacity needs the file 'avformat.dll'](#locate-ffmpeg---audacity-needs-the-file-avformatdll)
 
 ### Creating the Glyph format with Audacity&reg;
 To make our lives easier we can utilize Audacity&reg;'s Labels functionality and then use the Label data to generate our two needed csv files with the help of the [GlyphTranslator](./GlyphTranslator.py) - one for the *AUTHOR* tag (stores the light data) and the other for the *CUSTOM1* (stores data for the app to display) tag (for more info read the [technical details](#wrench-the-technical-details)).
 
 I would recommend saving your Audacity&reg; project regularly.
 
-You can also use the [MidiToLabel](./MidiToLabel.py) script to transform MIDI files to Audacity Labels. Use the `--help` command on the script to learn more.
+> [!NOTE]
+> You can also use the [MidiToLabel](./MidiToLabel.py) script to transform MIDI files to Audacity Labels. Use the `--help` command on the script to learn more.
 
 #### Add the Labels track
 1) **Open your audio with Audacity&reg;**
@@ -101,16 +168,16 @@ Each Label should be named like this: `[#]glyphId-lightLevelFrom[-lightLevelTo[-
     * EXP: Exponential Interpolation
     * LOG: Logarithmic Interpolation
 
-The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
+> [!IMPORTANT]
+> The brackets (`[` and `]`) mean optional. Therefore do **NOT** include them in the Label name!
 
 If you like regex patterns, the name of the Label should match this one (thanks [Joel05](https://github.com/SebiAi/custom-nothing-glyph-tools/issues/1)):
 ```regex
 ^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$
 ```
 
-> **:warning: Important**
-
-**At the end of the audio there MUST be a non ranged Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
+> [!IMPORTANT]
+> **At the end of the audio there MUST be a non ranged Label called *END*.** This is needed so the script knows how long the audio is. Also, make sure that there is enough space between your last Glyph lighting up and the *END* Label or else it might not get played - add silence at the end of the audio file if that happens and move the *END* Label accordingly.
 
 ##### glyphId
 Depending on which Phone you want to make the composition for there are two modes that I have called the *Compatibility* or *Phone2* mode:
@@ -184,7 +251,8 @@ The `glyphId` can only be 1 to 11 which correspond to the individual Glyphs:
 
 <img src="assets/Glyph%20Ids%20Phone2%20mode.png" alt="Glyph Ids Phone2 mode" width="25%"/>
 
-Do **NOT** prepend the `#` symbol! This is for addressing each individual Zone - see below.
+> [!IMPORTANT]
+> Do **NOT** prepend the `#` symbol! This is for addressing each individual Zone - see below.
 
 If you want even more control you can control each individual Zone with the Zone ids:
 | Index | Glyph                                | Direction          |
@@ -271,20 +339,20 @@ Now that we have a Labels file we can use the [GlyphTranslator](./GlyphTranslato
 ```bash
 python3 GlyphTranslator.py MyLabelFile.txt
 ```
-You can also add a watermark by writing your watermark to a text file and passing it to the script like this: `--watermark MyWatermarkFile.txt`
+> [!NOTE]
+> You can also add a watermark by writing your watermark to a text file and passing it to the script like this: `--watermark MyWatermarkFile.txt`
 
 Assuming your Label file was called `MyLabelFile.txt` it will spit out two files called `MyLabelFile.glypha` and `MyLabelFile.glyphc1` in your current working directory.
 
-> **:warning: Attention**
-
-If you see this message in the output:
-```
-INFO: Auto detected Phone (1) and Phone (2) compatibility mode.
-INFO: If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.
-```
-act according to this:
-* You are using ***Compatibility*** mode: Do NOT follow the advice - this is intended behaviour.
-* You are using ***Phone2*** mode: Please add the `--disableCompatibility` parameter to the command to use the right Glyphs.
+> [!IMPORTANT]
+> If you see this message in the output:
+> ```
+> INFO: Auto detected Phone (1) and Phone (2) compatibility mode.
+> INFO: If you intended to use the Glyphs 1-5 on the Nothing Phone (2) use the '--disableCompatibility' parameter. More info with '--help' or in the README.
+> ```
+> act according to this:
+> * You are using ***Compatibility*** mode: Do NOT follow the advice - this is intended behaviour.
+> * You are using ***Phone2*** mode: Please add the `--disableCompatibility` parameter to the command to use the right Glyphs.
 
 ### Read and write the Glyph format data to an audio file
 #### Write to an audio file
@@ -292,13 +360,14 @@ When you have both your `.glypha` and `.glyphc1` files (via Audacity&reg; and th
 ```bash
 python3 GlyphModder.py -t MyCustomTitle -w MyLabelFile.glypha MyLabelFile.glyphc1 MyGlyphCreation.ogg
 ```
-The `-t` argument is optional, this just sets the *TITLE* tag which, as far as I could see, is not used anywhere in the Glyph Composer right now.
+> [!NOTE]
+> The `-t` argument is optional, this just sets the *TITLE* tag which, as far as I could see, is not used anywhere in the Glyph Composer right now.
 
-You can provide the path to *ffmpeg* with the `--ffmpeg` argument if it can not be found in PATH.
+> [!NOTE]
+> You can provide the path to *ffmpeg* with the `--ffmpeg` argument if it can not be found in PATH.
 
-> **:warning: Important**
-
-**Regarding the `-w` option: The `.glypha` file must be passed before the `.glyphc1` file. The script will still comply but you can not play the file in the Glyph Composer!**
+> [!IMPORTANT]
+> **Regarding the `-w` option: The `.glypha` file must be passed before the `.glyphc1` file. The script will still comply but you can not play the file in the Glyph Composer!**
 
 Congrats, you can now transfer the audio file to your Nothing phone and import it into the Glyph Composer app!
 
@@ -310,19 +379,34 @@ python3 GlyphModder.py MyGlyphCreation.ogg
 ```
 Assuming your audio file was called `MyGlyphCreation.ogg` it will spit out two files called `MyGlyphCreation.glypha` and `MyGlyphCreation.glyphc1` in your current working directory.
 
-You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
+> [!NOTE]
+> You can provide the path to *ffprobe* with the `--ffprobe` argument if it can not be found in PATH.
 
 It is almost impossible to convert the `.glypha` and `.glyphc1` files back to an Audacity&reg; Label file therefore you would need to edit both files manually. More info on that is in the [The technical details](#wrench-the-technical-details) section.
 
 ***
 
 # Hardware limitations
+> [!NOTE]
+> The desync between the audio and the light sequence when the composition is set as a ringtone or notification sound seems to be an OS issue and only seems to occure on compositions longer than 10 seconds.
+> No fix for this issue is in sight in the near future.
+
 * The Glyphs can't playback fast-changing light sequences. One user reported that this phenomenon disappeared when it was set as a ringtone or notification sound. When doing this there is a small chance that the audio and the light sequence get desynced over time. The only solution until now is to don't make fast light sequences.
-* In some unknown cases the light sequence gets desynced from the audio when set as a ringtone or notification sound. If you know more feel free to reach out.
+* In some unknown cases the light sequence gets desynced from the audio when set as a ringtone or notification sound.
 
 ***
 
 # :interrobang: Troubleshooting
+## Locate FFmpeg - Audacity needs the file 'avformat.dll'
+![Audacity&reg; - Locate FFmpeg prompt](assets/audacity_locate_ffmpeg_prompt.png)
+
+This error is expected on Windows and can be solved the following way:
+1. Download and extract this file to a location you'll remember (you might need [7-Zip](https://7-zip.org/) to extract it): https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
+2. Then click on the *Browse...* button in Audacity&reg; and navigate to the extracted content
+3. Navigate into the `bin` folder
+4. Select the `avformat.dll` - The filename might differ a little bit
+5. Click *OK* in the Audacity&reg; dialog
+
 ## ModuleNotFoundError: No module named 'termcolor'
 You did not properly install the requirements. Try executing
 ```bash
@@ -462,7 +546,7 @@ See [Hardware limitations](#hardware-limitations)
   |   24  | USB Dot                              | -                  |
   | 25-32 | USB Line                             | From bottom to top |
 
-  Each Glyph can have a light value from 0 to 4080 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
+  Each Glyph can have a light value from 0 to 4095 and it appears that the smallest step is 1. If the data is longer than the audio it will not be played.
 
   The new line consists of Carriage Return (CR) and Line Feed (LF): `\r\n`
   The data ends with a final new line `\r\n`.
@@ -473,8 +557,8 @@ See [Hardware limitations](#hardware-limitations)
 
   *Example 5 Glyphs (Compatibility mode):*
   ```csv
-  0,0,4080,0,0,
-  0,0,4080,0,2032,
+  0,0,4095,0,0,
+  0,0,4095,0,2032,
   0,0,0,0,0,
   0,0,0,0,0,
   0,0,0,0,0,

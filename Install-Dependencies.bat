@@ -1,6 +1,13 @@
 @echo off
 setlocal
 
+REM +-----------------------------------------------------------------------------------------------------------------------+
+REM / This script installs the necessary software and packages for the custom-nothing-glyph-tools - if not already present. /
+REM /                                                                                                                       /
+REM / ATTENTION:                                                                                                            /
+REM /   Please do not execute this script standalone. Download AND EXTRACT the project and execute it from there.           /
+REM +-----------------------------------------------------------------------------------------------------------------------+
+
 title Install dependencies for Custom Glyphs
 
 REM ----------------------------------Check for Windows build-------------------------------------------
@@ -16,6 +23,15 @@ set "threshold=16299"
 if %build% lss %threshold% (
     REM Inform the user that the build version is not supported and exit
     powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('This Windows build (%build%) is not supported.' + [Environment]::NewLine + [Environment]::NewLine + 'Please update your Windows installation to build %threshold% or higher!', 'Windows build not supported', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
+    exit /b 1
+)
+
+REM ----------------------------------Check for required files-------------------------------------------
+
+REM Check if the file "requirements.txt" exists
+if not exist "%~dp0/requirements.txt" (
+    REM Inform the user that the file "requirements.txt" is missing and exit
+    powershell -Command "Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show('The file ''requirements.txt'' is missing.' + [Environment]::NewLine + [Environment]::NewLine + 'Please make sure that this script is in the root of the custom-nothing-glyph-tools directory.' + [Environment]::NewLine + [Environment]::NewLine + 'Also DO NOT execute any of the scripts from inside the zip file!', 'File ''requirements.txt'' missing', [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::ERROR);"
     exit /b 1
 )
 
@@ -91,13 +107,13 @@ call :PrintInfo "Downloading WinGet and its dependencies..."
 @(
     (
         REM Download the latest version of WinGet and save it to the .tmp folder as WinGet.msixbundle
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "%~dp0/.tmp/WinGet.msixbundle""
+        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile '%~dp0/.tmp/WinGet.msixbundle'"
         REM Get hash of the latest version of WinGet from web and save it to the .tmp folder as hash.txt
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.txt" -OutFile "%~dp0/.tmp/hash.txt""
+        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.txt" -OutFile '%~dp0/.tmp/hash.txt'"
 
         REM Download winget dependencies (Microsoft.VCLibs, Microsoft.UI.Xaml) and save them to the .tmp folder (https://learn.microsoft.com/en-us/windows/package-manager/winget/#install-winget-on-windows-sandbox)
-        powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx""
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile "%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
+        powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile '%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx'"
+        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile '%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx'"
     ) || (
         REM Error downloading
         call :PrintError "Could not download WinGet. Do you have a working internet connection?"
@@ -106,7 +122,7 @@ call :PrintInfo "Downloading WinGet and its dependencies..."
 )
 
 REM Get hash of WinGet.msixbundle and save it to the .tmp folder as file_hash.txt
-CertUtil -hashfile "%~dp0/.tmp/WinGet.msixbundle" SHA256 > %~dp0/.tmp/file_hash.txt
+CertUtil -hashfile "%~dp0/.tmp/WinGet.msixbundle" SHA256 > "%~dp0/.tmp/file_hash.txt"
 
 REM Get the hash value from the hash.txt file
 (for /L %%i in (1,1,1) do set /P "hash=") < "%~dp0/.tmp/hash.txt"
@@ -127,7 +143,7 @@ if "%file_hash%"=="%hash%" (
 REM If the installation doesn't fail, try if winget works now
 @(
     (
-        powershell -Command "Add-AppxPackage "%~dp0/.tmp/WinGet.msixbundle" -DependencyPath "%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx, %~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx""
+        powershell -Command "Add-AppxPackage '%~dp0/.tmp/WinGet.msixbundle' -DependencyPath "'%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx', '%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx'""
     ) && (
         goto :tryWinget
     )
@@ -147,12 +163,12 @@ goto :tryWinget
 
 REM ---------------------------Install dependencies-----------------------------------------------------
 
-:install
 REM Ask the user if they want to install Audacity or not which is optional
+:install
 set /p "install=Do you want to install Audacity? [y/n]: "
 if /i "%install%"=="y" goto :fullInstall
 if /i "%install%"=="n" goto :basicInstall
-else goto :install
+goto :install
 
 :fullInstall
 REM Install Audacity
@@ -173,32 +189,62 @@ REM Install the rest of the programs
     )
 )
 echo.
+REM if Get-Package Python* is not throwing an error check if python is in the path and if it is, skip the installation
 @(
     (
-        python --version >nul 2>&1
+        powershell -Command "Get-Package 'Python 3*'" >nul 2>&1
     ) && (
         call :PrintInfo "python is already installed. Skipping..."
-        REM No need to refresh environment variables if python is already working
-        goto :installPythonStuff
     ) || (
         REM python is not installed, install it
         call :PrintInfo "Installing python..."
         winget install Python.Python.3.11
+        goto :refreshEnv
     )
 )
-echo.
+setlocal enabledelayedexpansion
+@(
+    (
+        python --version >nul 2>&1
+    ) && (
+        call :PrintInfo "python is already in PATH. Skipping..."
+        REM No need to refresh environment variables if python is already working
+        goto :installPythonStuff
+    ) || (
+        REM python is not installed, install it
+        call :PrintWarning "python is not in path."
+        REM ask for user to uninstall current found package using powershell -Command "Get-Package Python*" and then install python using winget
+        set /p "reInstall=Do you want to uninstall and reinstall python using winget? [y/N]: "
+        if /i "!reInstall!"=="y" (
+            echo.
+            call :PrintInfo "Uninstalling python..."
+            winget uninstall Python
+            echo.
+            call :PrintInfo "Installing python..."
+            winget install Python.Python.3.11
+            goto :refreshEnv
+        )
+        endlocal
+        call :PrintError "Python is not in PATH! Please add python to the PATH manually. See here: https://docs.python.org/3/using/windows.html#excursus-setting-environment-variables"
+        pause
+        call :CleanUp
+        exit /b 0
+    )
+)
+endlocal
 
 REM ---------------------------Refresh environment variables--------------------------------------------------
-
+:refreshEnv
+echo.
 call :PrintInfo "Refreshing environment variables..."
 @(
     (
         REM Download code from @badrelmers on GitHub to refresh environment variables.
         REM This downloaded code is part of badrelmers/RefrEnv (https://github.com/badrelmers/RefrEnv) which is released under the GPL-3.0 license.
         REM Go to https://github.com/badrelmers/RefrEnv/blob/main/LICENSE for full license details.
-        powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile "%~dp0/.tmp/refrenv.bat""
+        powershell -Command "Invoke-WebRequest -Uri "https://raw.githubusercontent.com/badrelmers/RefrEnv/main/refrenv.bat" -OutFile '%~dp0/.tmp/refrenv.bat'"
     ) && (
-        call %~dp0/.tmp/refrenv.bat
+        call "%~dp0/.tmp/refrenv.bat"
     ) || (
         REM Download failed - inform the user
         call :PrintWarning "Could not refresh environment. Please install the python packages manually: python -m pip install -r requirements.txt"
@@ -211,9 +257,10 @@ call :PrintInfo "Refreshing environment variables..."
 REM ---------------------------Install python packages--------------------------------------------------
 
 :installPythonStuff
+echo.
 REM Install the python packages
 call :PrintInfo "Installing python packages..."
-python -m pip install -r %~dp0/requirements.txt
+python -m pip install -r "%~dp0/requirements.txt"
 echo.
 
 REM ---------------------------Clean-up--------------------------------------------------
