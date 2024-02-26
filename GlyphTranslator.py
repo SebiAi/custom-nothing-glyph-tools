@@ -67,6 +67,9 @@ def buildArgumentsParser() -> argparse.ArgumentParser:
 
 # Check the requirements
 def checkRequirements():
+    # Check if Python version is 3.10 or higher
+    if sys.version_info < (3, 10):
+        raise Exception("You need to use Python 3.10 or higher to run this script.")
     return
 
 
