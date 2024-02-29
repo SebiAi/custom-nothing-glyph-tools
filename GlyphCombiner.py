@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# This script is inspired by @nocturnalsushi on the Nothing Discord, and upgraded by @sebiai
+
 import sys
 
 # Check the python version
@@ -45,7 +47,7 @@ DEFAULT_ARGS = { 'files': [''], 'output': ['./combined.glypha'] }
 # Build the arguments parser
 def build_arguments_parser() -> argparse.ArgumentParser:
     # Parse the arguments with argparse (https://docs.python.org/3/library/argparse.html)
-    parser = argparse.ArgumentParser(description="Merge multiple glypha files (append each line). The first file will be the base where all the other files will be appended to line by line. Can be used to create a 15 Zone composition for the Phone (1) out of three compatibility glypha files.", epilog="Created by: Sebastian Aigner (aka. SebiAi)")
+    parser = argparse.ArgumentParser(description="Merge multiple glypha files (append each line). The first file will be the base where all the other files will be appended to line by line. Can be used to create a 15 Zone composition for the Phone (1) out of three compatibility glypha files. For tutorial: https://www.youtube.com/watch?v=WAkBL5NOaEY", epilog="Created by: Sebastian Aigner (aka. SebiAi)")
     
     # Add the arguments
     parser.add_argument('files', help="The files to merge. The first file will be first, the second one second and so on. Can be multiple files separated by a space. Remember: Put quotes arround the path if it contains spaces!", type=str, nargs='+', metavar="FILES") # files
