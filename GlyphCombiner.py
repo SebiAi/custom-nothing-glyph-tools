@@ -122,7 +122,7 @@ class GlyphaFile:
     def __init__(self, file: str):
         self.file = file
         self.content: list[list[str]] = []
-        self.collumns: int = 0
+        self.columns: int = 0
 
         # Open the file and read the content
         with open(file, newline='', encoding='utf-8') as f:
@@ -137,13 +137,13 @@ class GlyphaFile:
         if not self.content:
             raise GlyphaFileException(f"File '{file}' is empty.")
 
-        # Get the number of collumns
-        self.collumns = len(self.content[0])
+        # Get the number of columns
+        self.columns = len(self.content[0])
 
-        # Check if the number of collumns is the same for all lines
+        # Check if the number of columns is the same for all lines
         for line in self.content:
-            if len(line) != self.collumns:
-                raise GlyphaFileException(f"File '{file}' has different number of collumns in some lines.")
+            if len(line) != self.columns:
+                raise GlyphaFileException(f"File '{file}' has different number of columns in some lines.")
 
 # +------------------------------------+
 # |                                    |
@@ -198,7 +198,7 @@ def main() -> int:
             try:
                 line += file.content[i]
             except IndexError:
-                line += ['0' for _ in range(file.collumns)]
+                line += ['0' for _ in range(file.columns)]
         output.append(line)
     
     # Check if the output file already exists
