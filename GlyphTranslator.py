@@ -10,7 +10,7 @@ from termcolor import cprint, colored
 from colorama import just_fix_windows_console
 from enum import Enum
 
-REGEX_PATTERN_TEXT = '^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
+REGEX_PATTERN_TEXT = r'^((?:[1-9]|1[0-1])|(?:#(?:[1-9]|[1-2]\d|3[0-3])))-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 
 # +------------------------------------+
 # |                                    |
