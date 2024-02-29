@@ -178,7 +178,7 @@ def main() -> int:
         print_critical_error(e)
     
     # Get the files
-        print_info(f"Reading the {len(args.files)} file(s)...")
+    print_info(f"Reading the {len(args.files)} file(s)...")
     try:
         glypha_files = [GlyphaFile(file) for file in args.files]
     except GlyphaFileException as e:
@@ -188,6 +188,7 @@ def main() -> int:
     max_lines = max([len(file.content) for file in glypha_files])
 
     # Loop through all the lines
+    print_info(f"Combining the file(s)...")
     output: list[list[str]] = []
     for i in range(max_lines):
         line: list[str] = []
@@ -199,6 +200,7 @@ def main() -> int:
         output.append(line)
     
     # Check if the output file already exists
+    print_info(f"Writing output...")
     if os.path.isfile(args.output[0]):
         print_warning(f"Output file '{args.output[0]}' already exists. Do you want to overwrite it? (y/N): ", end="")
         if input().strip().lower() != "y":
