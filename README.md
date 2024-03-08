@@ -93,8 +93,9 @@ I have only tested the scripts on Linux. Multiple people managed to do it on Win
 ## Phones
 * Nothing Phone (1) :white_check_mark:
 * Nothing Phone (2) :white_check_mark:
+* Nothing Phone (2a) :x:
 
-Works on both Nothing devices. Supports all 33 Zones on Phone (2).
+Supports all 33 Zones on Phone (2).
 
 ***
 
