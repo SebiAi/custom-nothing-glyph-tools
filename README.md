@@ -489,6 +489,8 @@ See [Hardware limitations](#hardware-limitations)
 ***
 
 # :wrench: The technical details
+> [!CAUTION]
+> This info is only accurate BEFORE the v1.4.0 *Glyph Composer* update.
 <details>
   <summary>Click to expand</summary>
 
