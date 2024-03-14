@@ -70,8 +70,8 @@ Nope. They will be available on a second branch with the name `v1.0.0` once the 
 I can't give an exact date yet but I hope that I can publish them until the end of March.
 To give you an idea of what I still need to do:
 * ***GlyphTranslator:***
-  * [ ] Rework the watermark feature
-  * [ ] Test the hell out of the new implementation with the help of you guys ❤️
+  * [x] Rework the watermark feature
+  * [x] Test the hell out of the new implementation with the help of you guys ❤️
 * ***GlyphModder:***
   * [ ] Rewrite the basic functionality
   * [ ] Implement the reworked watermark feature
