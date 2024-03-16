@@ -73,9 +73,9 @@ To give you an idea of what I still need to do:
   * [x] Rework the watermark feature
   * [x] Test the hell out of the new implementation with the help of you guys ❤️
 * ***GlyphModder:***
-  * [ ] Rewrite the basic functionality
+  * [x] Rewrite the basic functionality
   * [ ] Implement the reworked watermark feature
-  * [ ] Implement the new media metadata tags introduced in *Glyph Composer* v1.4.0
+  * [x] Implement the new media metadata tags introduced in *Glyph Composer* v1.4.0
   * [ ] Probably more...
   * [ ] Test, test, test
 * **The converter script to convert Label files from the old syntax to the new syntax**
