@@ -163,12 +163,16 @@ goto :tryWinget
 
 REM ---------------------------Install dependencies-----------------------------------------------------
 
-REM Ask the user if they want to install Audacity or not which is optional
+REM Update the winget sources before installing anything
 :install
+winget source update
+
+REM Ask the user if they want to install Audacity or not which is optional
+:audacityQuestion
 set /p "install=Do you want to install Audacity? [y/n]: "
 if /i "%install%"=="y" goto :fullInstall
 if /i "%install%"=="n" goto :basicInstall
-goto :install
+goto :audacityQuestion
 
 :fullInstall
 REM Install Audacity
