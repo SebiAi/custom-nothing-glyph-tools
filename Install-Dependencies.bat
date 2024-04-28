@@ -177,6 +177,7 @@ goto :audacityQuestion
 :fullInstall
 REM Install Audacity
 winget install Audacity.Audacity
+call :CheckWinGetResult %ERRORLEVEL% "Audacity"
 echo.
 
 :basicInstall
@@ -190,6 +191,7 @@ REM Install the rest of the programs
         REM ffmpeg is not installed, install it
         call :PrintInfo "Installing ffmpeg..."
         winget install Gyan.FFmpeg
+        call :CheckWinGetResult %ERRORLEVEL% "FFmpeg"
     )
 )
 echo.
@@ -203,6 +205,7 @@ REM if Get-Package Python* is not throwing an error check if python is in the pa
         REM python is not installed, install it
         call :PrintInfo "Installing python..."
         winget install Python.Python.3.11
+        call :CheckWinGetResult %ERRORLEVEL% "Python 3.11"
         goto :refreshEnv
     )
 )
@@ -226,6 +229,7 @@ setlocal enabledelayedexpansion
             echo.
             call :PrintInfo "Installing python..."
             winget install Python.Python.3.11
+            call :CheckWinGetResult %ERRORLEVEL% "Python 3.11"
             goto :refreshEnv
         )
         endlocal
@@ -294,4 +298,26 @@ exit /b 0
 
 :PrintInfo
 powershell Write-Host -ForegroundColor DarkCyan '[INFO] %*'
+exit /b 0
+
+:CheckWinGetResult
+if %1 NEQ 0 (
+    if %1 EQU -1978335212 (
+        REM No packages found
+        call :PrintError "%2 could not be found in the configured winget sources. Please try resetting the winget resources in an admin terminal with ""winget source reset --force""" or use the manual install method."
+        pause
+        call :CleanUp
+        REM Exit, no script exit (/b)
+        exit 1
+    )    
+    if %1 NEQ -1978335189 (
+        REM All other errors
+        REM -1978335189 means No applicable update found => We dont want to throw.
+        call :PrintError "An unhandled error occurred with winget (%1). Please try the manual install method."
+        pause
+        call :CleanUp
+        REM Exit, no script exit (/b)
+        exit 1
+    )
+)
 exit /b 0
