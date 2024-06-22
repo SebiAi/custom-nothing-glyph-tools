@@ -216,7 +216,7 @@ setlocal enabledelayedexpansion
     ) && (
         call :PrintInfo "python is already in PATH. Skipping..."
         REM No need to refresh environment variables if python is already working
-        goto :installPythonStuff
+        goto :python3Check
     ) || (
         REM python is not installed, install it
         call :PrintWarning "python is not in path."
@@ -261,6 +261,50 @@ call :PrintInfo "Refreshing environment variables..."
         exit /b 0
     )
 )
+
+REM ---------------------------Link python to python3--------------------------------------------------
+
+:python3Check
+setlocal enabledelayedexpansion
+@(
+    (
+        python3 --version >nul 2>&1
+    ) && (
+        call :PrintInfo "python3 is linked properly"
+        REM No need to create a symlink if python3 is already working
+        goto :installPythonStuff
+    ) || (
+        REM python3 symlink is not created - inform the user
+        call :PrintWarning "python3 is not available to invoke python."
+        REM ask the user if they want to create a symlink python3 pointing to python
+        set /p "doLinking=Do you also want to invoke python via 'python3'? Press any key if unsure. (Y/n):: " 
+        if /i "!doLinking!"=="n" (
+            echo.
+            endlocal
+            call :PrintWarning "python3 is not linked! You will need to use 'python' to call the scripts."
+            goto :installPythonStuff
+        )
+    )
+)
+endlocal
+echo.
+REM Get path to the python.exe in the system path
+for /f "delims=" %%i in ('python -c "import sys; print(sys.executable)"') do (
+    set "pythonPath=%%i"
+)
+
+REM remove the python.exe from pythonPath variable
+set "pythonPath=%pythonPath:python.exe=%"
+set "pythonPath=%pythonPath:~0,-1%"
+
+REM Set the path to the cwd for easier symlinking
+pushd "%pythonPath%"
+
+REM make symlink to the python.exe
+mklink python3.exe python.exe
+
+REM revert the path to the cwd
+popd
 
 REM ---------------------------Install python packages--------------------------------------------------
 
