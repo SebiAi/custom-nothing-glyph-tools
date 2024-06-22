@@ -270,6 +270,7 @@ setlocal enabledelayedexpansion
     (
         python3 --version >nul 2>&1
     ) && (
+        endlocal
         call :PrintInfo "python3 is linked properly"
         REM No need to create a symlink if python3 is already working
         goto :installPythonStuff
