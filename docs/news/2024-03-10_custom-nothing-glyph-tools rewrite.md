@@ -79,8 +79,8 @@ To give you an idea of what I still need to do:
   * [ ] Probably more...
   * [ ] Test, test, test
 * **The converter script to convert Label files from the old syntax to the new syntax**
-  * [ ] Basic functionality
-  * [ ] Implement the conversion of glypha files with the old watermark implementation to the reworked one
+  * [ ] Basic functionality - Migrate old Label files to the new Label syntax
+  * [ ] ~~Implement the conversion of glypha files with the old watermark implementation to the reworked one~~
   * [ ] TESTINGGGGG
 * **Documentation**
   * [x] New Label syntax with a reworked explanation of the glyphId
