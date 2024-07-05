@@ -83,7 +83,7 @@ To give you an idea of what I still need to do:
   * [ ] Implement the conversion of glypha files with the old watermark implementation to the reworked one
   * [ ] TESTINGGGGG
 * **Documentation**
-  * [ ] New Label syntax with a reworked explanation of the glyphId
+  * [x] New Label syntax with a reworked explanation of the glyphId
   * [ ] Migration/Converter script
   * [ ] New troubleshooting steps for common migration pitfalls
  
