@@ -67,7 +67,7 @@ Nope. They will be available on a second branch with the name `v1.0.0` once the 
 > They will stay as is without any support on my part.
 
 ### When will the new version of the scripts be out?
-I can't give an exact date yet but I hope that I can publish them until the end of March.
+I can't give an exact date yet ~~but I hope that I can publish them until the end of March~~.
 To give you an idea of what I still need to do:
 * ***GlyphTranslator:***
   * [x] Rework the watermark feature
