@@ -76,15 +76,15 @@ To give you an idea of what I still need to do:
   * [x] Rewrite the basic functionality
   * [x] Implement the reworked watermark feature
   * [x] Implement the new media metadata tags introduced in *Glyph Composer* v1.4.0
-  * [ ] Probably more...
-  * [ ] Test, test, test
+  * [x] Probably more...
+  * [x] Test, test, test
 * **The converter script to convert Label files from the old syntax to the new syntax**
-  * [ ] Basic functionality - Migrate old Label files to the new Label syntax
+  * [x] Basic functionality - Migrate old Label files to the new Label syntax
   * [ ] ~~Implement the conversion of glypha files with the old watermark implementation to the reworked one~~
-  * [ ] TESTINGGGGG
+  * [ ] TESTINGGGGG - 20% done
 * **Documentation**
   * [x] New Label syntax with a reworked explanation of the glyphId
-  * [ ] Migration/Converter script
-  * [ ] New troubleshooting steps for common migration pitfalls
+  * [ ] Migration/Converter script - 0% done
+  * [ ] New troubleshooting steps for common migration pitfalls - 0% done
  
 I try to update this list as I go along 👍
