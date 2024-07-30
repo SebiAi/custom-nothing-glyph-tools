@@ -80,11 +80,11 @@ To give you an idea of what I still need to do:
   * [x] Test, test, test
 * **The converter script to convert Label files from the old syntax to the new syntax**
   * [x] Basic functionality - Migrate old Label files to the new Label syntax
-  * [ ] ~~Implement the conversion of glypha files with the old watermark implementation to the reworked one~~
-  * [ ] TESTINGGGGG - 20% done
+  * [x] ~~Implement the conversion of glypha files with the old watermark implementation to the reworked one~~
+  * [x] TESTINGGGGG
 * **Documentation**
   * [x] New Label syntax with a reworked explanation of the glyphId
-  * [ ] Migration/Converter script - 0% done
-  * [ ] New troubleshooting steps for common migration pitfalls - 0% done
+  * [x] Migration/Converter script
+  * [x] New troubleshooting steps for common migration pitfalls
  
 I try to update this list as I go along 👍
