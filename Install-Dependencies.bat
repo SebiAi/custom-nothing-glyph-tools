@@ -99,58 +99,6 @@ REM ---------------------------Check for winget---------------------------------
     )
 )
 
-REM ---------------------------Automated WinGet install--------------------------------------------------
-
-call :PrintInfo "Downloading WinGet and its dependencies..."
-
-
-@(
-    (
-        REM Download the latest version of WinGet and save it to the .tmp folder as WinGet.msixbundle
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile '%~dp0/.tmp/WinGet.msixbundle'"
-        REM Get hash of the latest version of WinGet from web and save it to the .tmp folder as hash.txt
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.txt" -OutFile '%~dp0/.tmp/hash.txt'"
-
-        REM Download winget dependencies (Microsoft.VCLibs, Microsoft.UI.Xaml) and save them to the .tmp folder (https://learn.microsoft.com/en-us/windows/package-manager/winget/#install-winget-on-windows-sandbox)
-        powershell -Command "Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile '%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx'"
-        powershell -Command "Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx" -OutFile '%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx'"
-    ) || (
-        REM Error downloading
-        call :PrintError "Could not download WinGet. Do you have a working internet connection?"
-        goto :manualInstall
-    )
-)
-
-REM Get hash of WinGet.msixbundle and save it to the .tmp folder as file_hash.txt
-CertUtil -hashfile "%~dp0/.tmp/WinGet.msixbundle" SHA256 > "%~dp0/.tmp/file_hash.txt"
-
-REM Get the hash value from the hash.txt file
-(for /L %%i in (1,1,1) do set /P "hash=") < "%~dp0/.tmp/hash.txt"
-call :PrintInfo "The file hash should be: %hash%"
-
-REM Get the hash value from the file_hash.txt file
-(for /L %%i in (1,1,2) do set /P "file_hash=") < "%~dp0/.tmp/file_hash.txt"
-call :PrintInfo "The file hash is:        %file_hash%"
-
-REM Compare the hash values
-if "%file_hash%"=="%hash%" (
-    call :PrintInfo "The hashes match!"
-) else (
-    call :PrintInfo "The hashes do not match."
-    goto :manualInstall
-)
-
-REM If the installation doesn't fail, try if winget works now
-@(
-    (
-        powershell -Command "Add-AppxPackage '%~dp0/.tmp/WinGet.msixbundle' -DependencyPath "'%~dp0/.tmp/Microsoft.VCLibs.x64.14.00.Desktop.appx', '%~dp0/.tmp/Microsoft.UI.Xaml.2.7.x64.appx'""
-    ) && (
-        goto :tryWinget
-    )
-)
-
-call :PrintWarning "Automatic installation failed."
-
 REM ---------------------------Manual WinGet install-----------------------------------------------------
 
 :manualInstall
