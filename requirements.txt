@@ -1,3 +1,4 @@
 termcolor
 mido
 colorama >= 0.4.6
+cryptography >= 42.0.5
