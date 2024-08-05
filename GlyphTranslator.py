@@ -68,7 +68,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.0.1"
+SCRIPT_VERSION = "2.0.2"
 
 # Default values for the arguments
 DEFAULT_ARGS = { 'output_path': { 'value': ['.'], 'description': 'The current working directory' } }
@@ -492,7 +492,7 @@ class LabelFile:
 
             # Set the AUTHOR data
             overwrites: int = 0
-            steps = list(range(int(parsed_label.rastered_time_from_ms/LabelFile._TIME_STEP_MS), int(parsed_label.rastered_time_to_ms/LabelFile._TIME_STEP_MS)))
+            steps = list(range(round(parsed_label.rastered_time_from_ms/LabelFile._TIME_STEP_MS), round(parsed_label.rastered_time_to_ms/LabelFile._TIME_STEP_MS)))
             for i, row in enumerate(steps, 1 if parsed_label.absolute_light_level_from <= parsed_label.absolute_light_level_to else 0):
                 # Calculate the light level depending on the light mode
                 match parsed_label.light_mode:
