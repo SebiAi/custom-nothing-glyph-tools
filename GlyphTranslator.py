@@ -68,7 +68,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.0.0"
+SCRIPT_VERSION = "2.0.1"
 
 # Default values for the arguments
 DEFAULT_ARGS = { 'output_path': { 'value': ['.'], 'description': 'The current working directory' } }
@@ -483,8 +483,8 @@ class LabelFile:
         custom1_data: list[str] = []
 
         for label in self.labels:
-            # Check if the label is the END label
-            if label.is_end_label:
+            # Check if the label is the END, LABEL_VERSION or PHONE_MODEL label
+            if label.is_end_label or label.is_version_label or label.is_phone_model_label:
                 continue
 
             # Get the parsed label
