@@ -95,7 +95,7 @@ Depending on the phone we have different indexes in the csv for the [\[Glyphs\]]
 ##### Nothing Phone (2a) indexes
 | Index | Glyph/Zone   | Direction                     |
 | ----: | :----------- | :---------------------------- |
-|  0-23 | Top left     | From top right to bottom left |
+|  0-23 | Top left     | From bottom left to top right |
 |    24 | Middle right | -                             |
 |    25 | Bottom left  | -                             |
 
