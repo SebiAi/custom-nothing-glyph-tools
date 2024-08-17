@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.0.1"
+SCRIPT_VERSION = "2.0.2"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -794,7 +794,13 @@ def write_metadata_to_audio_file(audio_file: AudioFile, nglyph_file: NGlyphFile,
     # Check if the AUTHOR data has enough lines to play the whole song
     required_n_lines = math.ceil(audio_file.get_audio_duration_ms() / TIME_STEP_MS)
     if required_n_lines > len(nglyph_file.author.data):
-        print_critical_error(f"The AUTHOR data does not have enough lines to play the whole song. Did you really place the 'END' Label at the end of the audio in Audacity? (Got: {len(nglyph_file.author.data)}, Expected: {required_n_lines})", start="\t")
+        # Check if we are off by one line
+        if required_n_lines - 1 == len(nglyph_file.author.data):
+            # Add a new empty line to the author data
+            nglyph_file.author.data.append([0 for _ in range(nglyph_file.author.columns)])
+        else:
+            # Print the error
+            print_critical_error(f"The AUTHOR data does not have enough lines to play the whole song. Did you really place the 'END' Label at the end of the audio in Audacity? (Got: {len(nglyph_file.author.data)}, Expected: {required_n_lines})", start="\t")
 
 
     # Print the watermark
