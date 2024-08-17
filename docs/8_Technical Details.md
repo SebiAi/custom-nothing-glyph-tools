@@ -27,7 +27,7 @@ This indicates how many [\[Zones\]](./1_Terminology.md#zones) get addressed. Thi
 | Nothing Phone (1)                                                         |          `5cols` |
 | Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode |          `5cols` |
 | Nothing Phone (2)                                                         |         `33cols` |
-| Nothing Phone (2a)                                                        |         `26cols` |
+| Nothing Phone (2a) / Nothing Phone (2a) Plus                              |         `26cols` |
 
 > [!NOTE]
 > This tag was not always present before the 1.4.0 *Glyph Composer* update where only the Nothing Phone (1) and Nothing Phone (2) were supported. It was missing if the [\[composition\]](./1_Terminology.md#compositioncompositions) was made on the Nothing Phone (1). Otherwise it had the Nothing Phone (2) value.
@@ -41,7 +41,7 @@ Depending on the phone we have n Zones:
 | Nothing Phone (1)                                                         |   5 |
 | Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode |  15 |
 | Nothing Phone (2)                                                         |  33 |
-| Nothing Phone (2a)                                                        |  26 |
+| Nothing Phone (2a) / Nothing Phone (2a) Plus                              |  26 |
 
 > [!NOTE]
 > The Nothing Phone (1) is a bit of a special case:  
@@ -92,7 +92,7 @@ Depending on the phone we have different indexes in the csv for the [\[Glyphs\]]
 |    24 | USB Dot                              | -                  |
 | 25-32 | USB Line                             | From bottom to top |
 
-##### Nothing Phone (2a) indexes
+##### Nothing Phone (2a) / Nothing Phone (2a) Plus indexes
 | Index | Glyph/Zone   | Direction                     |
 | ----: | :----------- | :---------------------------- |
 |  0-23 | Top left     | From bottom left to top right |
@@ -135,7 +135,7 @@ Same example as above but with the special 5 [\[Zone\]](./1_Terminology.md#zones
 
 ```
 
-*Example Nothing Phone (2a):*
+*Example Nothing Phone (2a) / Nothing Phone (2a) Plus:*
 ```csv
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4095,4095,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4095,4095,4095,0,4095,
@@ -155,12 +155,13 @@ A loading bar like animation in the *Top left* [\[Glyph\]](./1_Terminology.md#gl
 
 ### COMPOSER
 This depends on what device the composition was created on:
-| Phone                                                                     |            *Composer* string |
-| ------------------------------------------------------------------------- | ---------------------------: |
-| Nothing Phone (1)                                                         | `v1-Spacewar Glyph Composer` |
-| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode | `v1-Spacewar Glyph Composer` |
-| Nothing Phone (2)                                                         |     `v1-Pong Glyph Composer` |
-| Nothing Phone (2a)                                                        |   `v1-Pacman Glyph Composer` |
+| Phone                                                                     |             *Composer* string |
+| ------------------------------------------------------------------------- | ----------------------------: |
+| Nothing Phone (1)                                                         |  `v1-Spacewar Glyph Composer` |
+| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode |  `v1-Spacewar Glyph Composer` |
+| Nothing Phone (2)                                                         |      `v1-Pong Glyph Composer` |
+| Nothing Phone (2a)                                                        |    `v1-Pacman Glyph Composer` |
+| Nothing Phone (2a) Plus                                                   | `v1-PacmanPro Glyph Composer` |
 
 > [!IMPORTANT]
 > Before the 1.4.0 *Glyph Composer* update the prefix `v1-` was missing and only the Nothing Phone (1) and the Nothing Phone (2) were supported.
@@ -207,7 +208,7 @@ It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data.
 | USB Dot                              |   3 |
 | USB Line                             |   4 |
 
-##### Nothing Phone (2a) indexes
+##### Nothing Phone (2a) / Nothing Phone (2a) Plus indexes
 | Glyph/Zone   |  ID |
 | :----------- | --: |
 | Top left     |   0 |
@@ -215,9 +216,11 @@ It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data.
 | Bottom left  |   2 |
 
 > [!NOTE]
-> Assigning every [\[Glyph\]](./1_Terminology.md#glyphs) an ID on the Nothing Phone (2a) is not possible because it only has three of them. I've just choosen these IDs.
+> Assigning every [\[Glyph\]](./1_Terminology.md#glyphs) an ID on the Nothing Phone (2a) / Nothing Phone (2a) Plus is not possible because it only has three of them. I've just choosen these IDs.
 
 ## Aditional Notes
 A [\[composition\]](./1_Terminology.md#compositioncompositions) *can* be manually imported by moving the audio file to `Ringtones/Compositions`. The phone will interpret the lighting data in it's own way if it was made for another phone.
 
-A Nothing Phone (1) composition can be played back on a Nothing Phone (2) if it does **NOT** use 15 [\[Zones\]](./1_Terminology.md#zones).
+A Nothing Phone (1) [\[composition\]](./1_Terminology.md#compositioncompositions) can be played back on a Nothing Phone (2) if it does **NOT** use 15 [\[Zones\]](./1_Terminology.md#zones).
+
+A Nothing Phone (2a) [\[composition\]](./1_Terminology.md#compositioncompositions) can be played back on a Nothing Phone (2a) Plus and vice versa. They both have the same Glyph and Zone layout. The only difference is the [*COMPOSER*](#composer) tag.

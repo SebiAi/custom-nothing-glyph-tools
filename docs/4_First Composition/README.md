@@ -97,6 +97,10 @@ Now that you *cut your audio*, *set up the [\[Label Track\]](../1_Terminology.md
 * Nothing Phone (1)
 * Nothing Phone (2)
 * Nothing Phone (2a)
+* Nothing Phone (2a) Plus
+
+> [!IMPORTANT]
+> Because Nothing Phone (2a) compositions are compatible with the Nothing Phone (2a) Plus and vice versa, the Glyph Tools do not have a separate "Nothing Phone (2a) Plus" mode. Create your composition for the Nothing Phone (2a) instead.
 
 *After* you have made up your mind about it, continue to the next chapter.
 <div align="right"><h3><a href="1_Explaining the Glyph Format.md">Go to next chaper</a></h3></div>

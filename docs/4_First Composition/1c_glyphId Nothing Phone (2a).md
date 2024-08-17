@@ -1,4 +1,4 @@
-# [\[glyphId\]](../1_Terminology.md#glyphid) Nothing Phone (2a)
+# [\[glyphId\]](../1_Terminology.md#glyphid) Nothing Phone (2a) and Nothing Phone (2a) Plus
 
 ![glyphId Nothing Phone (2a)](./assets/glyphId%20Nothing%20Phone%20(2a).png)
 

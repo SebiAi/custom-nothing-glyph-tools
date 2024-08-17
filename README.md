@@ -57,6 +57,7 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 * Nothing Phone (1) :white_check_mark:
 * Nothing Phone (2) :white_check_mark:
 * Nothing Phone (2a) :white_check_mark:
+* Nothing Phone (2a) Plus :white_check_mark:
 
 <!-- TOC --><a name="heading-clapper-tutorial-video"></a>
 # :clapper: Tutorial Video
@@ -75,7 +76,7 @@ You can find everything there from downloading and installing the tools to the t
 Shortcut to the [\[glyphId\]](./docs/1_Terminology.md#glyphid) pages:
 * [**Nothing Phone (1)**](./docs/4_First%20Composition/1a_glyphId%20Nothing%20Phone%20(1).md)
 * [**Nothing Phone (2)**](./docs/4_First%20Composition/1b_glyphId%20Nothing%20Phone%20(2).md)
-* [**Nothing Phone (2a)**](./docs/4_First%20Composition/1c_glyphId%20Nothing%20Phone%20(2a).md)
+* [**Nothing Phone (2a) / Nothing Phone (2a) Plus**](./docs/4_First%20Composition/1c_glyphId%20Nothing%20Phone%20(2a).md)
 
 
 <!-- TOC --><a name="heading-download"></a>

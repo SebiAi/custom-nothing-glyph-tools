@@ -26,11 +26,11 @@ There are three [\[Point Labels\]](../1_Terminology.md#point-label) which **must
 
 Depending on what phone you chose to make this [\[composition\]](../1_Terminology.md#compositioncompositions) for, you need to **replace** `<model>` with one of these strings:
 
-| Phone Model        | `<model>`   |
-| ------------------ | ----------- |
-| Nothing Phone (1)  | **PHONE1**  |
-| Nothing Phone (2)  | **PHONE2**  |
-| Nothing Phone (2a) | **PHONE2A** |
+| Phone Model                                  | `<model>`   |
+| -------------------------------------------- | ----------- |
+| Nothing Phone (1)                            | **PHONE1**  |
+| Nothing Phone (2)                            | **PHONE2**  |
+| Nothing Phone (2a) / Nothing Phone (2a) Plus | **PHONE2A** |
 > [!Note]
 > If you make it for the Nothing Phone (1) your phone model [\[Point Label\]](../1_Terminology.md#point-label) should look like this: `PHONE_MODEL=PHONE1`
 
@@ -89,7 +89,7 @@ As already mentioned, is utilized to address a [\[Glyph\]](../1_Terminology.md#g
 Select the phone you chose and open the new site in a new tab, so you can reference it while creating your work.
 * [**Nothing Phone (1)**](./1a_glyphId%20Nothing%20Phone%20(1).md)
 * [**Nothing Phone (2)**](./1b_glyphId%20Nothing%20Phone%20(2).md)
-* [**Nothing Phone (2a)**](./1c_glyphId%20Nothing%20Phone%20(2a).md)
+* [**Nothing Phone (2a) / Nothing Phone (2a) Plus**](./1c_glyphId%20Nothing%20Phone%20(2a).md)
 
 > [!NOTE]
 > For now you can safely ignore the rows that have the type *Zones* if you are overwhelmed by them.
