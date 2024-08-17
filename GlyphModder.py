@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.0.0"
+SCRIPT_VERSION = "2.0.1"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -672,6 +672,10 @@ def read_metadata_from_audio_file(audio_file: AudioFile, output_path: str, ffmpe
     # Legacy checks for other creation tools - 'v1-Glyphify' is fine
     if album == 'Glyphify':
         print_warning("This looks like an \"old\" Glyphify composition. Depending on the length of it, it might desync when playing it back on device or in the GlyphVisualizer!", start="\t")
+        is_legacy = True
+    ## https://github.com/Krishnagopal-Sinha/better-nothing-glyph-composer
+    if album == 'custom':
+        print_warning("This looks like an \"old\" better-nothing-glyph-composer composition. Depending on the length of it, it might desync when playing it back on device or in the GlyphVisualizer!", start="\t")
         is_legacy = True
     
     # Check if the custom2 tag is valid
