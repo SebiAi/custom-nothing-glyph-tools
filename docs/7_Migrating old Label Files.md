@@ -23,7 +23,7 @@ python GlyphMigrate.py "C:\Users\VM\Downloads\custom-nothing-glyph-tools-main\La
 5. Now you can **execute the command** with the <kbd>ENTER</kbd> key. If everything went good and the file wasn't already upgraded beforehand you will have a new file named like your input [\[Label File\]](../1_Terminology.md#label-file) but with `_migrated` added to the file name. You can use that migrated [\[Label File\]](../1_Terminology.md#label-file) with the *GlyphTranslator* now: [Using the Glyph Tools](./4_First%20Composition/2_Using%20the%20Glyph%20Tools.md#using-the-glyphtranslator)
 
 > [!NOTE]
-> The script might ask you for old "*Compatibility mode*" [\[compositions\]](./1_Terminology.md#compositioncompositions) to select a phone to migrate to. You'll need to use the same phone model you chose here with the *GlyphTranslator*!
+> The script might ask you for old "*Compatibility mode*" [\[compositions\]](./1_Terminology.md#compositioncompositions) to select a phone to migrate to.
 
 > [!CAUTION]
 > An existing [\[Label File\]](../1_Terminology.md#label-file) with the same name will be overridden without notice!
