@@ -65,7 +65,7 @@ Depending on the phone we have different indexes in the csv for the [\[Glyphs\]]
 |     3 | USB Line |
 |     4 | USB Dot  |
 
-##### Nothing Phone (2) - 15 [\[Zones\]](./1_Terminology.md#zones) mode indexes
+##### Nothing Phone (1) - 15 [\[Zones\]](./1_Terminology.md#zones) mode indexes
 | Index | Glyph/Zone                  | Direction          |
 | ----: | :-------------------------- | :----------------- |
 |     0 | Camera                      | -                  |
