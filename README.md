@@ -4,7 +4,7 @@
 This repo is intended to be a collection of self contained tools and scripts to make it easy to create custom Nothing Glyph Compositions which in turn can be imported into the <i>Nothing Glyph Composer</i>.
 </p>
 
-<!--## Also check out my accompanying tool [*GlyphVisualizer*](https://github.com/SebiAi/GlyphVisualizer)!-->
+## Also check out my accompanying tool [*GlyphVisualizer*](https://github.com/SebiAi/GlyphVisualizer)!
 
 https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1cf9-4c0e-9835-792bf1b09a58
 
