@@ -68,7 +68,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.0.2"
+SCRIPT_VERSION = "2.1.0"
 
 # Default values for the arguments
 DEFAULT_ARGS = { 'output_path': { 'value': ['.'], 'description': 'The current working directory' } }
@@ -77,6 +77,7 @@ DEFAULT_ARGS = { 'output_path': { 'value': ['.'], 'description': 'The current wo
 REGEX_PATTERN_LABEL_TEXT_PHONE1 = r'^([1-5])(?:\.((?:(?<![1-24-5]\.)[1-4])|(?:(?<![1-35]\.)[1-8])))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 REGEX_PATTERN_LABEL_TEXT_PHONE2 = r'^([1-9]|1[0-1])(?:\.((?:(?<![0-35-9]\.)[1-9]|1[0-6])|(?:(?<![1-9]\.)[1-8])))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 REGEX_PATTERN_LABEL_TEXT_PHONE2A = r'^([1-3])(?:(?<![23])\.([1-9]|1\d|2[0-4]))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
+REGEX_PATTERN_LABEL_TEXT_PHONE3A = r'^([1-3])(?:\.((?:(?<=1\.)(?:[1-9]|1\d|20))|(?:(?<=2\.)(?:[1-9]|1[0-1]))|(?:(?<=3\.)[1-5])))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 
 # Enums
 class Cols(Enum):
@@ -84,12 +85,15 @@ class Cols(Enum):
     FIFTEEN_ZONE = 1
     ELEVEN_ZONE = 2
     THIRTY_THREE_ZONE = 3
-    THREE_ZONE = 4
+    THREE_ZONE_2A = 4
     TWENTY_SIX_ZONE = 5
+    THREE_ZONE_3A = 6
+    THIRTY_SIX_ZONE = 7
 class PhoneModel(Enum):
     PHONE1 = 0
     PHONE2 = 1
     PHONE2A = 2
+    PHONE3A = 3
 
 # -- Lookup tables to convert our numbering system to the array indexes --
 PHONE1_5COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL: list[list[int]] = [
@@ -238,6 +242,57 @@ PHONE2A_26COL_GLYPH_INDEX_TO_ARRAY_INDEXES_26COL: list[list[int]] = [
     [25], # 26 to BOTTOM_LEFT_GLYPH
 ]
 
+# Used for creating the CUSTOM1 data - custom mapping by SebiAi (not official)
+PHONE3A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL: list[list[int]] = [
+    [0],
+    [1],
+    [2],
+]
+PHONE3A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL: list[list[int]] = [
+    range(0, 20), # 1 to TOP_LEFT_GLYPH
+    range(20, 31), # 2 to MIDDLE_RIGHT_GLYPH
+    range(31, 36), # 3 to BOTTOM_LEFT_GLYPH
+]
+# We need this because our numbering is different than the array indexes in the AUTHOR data for the 36Col mode
+PHONE3A_36COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL: list[list[int]] = [
+    [0], # 1 to TOP_LEFT_ZONE1 (left bottom side)
+    [1], # 2 to TOP_LEFT_ZONE2
+    [2], # 3 to TOP_LEFT_ZONE3
+    [3], # 4 to TOP_LEFT_ZONE4
+    [4], # 5 to TOP_LEFT_ZONE5
+    [5], # 6 to TOP_LEFT_ZONE6
+    [6], # 7 to TOP_LEFT_ZONE7
+    [7], # 8 to TOP_LEFT_ZONE8
+    [8], # 9 to TOP_LEFT_ZONE9
+    [9], # 10 to TOP_LEFT_ZONE10
+    [10], # 11 to TOP_LEFT_ZONE11
+    [11], # 12 to TOP_LEFT_ZONE12
+    [12], # 13 to TOP_LEFT_ZONE13
+    [13], # 14 to TOP_LEFT_ZONE14
+    [14], # 15 to TOP_LEFT_ZONE15
+    [15], # 16 to TOP_LEFT_ZON16
+    [16], # 17 to TOP_LEFT_ZONE17
+    [17], # 18 to TOP_LEFT_ZONE18
+    [18], # 19 to TOP_LEFT_ZONE19
+    [19], # 20 to TOP_LEFT_ZONE20
+    [20], # 21 to MIDDLE_RIGHT_ZONE1 (top side)
+    [21], # 22 to MIDDLE_RIGHT_ZONE2
+    [22], # 23 to MIDDLE_RIGHT_ZONE3
+    [23], # 24 to MIDDLE_RIGHT_ZONE4
+    [24], # 25 to MIDDLE_RIGHT_ZONE5
+    [25], # 26 to MIDDLE_RIGHT_ZONE6
+    [26], # 27 to MIDDLE_RIGHT_ZONE7
+    [27], # 28 to MIDDLE_RIGHT_ZONE8
+    [28], # 29 to MIDDLE_RIGHT_ZONE9
+    [29], # 30 to MIDDLE_RIGHT_ZONE10
+    [30], # 31 to MIDDLE_RIGHT_ZONE11
+    [31], # 32 to BOTTOM_LEFT_GLYPH (right bottom side)
+    [32], # 33 to BOTTOM_LEFT_GLYPH
+    [33], # 34 to BOTTOM_LEFT_GLYPH
+    [34], # 35 to BOTTOM_LEFT_GLYPH
+    [35], # 36 to BOTTOM_LEFT_GLYPH
+]
+
 # +------------------------------------+
 # |                                    |
 # |           Bioler Plate             |
@@ -350,6 +405,8 @@ class LabelFile:
                 regex = re.compile(REGEX_PATTERN_LABEL_TEXT_PHONE2)
             case PhoneModel.PHONE2A:
                 regex = re.compile(REGEX_PATTERN_LABEL_TEXT_PHONE2A)
+            case PhoneModel.PHONE3A:
+                regex = re.compile(REGEX_PATTERN_LABEL_TEXT_PHONE3A)
             case _:
                 raise ValueError(f"[Programming Error] Missing phone model in switch case: '{self.phone_model}'. Please report this error to the developer.")
 
@@ -423,7 +480,9 @@ class LabelFile:
             case PhoneModel.PHONE2:
                 self.columns_model = Cols.THIRTY_THREE_ZONE if self.contains_zone_labels else Cols.ELEVEN_ZONE
             case PhoneModel.PHONE2A:
-                self.columns_model = Cols.TWENTY_SIX_ZONE if self.contains_zone_labels else Cols.THREE_ZONE
+                self.columns_model = Cols.TWENTY_SIX_ZONE if self.contains_zone_labels else Cols.THREE_ZONE_2A
+            case PhoneModel.PHONE3A:
+                self.columns_model = Cols.THIRTY_SIX_ZONE if self.contains_zone_labels else Cols.THREE_ZONE_3A
             case _:
                 raise ValueError(f"[Programming Error] Missing phone model in switch case: '{self.phone_model}'. Please report this error to the developer.")
 
@@ -681,10 +740,14 @@ def get_numer_of_columns_from_columns_model(columns_model: Cols) -> int:
             # There only exists 33 columns mode for the AUTHOR data,
             # the 11 columns mode is a convenience mode for the 33 columns mode
             return 33
-        case Cols.THREE_ZONE | Cols.TWENTY_SIX_ZONE:
+        case Cols.THREE_ZONE_2A | Cols.TWENTY_SIX_ZONE:
             # There only exists 26 columns mode for the AUTHOR data,
             # the 3 columns mode is a convenience mode for the 26 columns mode
             return 26
+        case Cols.THREE_ZONE_3A | Cols.THIRTY_SIX_ZONE:
+            # There only exists 36 columns mode for the AUTHOR data,
+            # the 3 columns mode is a convenience mode for the 36 columns mode
+            return 36
         case _:
             raise ValueError(f"[Programming Error] Missing columns model in switch case: '{columns_model}'. Please report this error to the developer.")
 
@@ -729,7 +792,7 @@ def get_glyph_array_indexes(glyph_index: int, zone_index: int, columns_model: Co
             else:
                 # Only address the zone
                 return PHONE2_33_COL_GLYPH_ZONE_INDEX_TO_ARRAY_INDEXES_33COL[glyph_index + zone_index + offset]
-        case Cols.THREE_ZONE:
+        case Cols.THREE_ZONE_2A:
             # No zone_index in 3Col mode
             return PHONE2A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_26COL[glyph_index]
         case Cols.TWENTY_SIX_ZONE:
@@ -742,6 +805,21 @@ def get_glyph_array_indexes(glyph_index: int, zone_index: int, columns_model: Co
             else:
                 # Only address the zone
                 return PHONE2A_26COL_GLYPH_INDEX_TO_ARRAY_INDEXES_26COL[glyph_index + zone_index + offset]
+        case Cols.THREE_ZONE_3A:
+            # No zone_index in 3Col mode
+            return PHONE3A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL[glyph_index]
+        case Cols.THIRTY_SIX_ZONE:
+            # Offset the array index if the glyph_index is greater than (1 - 1) (TOP_LEFT_GLYPH has 20 zones in 36Col mode => 19 + 1)
+            offset += 19 if glyph_index > 0 else 0
+            # Offset the array index if the glyph_index is greater than (2 - 1) (MIDDLE_RIGHT_GLYPH has 11 zones in 36Col mode => 10 + 1)
+            offset += 10 if glyph_index > 1 else 0
+
+            if zone_index == -1:
+                # No zone_index provided => we need to address the whole glyph
+                return PHONE3A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL[glyph_index]
+            else:
+                # Only address the zone
+                return PHONE3A_36COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL[glyph_index + zone_index + offset]
         case _:
             raise ValueError(f"[Programming Error] Missing columns model in switch case: '{columns_model}'. Please report this error to the developer.")
 
@@ -754,8 +832,10 @@ def get_custom_5col_id(glyph_index: int, columns_model: Cols) -> int:
             return PHONE1_5COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
         case Cols.ELEVEN_ZONE | Cols.THIRTY_THREE_ZONE:
             return PHONE2_11COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
-        case Cols.THREE_ZONE | Cols.TWENTY_SIX_ZONE:
+        case Cols.THREE_ZONE_2A | Cols.TWENTY_SIX_ZONE:
             return PHONE2A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
+        case Cols.THREE_ZONE_3A | Cols.THIRTY_SIX_ZONE:
+            return PHONE3A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
         case _:
             raise ValueError(f"[Programming Error] Missing columns model in switch case: '{columns_model}'. Please report this error to the developer.")
 
