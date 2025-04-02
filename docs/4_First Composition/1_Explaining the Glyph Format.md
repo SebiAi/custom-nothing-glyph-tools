@@ -31,7 +31,7 @@ Depending on what phone you chose to make this [\[composition\]](../1_Terminolog
 | Nothing Phone (1)                            | **PHONE1**  |
 | Nothing Phone (2)                            | **PHONE2**  |
 | Nothing Phone (2a) / Nothing Phone (2a) Plus | **PHONE2A** |
-| Nothing Phone (3a) / Nothing Phone (2a) Pro  | **PHONE3A** |
+| Nothing Phone (3a) / Nothing Phone (3a) Pro  | **PHONE3A** |
 > [!Note]
 > If you make it for the Nothing Phone (1) your phone model [\[Point Label\]](../1_Terminology.md#point-label) should look like this: `PHONE_MODEL=PHONE1`
 
