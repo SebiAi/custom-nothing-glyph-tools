@@ -295,7 +295,7 @@ def migrate_labels(labels: list[Label], version: int) -> tuple[list[Label], int]
     
     max_version: int = max(SUPPORTED_LABEL_VERSIONS)
     if version != max_version:
-            raise NotImplementedError(f"[Development Error] Could not upgrade the data to the latest format version. Got {version}, expected {max_version}.")
+        raise NotImplementedError(f"[Development Error] Could not upgrade the data to the latest format version. Got {version}, expected {max_version}.")
         
     return (labels, migration_steps)
 
