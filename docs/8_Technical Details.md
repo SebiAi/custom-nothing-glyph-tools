@@ -1,6 +1,9 @@
 # :wrench: The technical details
 This documents the technical details of [\[compositions\]](./1_Terminology.md#compositioncompositions) created with the *Glyph Composer* app developed by Nothing Technology Limited (NOTHING).
 
+> [!NOTE]
+> The Phone (3) (Glyph Matrix) is NOT supported in the *Glyph Composer* but the same techniques can still be used to get custom ringtones working and are thus also documented here.
+
 ## Audio
 The audio is disconnected from the lighting - it only determines the final length of the composition. The maximum you can produce in the app is 10s but it can be longer when making it custom.
 
@@ -32,6 +35,7 @@ This indicates how many [\[Zones\]](./1_Terminology.md#zones) get addressed. Thi
 | Nothing Phone (2)                                                         |         `33cols` |
 | Nothing Phone (2a) / Nothing Phone (2a) Plus                              |         `26cols` |
 | Nothing Phone (3a) / Nothing Phone (3a) Pro                               |         `36cols` |
+| Nothing Phone (3)                                                         |        `625cols` |
 
 > [!NOTE]
 > This tag was not always present before the 1.4.0 *Glyph Composer* update where only the Nothing Phone (1) and Nothing Phone (2) were supported. It was missing if the [\[composition\]](./1_Terminology.md#compositioncompositions) was made on the Nothing Phone (1). Otherwise it had the Nothing Phone (2) value.
@@ -47,6 +51,7 @@ Depending on the phone we have n Zones:
 | Nothing Phone (2)                                                         |  33 |
 | Nothing Phone (2a) / Nothing Phone (2a) Plus                              |  26 |
 | Nothing Phone (3a) / Nothing Phone (3a) Pro                               |  36 |
+| Nothing Phone (3)                                                         | 625 |
 
 > [!NOTE]
 > The Nothing Phone (1) is a bit of a special case:  
@@ -112,6 +117,35 @@ Depending on the phone we have different indexes in the csv for the [\[Glyphs\]]
 | 20-30 | Middle right | From top to bottom            |
 | 31-35 | Bottom left  | From bottom right to top left |
 
+##### Nothing Phone (3)
+The first index maps to the top left pixel, the last index maps to the bottom right pixel. The mapping in between is row major, meaning every 25th index (e.g.: 0, 25, 50, ...) will be the leftmost pixel in each row.
+
+Because of the round Glyph Matrix on the Phone (3), not all of the 625 [\[Zones\]](./1_Terminology.md#zones) can be used. Only 489 of these will be visible, the others will not be used and can be set to 0.  
+Visible index range includes (counting from 0 onwards!!):
+* 9-15 (top row)
+* 32-42
+* 55-69
+* 79-95
+* 103-121
+* 127-147
+* 152-172
+* 176-198
+* 201-223
+* 225-399 (fully filled rows in the middle)
+* 401-423
+* 426-448
+* 452-472
+* 477-497
+* 503-521
+* 529-545
+* 555-569
+* 582-592
+* 609-615 (bottom row)
+
+See [here](https://raw.githubusercontent.com/Nothing-Developer-Programme/GlyphMatrix-Developer-Kit/refs/heads/main/image/pixel_coordinate.png) for a visual.
+
+<br><br>
+
 Each [\[Zone\]](./1_Terminology.md#zones) can have a light value from 0 to 4095 (2^12 values), the smallest step is 1. If the data is longer than the audio it will not be played.
 
 The new line consists of Carriage Return (CR) and Line Feed (LF): `\r\n`
@@ -176,6 +210,7 @@ This depends on what device the composition was created on:
 | Nothing Phone (2a)                                                        |    `v1-Pacman Glyph Composer` |
 | Nothing Phone (2a) Plus                                                   | `v1-PacmanPro Glyph Composer` |
 | Nothing Phone (3a) / Nothing Phone (3a) Pro                               | `v1-Asteroids Glyph Composer` |
+| Nothing Phone (3)                                                         |   `v1-Metroid Glyph Composer` |
 
 > [!IMPORTANT]
 > Before the 1.4.0 *Glyph Composer* update the prefix `v1-` was missing and only the Nothing Phone (1) and the Nothing Phone (2) were supported.
@@ -238,6 +273,8 @@ It is entirely possible to mismatch the *CUSTOM1* and *ALBUM* data.
 
 > [!NOTE]
 > Assigning every [\[Glyph\]](./1_Terminology.md#glyphs) an ID on the Nothing Phone (2a) / Nothing Phone (2a) Plus / Nothing Phone (3a) / Nothing Phone (3a) Pro is not possible because it only has three of them. I've just choosen these IDs.
+> 
+> Also no mapping for the Nothing Phone (3) is provided here.
 
 ## Aditional Notes
 A [\[composition\]](./1_Terminology.md#compositioncompositions) *can* be manually imported by moving the audio file to `Ringtones/Compositions`. The phone will interpret the lighting data in it's own way if it was made for another phone.
