@@ -1,4 +1,6 @@
 # :wrench: The technical details
+This documents the technical details of [\[compositions\]](./1_Terminology.md#compositioncompositions) created with the *Glyph Composer* app developed by Nothing Technology Limited (NOTHING).
+
 ## Audio
 The audio is disconnected from the lighting - it only determines the final length of the composition. The maximum you can produce in the app is 10s but it can be longer when making it custom.
 
