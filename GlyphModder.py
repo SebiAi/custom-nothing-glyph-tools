@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.1.0"
+SCRIPT_VERSION = "2.2.0"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -93,11 +93,13 @@ class Cols(Enum):
     THREE_ZONE = 4 # Unused
     TWENTY_SIX_ZONE = 5
     THIRTY_SIX_ZONE = 6
+    SIX_TWENTY_FIVE_ZONE = 7
 class PhoneModel(Enum):
     PHONE1 = 0
     PHONE2 = 1
     PHONE2A = 2
     PHONE3A = 3
+    PHONE3 = 4
 
 # Cols lookup tables
 STRING_TO_COLS: dict[Cols, str] = {
@@ -106,6 +108,7 @@ STRING_TO_COLS: dict[Cols, str] = {
     Cols.THIRTY_THREE_ZONE: '33cols',
     Cols.TWENTY_SIX_ZONE: '26cols',
     Cols.THIRTY_SIX_ZONE: '36cols',
+    Cols.SIX_TWENTY_FIVE_ZONE: '625cols',
 }
 N_COLUMNS_TO_COLS = {
     5: Cols.FIVE_ZONE,
@@ -113,6 +116,7 @@ N_COLUMNS_TO_COLS = {
     33: Cols.THIRTY_THREE_ZONE,
     26: Cols.TWENTY_SIX_ZONE,
     36: Cols.THIRTY_SIX_ZONE,
+    625: Cols.SIX_TWENTY_FIVE_ZONE,
 }
 
 # Device codename lookup table (used for the composer tag)
@@ -122,12 +126,14 @@ DEVICE_CODENAME = {
     Cols.THIRTY_THREE_ZONE: 'Pong',
     Cols.TWENTY_SIX_ZONE: 'Pacman',
     Cols.THIRTY_SIX_ZONE: 'Asteroids',
+    Cols.SIX_TWENTY_FIVE_ZONE: 'Metroid',
 }
 STRING_COLS_TO_PHONE_MODEL = {
     '5cols': PhoneModel.PHONE1,
     '33cols': PhoneModel.PHONE2,
     '26cols': PhoneModel.PHONE2A,
     '36cols': PhoneModel.PHONE3A,
+    '625cols': PhoneModel.PHONE3,
 }
 
 # +------------------------------------+
