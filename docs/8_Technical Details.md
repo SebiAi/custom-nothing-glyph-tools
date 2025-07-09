@@ -14,7 +14,8 @@ There are the following tags in the ogg file (order irrelevant):
 The *AUTHOR* and *CUSTOM1* tags contain both *Base64* encoded and then *zlib compressed* data (Best Compression (no preset dictionary) - see [here](https://en.wikipedia.org/wiki/List_of_file_signatures)).
 
 ### TITLE
-Contains the title given in the *Glyph Composer*. Weirdly enough the *Glyph Composer* does not use this tag when displaying the name of the composition - the filename is used instead.
+Contains the title given in the *Glyph Composer*. Weirdly enough the *Glyph Composer* does not use this tag when displaying the name of the composition - the filename is used instead.  
+This title is used in the normal, non-glyph ringtone menu and may be displayed by other software like music players.
 
 ### ALBUM
 Saves what sound pack was used when the composition was created. Can be changed without any effect on the audio or lights. It does display in the *Glyph Composer*.
