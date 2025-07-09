@@ -51,8 +51,9 @@ Depending on the phone we have n Zones:
 >
 > Because the *Glyph Composer* uses essentially the *Glyph Developer Kit* in the backend we can increase the [\[Zone\]](./1_Terminology.md#zones) count from 5 to 15 to account for all the extra [\[Zones\]](./1_Terminology.md#zones) mentioned.
 >
-> Why not always use the 15 [\[Zones\]](./1_Terminology.md#zones) mode on the Phone (1)?:  
-> Because it is not officially supported, the lights get stuck if the [\[composition\]](../1_Terminology.md#compositioncompositions) stops prematurely. Toggle the *Glyph Torch* to fix it.
+> ~~Why not always use the 15 [\[Zones\]](./1_Terminology.md#zones) mode on the Phone (1)?:~~  
+> ~~Because it is not officially supported, the lights get stuck if the [\[composition\]](../1_Terminology.md#compositioncompositions) stops prematurely. Toggle the *Glyph Torch* to fix it.~~  
+> This issue was fixed with `Nothing OS V3.2-250610-1104` and higher on the Phone (1).
 >
 > If we use the 15 [\[Zones\]](./1_Terminology.md#zones) mode on the Phone (1) we still need to set the [*CUSTOM2*](#custom2) tag to `5cols` or else it won't import. This makes it a bit tricky to discern 5 [\[Zones\]](./1_Terminology.md#zones) and 15 [\[Zones\]](./1_Terminology.md#zones) [\[compositions\]](./1_Terminology.md#compositioncompositions).
 
