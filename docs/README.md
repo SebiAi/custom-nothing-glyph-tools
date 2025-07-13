@@ -21,6 +21,7 @@ The other chapters are here for the curious minds :wink:
 6. [**Troubleshooting**](./6_Troubleshooting.md)
 7. [**Migrating old Label Files to the v1 format**](./7_Migrating%20old%20Label%20Files.md)
 8. [**Technical Details**](./8_Technical%20Details.md)
+9. [**The NGlyph File Format**](./9_The%20NGlyph%20File%20Format.md)
 
 ## Need help?
 If you get stuck, have questions or need help, feel free to join the Discord here: https://discord.gg/EmcnHqDxZt
