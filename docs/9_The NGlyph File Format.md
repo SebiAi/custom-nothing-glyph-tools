@@ -1,7 +1,7 @@
 # The [\[NGlyph File\]](./1_Terminology.md#nglyph-file) Format
 ## Introduction
 This is an intermediate file format that is used by the Glyph Tools. It soley contains the raw light data (no audio) and can thus be shared online without infringing on any copyright laws.  
-A person with the knowledge of what part of what audio to use, can then utilize the Glyph Tools with the [\[NGlyph File\]](./1_Terminology.md#nglyph-file) to create the final [\[composition\]](./1_Terminology.md#compositioncompositions).
+A person who knows what audio to use along this light data can then utilize the Glyph Tools with the [\[NGlyph File\]](./1_Terminology.md#nglyph-file) to create the final [\[composition\]](./1_Terminology.md#compositioncompositions).
 
 To prevent people other than the author itself from claiming ownership of the light data and thus the [\[composition\]](./1_Terminology.md#compositioncompositions), a basic watermark system is included.
 
@@ -40,7 +40,7 @@ The [\[NGlyph File\]](./1_Terminology.md#nglyph-file) is a UTF-8 encoded [JSON](
 | Nothing Phone (3)                            | `PHONE3`    |
 
 > [!IMPORTANT]
-> The special 15 [\[Zones\]](./1_Terminology.md#zones) mode for the Nothing Phone (1) does not have it's own value.  
+> The special 15 [\[Zones\]](./1_Terminology.md#zones) mode for the Nothing Phone (1) does not have it's own value. *PHONE_MODEL* is `PHONE1` in this case.
 > If you want to know if light data is made for this mode, you can count the number of columns in the *AUTHOR* data.
 > 
 > More info [here](./8_Technical%20Details.md#author).
@@ -53,7 +53,7 @@ The [\[NGlyph File\]](./1_Terminology.md#nglyph-file) is a UTF-8 encoded [JSON](
 
 #### Encryption process
 > [!CAUTION]
-> When reading a [\[composition\]](./1_Terminology.md#compositioncompositions) watch out for the `GLYPHER_WATERMARK` metadata tag on the audio. It contains the watermark with a new line `\n` prepended to it.
+> When reading a [\[composition\]](./1_Terminology.md#compositioncompositions), watch out for the `GLYPHER_WATERMARK` metadata tag on the audio. It contains the watermark with a new line `\n` prepended to it.
 > 
 > **Make sure that when you write composition data sourced from a [\[NGlyph File\]](./1_Terminology.md#nglyph-file) to the audio that you also include that metadata tag in the data written, if a watermark is present!**
 
