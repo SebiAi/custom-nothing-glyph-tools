@@ -40,7 +40,7 @@ The [\[NGlyph File\]](./1_Terminology.md#nglyph-file) is a UTF-8 encoded [JSON](
 | Nothing Phone (3)                            | `PHONE3`    |
 
 > [!IMPORTANT]
-> The special 15 [\[Zones\]](./1_Terminology.md#zones) mode for the Nothing Phone (1) does not have it's own value. `PHONE_MODEL` is `PHONE1` in this case.
+> The special 15 [\[Zones\]](./1_Terminology.md#zones) mode for the Nothing Phone (1) does not have it's own value. *PHONE_MODEL* is `PHONE1` in this case.
 > If you want to know if light data is made for this mode, you can count the number of columns in the *AUTHOR* data.
 > 
 > More info [here](./8_Technical%20Details.md#author).
