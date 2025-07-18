@@ -21,7 +21,7 @@ A Label is placed on a [\[Label Track\]](#label-track). A Label has a starting a
 A Point Label is a [\[Label\]](#label) that has the *same* starting and ending position. See [here](https://manual.audacityteam.org/man/label_tracks.html#Point_labels_and_region_labels).
 
 ### Region Label
-A Point Label is a [\[Label\]](#label) that has a *different* starting and ending position. See [here](https://manual.audacityteam.org/man/label_tracks.html#Point_labels_and_region_labels).
+A Region Label is a [\[Label\]](#label) that has a *different* starting and ending position. See [here](https://manual.audacityteam.org/man/label_tracks.html#Point_labels_and_region_labels).
 
 ### Glyph(s)
 The Glyphs are the whole light segments on the back of the phones. In contrast stand the [\[Zones\]](#zones). E.g.: The Nothing Phone (1) has 5 Glyphs.
