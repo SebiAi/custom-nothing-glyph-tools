@@ -142,7 +142,7 @@ Visible index range includes (counting from 0 onwards!!):
 * 582-592
 * 609-615 (bottom row)
 
-See [here](https://raw.githubusercontent.com/Nothing-Developer-Programme/GlyphMatrix-Developer-Kit/refs/heads/main/image/pixel_coordinate.png) for a visual.
+See [here](https://github.com/Nothing-Developer-Programme/GlyphMatrix-Developer-Kit/blob/43622ebcc2cff4c06f5a76935651fe48f45e5a6d/image/Phone%203%20Glyph%20Matrix%20LED%20allocation.svg) for a visual.
 
 <br><br>
 
