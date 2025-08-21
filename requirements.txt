@@ -1,6 +1,19 @@
+#
+# Shared dependencies
+#
+
 # Color output in terminal
 termcolor
 # Windows color terminal support
 colorama >= 0.4.6
 # NGlyph watermark support
 cryptography >= 42.0.5
+
+#
+# Phone (3) scripts
+#
+
+# Used for frame extraction from videos. No need for GUI features => headless.
+opencv-python-headless
+# Image processing
+numpy
