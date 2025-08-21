@@ -1,3 +1,6 @@
+# Color output in terminal
 termcolor
+# Windows color terminal support
 colorama >= 0.4.6
+# NGlyph watermark support
 cryptography >= 42.0.5
