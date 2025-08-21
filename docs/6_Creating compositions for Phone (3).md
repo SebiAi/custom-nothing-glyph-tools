@@ -35,7 +35,7 @@ Your command should look something like this now:
 ```
 python VideoToPhone3NGlyph.py "C:\Users\VM\Downloads\custom-nothing-glyph-tools-main\Video.mp4"
 ```
-4. Now you can **execute the command** with the <kbd>ENTER</kbd> key. If everything went good and the file wasn't already upgraded beforehand you will have a new file named like your input video but with the `.nglyph` extension. You can use that [\[NGlyph File\]](./1_Terminology.md#nglyph-file) + your audio with the *GlyphModder* by following the linked portion here: [Using the Glyph Tools](./4_First%20Composition/2_Using%20the%20Glyph%20Tools.md#using-the-glyphmodder)
+4. Now you can **execute the command** with the <kbd>ENTER</kbd> key. If everything went good you will have a new file named like your input video but with the `.nglyph` extension. You can use that [\[NGlyph File\]](./1_Terminology.md#nglyph-file) + your audio with the *GlyphModder* by following the linked portion here: [Using the Glyph Tools](./4_First%20Composition/2_Using%20the%20Glyph%20Tools.md#using-the-glyphmodder)
 
 > [!TIP]
 > If your video already has the audio you want to use, you can just pass it to the *GlyphModder* script and it will handle extracting the audio track for you.
