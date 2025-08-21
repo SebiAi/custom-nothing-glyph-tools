@@ -177,3 +177,6 @@ pyrightconfig.json
 
 # NGlyphToFrames
 nglyphframes/
+# FrameGenerator
+frames/
+output.mp4
