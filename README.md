@@ -60,7 +60,7 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 * Nothing Phone (2a) Plus :white_check_mark:
 * Nothing Phone (3a) :white_check_mark:
 * Nothing Phone (3a) Pro :white_check_mark:
-* Nothing Phone (3) :construction: - [\[GlyphModder\]](./docs/1_Terminology.md#glyphmodder) supports reading and writing self made [\[NGlyph Files\]](./docs/1_Terminology.md#nglyph-file).
+* Nothing Phone (3) :white_check_mark:
 
 <!-- TOC --><a name="heading-clapper-tutorial-video"></a>
 # :clapper: Tutorial Video
