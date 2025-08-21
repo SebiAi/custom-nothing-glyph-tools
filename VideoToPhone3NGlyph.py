@@ -112,7 +112,7 @@ def print_info(message, start: str = "", **args):
 
 # Print debug message
 def print_debug(message, start: str = "", **args):
-    cprint(str(start) + "DEBUG: " + str(message), color="grey", flush=True, **args)
+    #cprint(str(start) + "DEBUG: " + str(message), color="grey", flush=True, **args)
     pass
 
 # +------------------------------------+
