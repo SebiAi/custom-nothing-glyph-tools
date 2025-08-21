@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.2.0"
+SCRIPT_VERSION = "2.2.1"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -602,7 +602,7 @@ class AudioFile:
     def fix_audio_codec(self, ffmpeg: FFmpeg, new_audio_path: str) -> str:
         assert new_audio_path != self.audio_path, "[Development Error] The new audio path is the same as the old one. What happened here?"
 
-        ffmpeg_command = ffmpeg.ffmpeg_base_command + ['-y', '-i', self.audio_path, '-strict', '-2', '-c:a', 'opus', '-map_metadata', '0:s:a:0', '-fflags', '+bitexact', '-flags:v', '+bitexact', '-flags:a', '+bitexact', new_audio_path]
+        ffmpeg_command = ffmpeg.ffmpeg_base_command + ['-y', '-i', self.audio_path, '-strict', '-2', '-c:a', 'opus', '-map', '0:a:0', '-map_metadata', '0:s:a:0', '-fflags', '+bitexact', '-flags:v', '+bitexact', '-flags:a', '+bitexact', new_audio_path]
 
         result = subprocess.run(ffmpeg_command, capture_output=True, text=True)
         if result.returncode != 0:
