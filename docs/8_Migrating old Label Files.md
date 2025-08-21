@@ -29,4 +29,4 @@ python GlyphMigrate.py "C:\Users\VM\Downloads\custom-nothing-glyph-tools-main\La
 > An existing [\[Label File\]](../1_Terminology.md#label-file) with the same name will be overridden without notice!
 
 > [!TIP]
-> Read the output and act accordingly if it tells you something. If you get stuck **read through the [Troubleshooting](./6_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](./README.md#need-help)).
+> Read the output and act accordingly if it tells you something. If you get stuck **read through the [Troubleshooting](./7_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](./README.md#need-help)).

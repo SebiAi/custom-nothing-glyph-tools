@@ -1,4 +1,9 @@
 # Create your first [\[composition\]](../1_Terminology.md#compositioncompositions)
+> [!WARNING]
+> This only works for Nothing Phones up to but **excluding** Phone (3)!
+> 
+> See the [Creating compositions for Phone (3)](../6_Creating%20compositions%20for%20Phone%20(3).md) topic on how you can create compositions for it.
+
 This topic will have multiple chapters, starting with prepairing your audio inside Audacity.  
 The table of contents will be visible in each chapter at the top so you can see where you are (bold title and not clickable).
 
@@ -100,6 +105,11 @@ Now that you *cut your audio*, *set up the [\[Label Track\]](../1_Terminology.md
 * Nothing Phone (2a) Plus
 * Nothing Phone (3a)
 * Nothing Phone (3a) Pro
+
+> [!NOTE]
+> Note that the *Nothing Phone (3)* is not on this list, since creating a composition for it with the [\[Glyph Format\]](../1_Terminology.md#glyph-format) that is explained here would be more than tedious.
+> 
+> See the [Creating compositions for Phone (3)](../6_Creating%20compositions%20for%20Phone%20(3).md) topic on how you can create compositions for it.
 
 > [!IMPORTANT]
 > Because Nothing Phone (2a) compositions are compatible with the Nothing Phone (2a) Plus and vice versa, the Glyph Tools do not have a separate "Nothing Phone (2a) Plus" mode. Create your composition for the Nothing Phone (2a) instead.  

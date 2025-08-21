@@ -34,10 +34,10 @@ I recommend the following methods:
 3. Click on the three dots in the top right corner and **select *Import***.
 4. Choose your [\[composition\]](../1_Terminology.md#compositioncompositions) with the stock Android file manager
 > [!CAUTION]
-> Do not use any other third party file explorer! More info [here](../6_Troubleshooting.md#file-is-not-created-by-composer).
+> Do not use any other third party file explorer! More info [here](../7_Troubleshooting.md#file-is-not-created-by-composer).
 
 > [!NOTE]
-> If your composition does not import and you get a small popup at the bottom of your screen, see the [Troubleshooting](../6_Troubleshooting.md) topic.
+> If your composition does not import and you get a small popup at the bottom of your screen, see the [Troubleshooting](../7_Troubleshooting.md) topic.
 
 ***
 
@@ -64,6 +64,6 @@ With the file and this info it is possible to recreate it.
 ### What to do next
 If you want to step up your game and create even better [\[compositions\]](../1_Terminology.md#compositioncompositions) you can work through the [Create Advanced compositions (Zones)](../5_Create%20Advanced%20compositions%20(Zones).md) topic.
 
-If you are more interrested in the technical aspect of how this all works, check out the [Technical Details](../8_Technical%20Details.md) topic.
+If you are more interrested in the technical aspect of how this all works, check out the [Technical Details](../9_Technical%20Details.md) topic.
 
 <div align="right"><h3><a href="../README.md">Return to the Wiki overview</a></h3></div>

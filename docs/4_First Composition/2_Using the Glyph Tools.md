@@ -63,7 +63,7 @@ In this step you'll generate the [\[NGlyph File\]](../1_Terminology.md#nglyph-fi
 > You can use the `--help` argument to see all the available arguments you can pass to the script.
 
 > [!TIP]
-> If you get stuck **read through the [Troubleshooting](../6_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](../README.md#need-help)).
+> If you get stuck **read through the [Troubleshooting](../7_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](../README.md#need-help)).
 
 ***
 
@@ -81,7 +81,7 @@ This is the final step to get your completed [\[composition\]](../1_Terminology.
 > You can use the `--help` argument to see all the available arguments you can pass to the script.
 
 > [!TIP]
-> If you get stuck **read through the [Troubleshooting](../6_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](../README.md#need-help)).
+> If you get stuck **read through the [Troubleshooting](../7_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](../README.md#need-help)).
 
 ## The next step
 Now that you have your finished [\[composition\]](../1_Terminology.md#compositioncompositions) you can continue to the last chapter.

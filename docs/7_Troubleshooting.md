@@ -10,7 +10,7 @@ If you created this composition please make sure you used the right phone-model 
 > [!CAUTION]
 > This workaround only works for Phone (1) [\[compositions\]](./1_Terminology.md#compositioncompositions) that strictly use the whole *5 [\[Glyphs\]](./1_Terminology.md#glyphs)* aka. not using the 4 [\[Zones\]](./1_Terminology.md#zones) in the *Battery Glyph* and the 8 [\[Zones\]](./1_Terminology.md#zones) in the *USB Line Glyph*.
 >
-> There is currently no simple way to discern *5 [\[Zones\]](./1_Terminology.md#zones)* and *15 [\[Zones\]](./1_Terminology.md#zones)* [\[compositions\]](./1_Terminology.md#compositioncompositions), except for looking at the column count after extracting the *AUTHOR* data (see [Technical Details](./8_Technical%20Details.md)).
+> There is currently no simple way to discern *5 [\[Zones\]](./1_Terminology.md#zones)* and *15 [\[Zones\]](./1_Terminology.md#zones)* [\[compositions\]](./1_Terminology.md#compositioncompositions), except for looking at the column count after extracting the *AUTHOR* data (see [Technical Details](./9_Technical%20Details.md)).
 
 ## File is not created by Composer
 If you get this error message:

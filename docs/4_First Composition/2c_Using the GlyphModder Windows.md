@@ -18,7 +18,7 @@ python GlyphModder.py write -t "Tutorial Composition" "C:\Users\VM\Downloads\cus
 > The script might ask for your input in the form of yes (`y`) and no (`n`).
 
 > [!TIP]
-> Read the output and act accordingly if it tells you something. If you get stuck **read through the [Troubleshooting](../6_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](../README.md#need-help)).
+> Read the output and act accordingly if it tells you something. If you get stuck **read through the [Troubleshooting](../7_Troubleshooting.md) entry first**. If you still need help you can join the Discord (link at the [root of the wiki](../README.md#need-help)).
 
 > [!IMPORTANT]
 > If you make changes to your [\[Labels\]](../1_Terminology.md#label) then do not forget to export them and run them through the [\[GlyphTranslator\]](../1_Terminology.md#glyphtranslator) again!!

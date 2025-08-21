@@ -43,10 +43,10 @@ The [\[NGlyph File\]](./1_Terminology.md#nglyph-file) is a UTF-8 encoded [JSON](
 > The special 15 [\[Zones\]](./1_Terminology.md#zones) mode for the Nothing Phone (1) does not have it's own value. *PHONE_MODEL* is `PHONE1` in this case.
 > If you want to know if light data is made for this mode, you can count the number of columns in the *AUTHOR* data.
 > 
-> More info [here](./8_Technical%20Details.md#author).
+> More info [here](./9_Technical%20Details.md#author).
 
 ### AUTHOR
-**This is a required field.** Contains the author data as described in the [Technical Details](./8_Technical%20Details.md#author) but split by each new line, resulting in a string array (except when there is a watermark, see following sections). This allows the data to be humanly readable when the JSON is pretty formatted, which is done on purpose when creating the file via the Glyph Tools.
+**This is a required field.** Contains the author data as described in the [Technical Details](./9_Technical%20Details.md#author) but split by each new line, resulting in a string array (except when there is a watermark, see following sections). This allows the data to be humanly readable when the JSON is pretty formatted, which is done on purpose when creating the file via the Glyph Tools.
 
 > [!WARNING]
 > When a watermark is present (*[WATERMARK](#watermark)* field) the **light data is encrypted** with the contents of the watermark to stop people from simply removing the watermark or changing it to their name.
@@ -114,7 +114,7 @@ Follow the rough steps from above but in reverse order:
 5. Decode as UTF-8
 
 ### CUSTOM1
-**This is a required field.** Contains the custom1 data as described in the [Technical Details](./8_Technical%20Details.md#custom1) but split by each new line, resulting in a string array. This allows the data to be humanly readable when the JSON is pretty formatted, which it is when creating the file via the Glyph Tools.
+**This is a required field.** Contains the custom1 data as described in the [Technical Details](./9_Technical%20Details.md#custom1) but split by each new line, resulting in a string array. This allows the data to be humanly readable when the JSON is pretty formatted, which it is when creating the file via the Glyph Tools.
 
 If you do not have any *CUSTOM1* data just leave the array empty.
 
@@ -144,7 +144,7 @@ If a composition is considered a "legacy" composition can be determined via the 
 | `ALBUM` metadata equals `custom`            | Early versions of [Better-Nothing-Glyph-Composer](https://better-nothing-glyph-composer.pages.dev/) (BNGC) had this bug. When the bug was fixed the album changed to `BNGC v1`.                                                                                    |
 
 > [!NOTE]
-> More info on the metadata strings of a [\[composition\]](./1_Terminology.md#compositioncompositions) can be found in the [Technical Details](./8_Technical%20Details.md).
+> More info on the metadata strings of a [\[composition\]](./1_Terminology.md#compositioncompositions) can be found in the [Technical Details](./9_Technical%20Details.md).
 
 ## Example
 > [!NOTE]
