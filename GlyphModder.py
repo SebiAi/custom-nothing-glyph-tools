@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.2.1"
+SCRIPT_VERSION = "2.3.0"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -457,6 +457,9 @@ class AuthorData:
             self.data = [[int(e) for e in line if e.strip()] for line in list(reader) if ''.join(line).strip()]
         except (csv.Error, ValueError):
             raise AuthorData.AuthorDataException("AUTHOR data is not valid")
+    
+    def regenerate_raw_data_from_data(self) -> None:
+        self.raw_data = ('\r\n'.join([f"{','.join([str(e) for e in line])}," for line in self.data]) + '\r\n').encode('utf-8')
 
     def decrypt(self, key: bytes) -> None:
         f = Fernet(key)
@@ -812,8 +815,13 @@ def write_metadata_to_audio_file(audio_file: AudioFile, nglyph_file: NGlyphFile,
             nglyph_file.author.data.append([0 for _ in range(nglyph_file.author.columns)])
         else:
             # Print the error
-            print_critical_error(f"The AUTHOR data does not have enough lines to play the whole song. Did you really place the 'END' Label at the end of the audio in Audacity? (Got: {len(nglyph_file.author.data)}, Expected: {required_n_lines})", start="\t")
-
+            delta = required_n_lines - len(nglyph_file.author.data)
+            print_warning(f"The AUTHOR data does not have enough lines to play the whole song. Did you really place the 'END' Label at the end of the audio in Audacity? Filling missing data with zeros. (Got: {len(nglyph_file.author.data)}, Expected: {required_n_lines}, Off by: {delta} ({delta / TIME_STEP_MS:.3f}ms))", start="\t")
+            for _ in range(delta):
+                nglyph_file.author.data.append([0 for _ in range(nglyph_file.author.columns)])
+        
+        nglyph_file.author.regenerate_raw_data_from_data()
+    assert required_n_lines <= len(nglyph_file.author.data), "[Development Error] The AUTHOR data still does not have enough lines to play the whole song. What happened here?"
 
     # Print the watermark
     if nglyph_file.watermark is not None:
