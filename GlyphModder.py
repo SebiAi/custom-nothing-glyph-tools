@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.3.0"
+SCRIPT_VERSION = "2.3.1"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -446,7 +446,7 @@ class AuthorData:
         try:
             self.columns_mode = N_COLUMNS_TO_COLS[self.columns]
         except KeyError:
-            raise AuthorData.AuthorDataException("AUTHOR data has an invalid number of columns ({self.author_columns})")
+            raise AuthorData.AuthorDataException(f"AUTHOR data has an invalid number of columns ({self.columns})")
     
     def _parse_author_data(self, data: list[str]):
         # Get data and raw_data
@@ -816,7 +816,7 @@ def write_metadata_to_audio_file(audio_file: AudioFile, nglyph_file: NGlyphFile,
         else:
             # Print the error
             delta = required_n_lines - len(nglyph_file.author.data)
-            print_warning(f"The AUTHOR data does not have enough lines to play the whole song. Did you really place the 'END' Label at the end of the audio in Audacity? Filling missing data with zeros. (Got: {len(nglyph_file.author.data)}, Expected: {required_n_lines}, Off by: {delta} ({delta / TIME_STEP_MS:.3f}ms))", start="\t")
+            print_warning(f"The AUTHOR data does not have enough lines to play the whole song. Did you really place the 'END' Label at the end of the audio in Audacity? Filling missing data with zeros. (Got: {len(nglyph_file.author.data)}, Expected: {required_n_lines}, Off by: {delta} ({delta * TIME_STEP_MS:.3f}ms))", start="\t")
             for _ in range(delta):
                 nglyph_file.author.data.append([0 for _ in range(nglyph_file.author.columns)])
         
