@@ -11,7 +11,7 @@ The *Nothing Phone (3)* has a 25x25 led matrix on the back of the device that we
 
 Instead we can use the power of already existing software like video editing programs or animation software to create a video and then process that into data the phone can interpret for the matrix.
 
-**TL;DR:** All you need is a preferably already rectangle video + audio and the *VideoToPhone3NGlyph* script will do the heavy lifting. If the video is not recangle it will be scaled down to 25x25.
+**TL;DR:** All you need is a preferably already rectangle video at 60fps + audio and the *VideoToPhone3NGlyph* script will do the heavy lifting. If the video is not recangle it will be scaled down to 25x25.
 > [!NOTE]
 > The script currently does not support any form of cropping or adjustment of saturation or thresholds for the color to gray conversion.  
 > These adjustments should be made beforehand in a suitable video editing software of your preference - I personally use [Kdenlive](https://kdenlive.org).
