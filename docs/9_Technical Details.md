@@ -237,17 +237,18 @@ A loading bar like animation in the *Top left* [\[Glyph\]](./1_Terminology.md#gl
 
 ### COMPOSER
 This depends on what device the composition was created on:
-| Phone                                                                      |             *Composer* string |
-| -------------------------------------------------------------------------- | ----------------------------: |
-| Nothing Phone (1)                                                          |  `v1-Spacewar Glyph Composer` |
-| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode  |  `v1-Spacewar Glyph Composer` |
-| Nothing Phone (2)                                                          |      `v1-Pong Glyph Composer` |
-| Nothing Phone (2a)                                                         |    `v1-Pacman Glyph Composer` |
-| Nothing Phone (2a) Plus                                                    | `v1-PacmanPro Glyph Composer` |
-| Nothing Phone (3a) / Nothing Phone (3a) Pro                                | `v1-Asteroids Glyph Composer` |
-| Nothing Phone (3)                                                          |   `v1-Metroid Glyph Composer` |
-| Nothing Phone (4a)                                                         |   `v1-Frogger Glyph Composer` |
-| Nothing Phone (4a) - special 7 [\[Glyph\]](./1_Terminology.md#glyphs) mode |   `v1-Frogger Glyph Composer` |
+| Phone                                                                      |              *Composer* string |
+| -------------------------------------------------------------------------- | -----------------------------: |
+| Nothing Phone (1)                                                          |   `v1-Spacewar Glyph Composer` |
+| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode  |   `v1-Spacewar Glyph Composer` |
+| Nothing Phone (2)                                                          |       `v1-Pong Glyph Composer` |
+| Nothing Phone (2a)                                                         |     `v1-Pacman Glyph Composer` |
+| Nothing Phone (2a) Plus                                                    |  `v1-PacmanPro Glyph Composer` |
+| Nothing Phone (3a) / Nothing Phone (3a) Pro                                |  `v1-Asteroids Glyph Composer` |
+| Nothing Phone (3)                                                          |    `v1-Metroid Glyph Composer` |
+| Nothing Phone (4a)                                                         |    `v1-Frogger Glyph Composer` |
+| Nothing Phone (4a) - special 7 [\[Glyph\]](./1_Terminology.md#glyphs) mode |    `v1-Frogger Glyph Composer` |
+| Nothing Phone (4a) Pro                                                     | `v1-FroggerPro Glyph Composer` |
 
 > [!IMPORTANT]
 > Before the 1.4.0 *Glyph Composer* update the prefix `v1-` was missing and only the Nothing Phone (1) and the Nothing Phone (2) were supported.
