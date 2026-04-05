@@ -60,7 +60,7 @@ Depending on the phone we have n Zones:
 | Nothing Phone (3)                                                          | 625 |
 | Nothing Phone (4a)                                                         |   6 |
 | Nothing Phone (4a) - special 7 [\[Glyph\]](./1_Terminology.md#glyphs) mode |   7 |
-| Nothing PHone (4a) Pro                                                     | 169 |
+| Nothing Phone (4a) Pro                                                     | 169 |
 
 > [!CAUTION]
 > The *Nothing Phone (4a)* **7 Zones** mode (addressing the red camera indicator [\[Glyph\]](./1_Terminology.md#glyphs)) is not officially supported by Nothing and may break unexpectedly in the future!
