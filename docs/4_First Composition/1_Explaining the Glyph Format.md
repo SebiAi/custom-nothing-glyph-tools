@@ -32,6 +32,7 @@ Depending on what phone you chose to make this [\[composition\]](../1_Terminolog
 | Nothing Phone (2)                            | **PHONE2**  |
 | Nothing Phone (2a) / Nothing Phone (2a) Plus | **PHONE2A** |
 | Nothing Phone (3a) / Nothing Phone (3a) Pro  | **PHONE3A** |
+| Nothing Phone (4a)                           | **PHONE4A** |
 > [!Note]
 > If you make it for the Nothing Phone (1) your phone model [\[Point Label\]](../1_Terminology.md#point-label) should look like this: `PHONE_MODEL=PHONE1`
 
@@ -92,6 +93,7 @@ Select the phone you chose and open the new site in a new tab, so you can refere
 * [**Nothing Phone (2)**](./1b_glyphId%20Nothing%20Phone%20(2).md)
 * [**Nothing Phone (2a) / Nothing Phone (2a) Plus**](./1c_glyphId%20Nothing%20Phone%20(2a).md)
 * [**Nothing Phone (3a) / Nothing Phone (3a) Pro**](./1d_glyphId%20Nothing%20Phone%20(3a).md)
+* [**Nothing Phone (4a)**](./1e_glyphId%20Nothing%20Phone%20(4a).md)
 
 > [!NOTE]
 > For now you can safely ignore the rows that have the type *Zones* if you are overwhelmed by them.

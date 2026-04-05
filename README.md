@@ -61,6 +61,8 @@ This repo is in no way shape or form affiliated with Nothing Technology Limited 
 * Nothing Phone (3a) :white_check_mark:
 * Nothing Phone (3a) Pro :white_check_mark:
 * Nothing Phone (3) :white_check_mark:
+* Nothing Phone (4a) :white_check_mark:
+* Nothing Phone (4a) Pro :white_check_mark:
 
 <!-- TOC --><a name="heading-clapper-tutorial-video"></a>
 # :clapper: Tutorial Video
@@ -81,6 +83,7 @@ Shortcut to the [\[glyphId\]](./docs/1_Terminology.md#glyphid) pages:
 * [**Nothing Phone (2)**](./docs/4_First%20Composition/1b_glyphId%20Nothing%20Phone%20(2).md)
 * [**Nothing Phone (2a) / Nothing Phone (2a) Plus**](./docs/4_First%20Composition/1c_glyphId%20Nothing%20Phone%20(2a).md)
 * [**Nothing Phone (3a) / Nothing Phone (3a) Pro**](./docs/4_First%20Composition/1d_glyphId%20Nothing%20Phone%20(3a).md)
+* [**Nothing Phone (4a)**](./docs/4_First%20Composition/1e_glyphId%20Nothing%20Phone%20(4a).md)
 
 
 <!-- TOC --><a name="heading-download"></a>

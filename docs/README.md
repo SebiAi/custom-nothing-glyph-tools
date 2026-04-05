@@ -18,7 +18,7 @@ The other chapters are here for the curious minds :wink:
 3. [**Installing Dependencies**](./3_Installing%20Dependencies/README.md)
 4. [**Create your first composition**](./4_First%20Composition/README.md)
 5. [**Create Advanced compositions (Zones)**](./5_Create%20Advanced%20compositions%20(Zones).md)
-6. [**Creating compositions for Phone (3)**](./6_Creating%20compositions%20for%20Phone%20(3).md)
+6. [**Creating compositions for Glyph Matrix**](./6_Creating%20compositions%20for%20Glyph%20Matrix.md)
 7. [**Troubleshooting**](./7_Troubleshooting.md)
 8. [**Migrating old Label Files to the v1 format**](./8_Migrating%20old%20Label%20Files.md)
 9. [**Technical Details**](./9_Technical%20Details.md)

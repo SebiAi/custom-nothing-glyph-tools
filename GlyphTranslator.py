@@ -68,7 +68,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.1.0"
+SCRIPT_VERSION = "2.2.0"
 
 # Default values for the arguments
 DEFAULT_ARGS = { 'output_path': { 'value': ['.'], 'description': 'The current working directory' } }
@@ -78,6 +78,7 @@ REGEX_PATTERN_LABEL_TEXT_PHONE1 = r'^([1-5])(?:\.((?:(?<![1-24-5]\.)[1-4])|(?:(?
 REGEX_PATTERN_LABEL_TEXT_PHONE2 = r'^([1-9]|1[0-1])(?:\.((?:(?<![0-35-9]\.)[1-9]|1[0-6])|(?:(?<![1-9]\.)[1-8])))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 REGEX_PATTERN_LABEL_TEXT_PHONE2A = r'^([1-3])(?:(?<![23])\.([1-9]|1\d|2[0-4]))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 REGEX_PATTERN_LABEL_TEXT_PHONE3A = r'^([1-3])(?:\.((?:(?<=1\.)(?:[1-9]|1\d|20))|(?:(?<=2\.)(?:[1-9]|1[0-1]))|(?:(?<=3\.)[1-5])))?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
+REGEX_PATTERN_LABEL_TEXT_PHONE4A = r'^([1-7])()?-(\d{1,2}|100)(?:-(\d{1,2}|100))?(?:-(EXP|LIN|LOG))?$'
 
 # Enums
 class Cols(Enum):
@@ -89,11 +90,14 @@ class Cols(Enum):
     TWENTY_SIX_ZONE = 5
     THREE_ZONE_3A = 6
     THIRTY_SIX_ZONE = 7
+    SIX_ZONE = 8
+    SEVEN_ZONE = 9
 class PhoneModel(Enum):
     PHONE1 = 0
     PHONE2 = 1
     PHONE2A = 2
     PHONE3A = 3
+    PHONE4A = 5
 
 # -- Lookup tables to convert our numbering system to the array indexes --
 PHONE1_5COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL: list[list[int]] = [
@@ -293,6 +297,47 @@ PHONE3A_36COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL: list[list[int]] = [
     [35], # 36 to BOTTOM_LEFT_GLYPH
 ]
 
+# Used for creating the CUSTOM1 data - custom mapping by SebiAi (not official)
+PHONE4A_6COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL: list[list[int]] = [
+    [0],
+    [1],
+    [2],
+    [3],
+    [4],
+    [4],
+]
+# Used for creating the CUSTOM1 data - custom mapping by SebiAi (not official)
+PHONE4A_7COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL: list[list[int]] = [
+    [0],
+    [1],
+    [2],
+    [3],
+    [4],
+    [4],
+    [4],
+]
+# We need this because our numbering is different than the array indexes in the AUTHOR data for the 6Col mode
+# In this case it is not actually different => pass through
+PHONE4A_6COL_GLYPH_INDEX_TO_ARRAY_INDEXES_6COL: list[list[int]] = [
+    [0], # 1 to ZONE1
+    [1], # 2 to ZONE2
+    [2], # 3 to ZONE3
+    [3], # 4 to ZONE4
+    [4], # 5 to ZONE5
+    [5], # 6 to ZONE6
+]
+# We need this because our numbering is different than the array indexes in the AUTHOR data for the 6Col mode
+# In this case it is not actually different => pass through
+PHONE4A_7COL_GLYPH_INDEX_TO_ARRAY_INDEXES_7COL: list[list[int]] = [
+    [0], # 1 to ZONE1
+    [1], # 2 to ZONE2
+    [2], # 3 to ZONE3
+    [3], # 4 to ZONE4
+    [4], # 5 to ZONE5
+    [5], # 6 to ZONE6
+    [6], # 7 to ZONE7
+]
+
 # +------------------------------------+
 # |                                    |
 # |           Bioler Plate             |
@@ -407,6 +452,8 @@ class LabelFile:
                 regex = re.compile(REGEX_PATTERN_LABEL_TEXT_PHONE2A)
             case PhoneModel.PHONE3A:
                 regex = re.compile(REGEX_PATTERN_LABEL_TEXT_PHONE3A)
+            case PhoneModel.PHONE4A:
+                regex = re.compile(REGEX_PATTERN_LABEL_TEXT_PHONE4A)
             case _:
                 raise ValueError(f"[Programming Error] Missing phone model in switch case: '{self.phone_model}'. Please report this error to the developer.")
 
@@ -483,6 +530,10 @@ class LabelFile:
                 self.columns_model = Cols.TWENTY_SIX_ZONE if self.contains_zone_labels else Cols.THREE_ZONE_2A
             case PhoneModel.PHONE3A:
                 self.columns_model = Cols.THIRTY_SIX_ZONE if self.contains_zone_labels else Cols.THREE_ZONE_3A
+            case PhoneModel.PHONE4A:
+                assert not self.contains_zone_labels, "[Developer Error] Zone labels are not supported for PHONE4A. Please report this error to the developer."
+                max_glyph_index = max([label.glyph_index for label in self.labels])
+                self.columns_model = Cols.SEVEN_ZONE if max_glyph_index >= 7 else Cols.SIX_ZONE
             case _:
                 raise ValueError(f"[Programming Error] Missing phone model in switch case: '{self.phone_model}'. Please report this error to the developer.")
 
@@ -640,7 +691,7 @@ class LabelFile:
             # Get the values from the match
             try:
                 glyph_index = int(result.group(1))
-                zone_index = int(result.group(2)) if result.group(2) is not None else 0
+                zone_index = int(result.group(2)) if (result.group(2) is not None and result.group(2) != "") else 0
                 relative_light_level_from = int(result.group(3))
                 relative_light_level_to = int(result.group(4)) if result.group(4) is not None else relative_light_level_from
                 light_mode = result.group(5) if result.group(5) is not None else "LIN"
@@ -748,6 +799,10 @@ def get_numer_of_columns_from_columns_model(columns_model: Cols) -> int:
             # There only exists 36 columns mode for the AUTHOR data,
             # the 3 columns mode is a convenience mode for the 36 columns mode
             return 36
+        case Cols.SIX_ZONE | Cols.SEVEN_ZONE:
+            # There only exists 6 and 7 columns modes for the AUTHOR data for PHONE4A,
+            # the 6 and 7 columns modes are determined by the maximum glyph index used in the Labels file
+            return 7 if columns_model == Cols.SEVEN_ZONE else 6
         case _:
             raise ValueError(f"[Programming Error] Missing columns model in switch case: '{columns_model}'. Please report this error to the developer.")
 
@@ -820,6 +875,13 @@ def get_glyph_array_indexes(glyph_index: int, zone_index: int, columns_model: Co
             else:
                 # Only address the zone
                 return PHONE3A_36COL_GLYPH_INDEX_TO_ARRAY_INDEXES_36COL[glyph_index + zone_index + offset]
+        case Cols.SIX_ZONE | Cols.SEVEN_ZONE:
+            # No zone index in 6 and 7 Col mode
+            match columns_model:
+                case Cols.SIX_ZONE:
+                    return PHONE4A_6COL_GLYPH_INDEX_TO_ARRAY_INDEXES_6COL[glyph_index]
+                case Cols.SEVEN_ZONE:
+                    return PHONE4A_7COL_GLYPH_INDEX_TO_ARRAY_INDEXES_7COL[glyph_index]
         case _:
             raise ValueError(f"[Programming Error] Missing columns model in switch case: '{columns_model}'. Please report this error to the developer.")
 
@@ -836,6 +898,12 @@ def get_custom_5col_id(glyph_index: int, columns_model: Cols) -> int:
             return PHONE2A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
         case Cols.THREE_ZONE_3A | Cols.THIRTY_SIX_ZONE:
             return PHONE3A_3COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
+        case Cols.SIX_ZONE | Cols.SEVEN_ZONE:
+            match columns_model:
+                case Cols.SIX_ZONE:
+                    return PHONE4A_6COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
+                case Cols.SEVEN_ZONE:
+                    return PHONE4A_7COL_GLYPH_INDEX_TO_ARRAY_INDEXES_5COL[glyph_index][0]
         case _:
             raise ValueError(f"[Programming Error] Missing columns model in switch case: '{columns_model}'. Please report this error to the developer.")
 

@@ -71,7 +71,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_NAME = os.path.basename(__file__)
 
 # Version of the script
-SCRIPT_VERSION = "2.3.1"
+SCRIPT_VERSION = "2.4.0"
 SCRIPT_VERSION_MAJOR = SCRIPT_VERSION.split('.', 1)[0]
 
 TIME_STEP_MS = 16.666
@@ -94,12 +94,17 @@ class Cols(Enum):
     TWENTY_SIX_ZONE = 5
     THIRTY_SIX_ZONE = 6
     SIX_TWENTY_FIVE_ZONE = 7
+    SIX_ZONE = 8
+    SEVEN_ZONE = 9
+    ONE_SIXTY_NINE_ZONE = 10
 class PhoneModel(Enum):
     PHONE1 = 0
     PHONE2 = 1
     PHONE2A = 2
     PHONE3A = 3
     PHONE3 = 4
+    PHONE4A = 5
+    PHONE4APRO = 6
 
 # Cols lookup tables
 STRING_TO_COLS: dict[Cols, str] = {
@@ -109,6 +114,9 @@ STRING_TO_COLS: dict[Cols, str] = {
     Cols.TWENTY_SIX_ZONE: '26cols',
     Cols.THIRTY_SIX_ZONE: '36cols',
     Cols.SIX_TWENTY_FIVE_ZONE: '625cols',
+    Cols.SIX_ZONE: '6cols',
+    Cols.SEVEN_ZONE: '7cols',
+    Cols.ONE_SIXTY_NINE_ZONE: '169cols',
 }
 N_COLUMNS_TO_COLS = {
     5: Cols.FIVE_ZONE,
@@ -117,6 +125,9 @@ N_COLUMNS_TO_COLS = {
     26: Cols.TWENTY_SIX_ZONE,
     36: Cols.THIRTY_SIX_ZONE,
     625: Cols.SIX_TWENTY_FIVE_ZONE,
+    6: Cols.SIX_ZONE,
+    7: Cols.SEVEN_ZONE,
+    169: Cols.ONE_SIXTY_NINE_ZONE,
 }
 
 # Device codename lookup table (used for the composer tag)
@@ -127,6 +138,9 @@ DEVICE_CODENAME = {
     Cols.TWENTY_SIX_ZONE: 'Pacman',
     Cols.THIRTY_SIX_ZONE: 'Asteroids',
     Cols.SIX_TWENTY_FIVE_ZONE: 'Metroid',
+    Cols.SIX_ZONE: 'Frogger',
+    Cols.SEVEN_ZONE: 'Frogger',
+    Cols.ONE_SIXTY_NINE_ZONE: 'FroggerPro',
 }
 STRING_COLS_TO_PHONE_MODEL = {
     '5cols': PhoneModel.PHONE1,
@@ -134,6 +148,9 @@ STRING_COLS_TO_PHONE_MODEL = {
     '26cols': PhoneModel.PHONE2A,
     '36cols': PhoneModel.PHONE3A,
     '625cols': PhoneModel.PHONE3,
+    '6cols': PhoneModel.PHONE4A,
+    '7cols': PhoneModel.PHONE4A,
+    '169cols': PhoneModel.PHONE4APRO,
 }
 
 # +------------------------------------+
@@ -788,6 +805,7 @@ def write_metadata_to_audio_file(audio_file: AudioFile, nglyph_file: NGlyphFile,
                 print_critical_error("The audio file has the wrong codec. Please consult the documentation on how to fix it and try again.", start="\t")
         try:
             audio_file.fix_audio_codec(ffmpeg, audio_file_path_fixed)
+            audio_file = AudioFile(audio_file.audio_path, ffmpeg) # Reload the audio file to get the new metadata
         except AudioFile.AudioFileError as e:
             print_critical_error(e, start="\t")
     # Check if the audio file has the right extension and ask the user if we should fix it

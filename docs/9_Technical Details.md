@@ -2,7 +2,7 @@
 This documents the technical details of [\[compositions\]](./1_Terminology.md#compositioncompositions) created with the *Glyph Composer* app developed by Nothing Technology Limited (NOTHING).
 
 > [!NOTE]
-> The Phone (3) (Glyph Matrix) is NOT supported in the *Glyph Composer* but the same techniques can still be used to get custom ringtones working and are thus also documented here.
+> The *Phone (3)*/*Phone (4a) Pro* (Glyph Matrix) and *Phone (4a)* is NOT supported in the *Glyph Composer* but the same techniques can still be used to get custom ringtones working and are thus also documented here.
 
 ## Audio
 The audio is disconnected from the lighting - it only determines the final length of the composition. The maximum you can produce in the app is 10s but it can be longer when making it custom.
@@ -28,14 +28,20 @@ Saves what sound pack was used when the composition was created. Can be changed 
 ### CUSTOM2
 This indicates how many [\[Zones\]](./1_Terminology.md#zones) get addressed. This must match with the [*COMPOSER*](#composer) tag.
 
-| Phone                                                                     | *CUSTOM2* string |
-| ------------------------------------------------------------------------- | ---------------: |
-| Nothing Phone (1)                                                         |          `5cols` |
-| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode |          `5cols` |
-| Nothing Phone (2)                                                         |         `33cols` |
-| Nothing Phone (2a) / Nothing Phone (2a) Plus                              |         `26cols` |
-| Nothing Phone (3a) / Nothing Phone (3a) Pro                               |         `36cols` |
-| Nothing Phone (3)                                                         |        `625cols` |
+| Phone                                                                      | *CUSTOM2* string |
+| -------------------------------------------------------------------------- | ---------------: |
+| Nothing Phone (1)                                                          |          `5cols` |
+| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode  |          `5cols` |
+| Nothing Phone (2)                                                          |         `33cols` |
+| Nothing Phone (2a) / Nothing Phone (2a) Plus                               |         `26cols` |
+| Nothing Phone (3a) / Nothing Phone (3a) Pro                                |         `36cols` |
+| Nothing Phone (3)                                                          |        `625cols` |
+| Nothing Phone (4a)                                                         |          `6cols` |
+| Nothing Phone (4a) - special 7 [\[Glyph\]](./1_Terminology.md#glyphs) mode |          `7cols` |
+| Nothing Phone (4a) Pro                                                     |        `169cols` |
+
+> [!CAUTION]
+> The *Nothing Phone (4a)* **7 Zones** mode (addressing the red camera indicator [\[Glyph\]](./1_Terminology.md#glyphs)) is not officially supported by Nothing and may break unexpectedly in the future!
 
 > [!NOTE]
 > This tag was not always present before the 1.4.0 *Glyph Composer* update where only the Nothing Phone (1) and Nothing Phone (2) were supported. It was missing if the [\[composition\]](./1_Terminology.md#compositioncompositions) was made on the Nothing Phone (1). Otherwise it had the Nothing Phone (2) value.
@@ -44,14 +50,20 @@ This indicates how many [\[Zones\]](./1_Terminology.md#zones) get addressed. Thi
 After decoding and decompressing it contains the [\[Glyph\]](./1_Terminology.md#glyphs) light data in a csv like manner where in each line we have the [\[Zones\]](./1_Terminology.md#zones) separated and followed by a comma (`,`). Each line corresponds to 16.666ms (60Hz).
 
 Depending on the phone we have n Zones:
-| Phone                                                                     |   n |
-| ------------------------------------------------------------------------- | --: |
-| Nothing Phone (1)                                                         |   5 |
-| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode |  15 |
-| Nothing Phone (2)                                                         |  33 |
-| Nothing Phone (2a) / Nothing Phone (2a) Plus                              |  26 |
-| Nothing Phone (3a) / Nothing Phone (3a) Pro                               |  36 |
-| Nothing Phone (3)                                                         | 625 |
+| Phone                                                                      |   n |
+| -------------------------------------------------------------------------- | --: |
+| Nothing Phone (1)                                                          |   5 |
+| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode  |  15 |
+| Nothing Phone (2)                                                          |  33 |
+| Nothing Phone (2a) / Nothing Phone (2a) Plus                               |  26 |
+| Nothing Phone (3a) / Nothing Phone (3a) Pro                                |  36 |
+| Nothing Phone (3)                                                          | 625 |
+| Nothing Phone (4a)                                                         |   6 |
+| Nothing Phone (4a) - special 7 [\[Glyph\]](./1_Terminology.md#glyphs) mode |   7 |
+| Nothing PHone (4a) Pro                                                     | 169 |
+
+> [!CAUTION]
+> The *Nothing Phone (4a)* **7 Zones** mode (addressing the red camera indicator [\[Glyph\]](./1_Terminology.md#glyphs)) is not officially supported by Nothing and may break unexpectedly in the future!
 
 > [!NOTE]
 > The Nothing Phone (1) is a bit of a special case:  
@@ -144,6 +156,29 @@ Visible index range includes (counting from 0 onwards!!):
 
 See [here](https://github.com/Nothing-Developer-Programme/GlyphMatrix-Developer-Kit/blob/43622ebcc2cff4c06f5a76935651fe48f45e5a6d/image/Phone%203%20Glyph%20Matrix%20LED%20allocation.svg) for a visual.
 
+##### Nothing Phone (4a) indexes
+The indexes (0-5) map from the top most [\[Glyph\]](./1_Terminology.md#glyphs) (index 0) to the bottom most [\[Glyph\]](./1_Terminology.md#glyphs) (index 5).
+
+##### Nothing Phone (4a) - 7 [\[Glyphs\]](./1_Terminology.md#glyphs) mode indexes
+In addition to the normal 6 [\[Glyph\]](./1_Terminology.md#glyphs) mode, the red camera recording [\[Glyph\]](./1_Terminology.md#glyphs) is addressable with index 6 => index 0 to 6 from top to bottom.
+
+##### Nothing Phone (4a) Pro indexes
+The first index maps to the top left pixel, the last index maps to the bottom right pixel. The mapping in between is row major, meaning every 13th index (e.g.: 0, 13, 26, ...) will be the leftmost pixel in each row.
+
+Because of the round Glyph Matrix on the Phone (4a) Pro, not all of the 169 [\[Zones\]](./1_Terminology.md#zones) can be used. Only 137 of these will be visible, the others will not be used and can be set to 0.  
+Visible index range includes (counting from 0 onwards!!):
+* 4-8 (top row)
+* 15-23
+* 27-37
+* 40-50
+* 52-116 (fully filled rows in the middle)
+* 118-128
+* 131-141
+* 145-153
+* 160-164 (bottom row)
+
+See [here](https://github.com/Nothing-Developer-Programme/GlyphMatrix-Developer-Kit/blob/15b55c7b4b29735bb05c87bbb2529f6e9ef22bd6/image/25111_specification.svg) for a visual.
+
 <br><br>
 
 Each [\[Zone\]](./1_Terminology.md#zones) can have a light value from 0 to 4095 (2^12 values), the smallest step is 1. If the data is longer than the audio it will not be played.
@@ -202,15 +237,17 @@ A loading bar like animation in the *Top left* [\[Glyph\]](./1_Terminology.md#gl
 
 ### COMPOSER
 This depends on what device the composition was created on:
-| Phone                                                                     |             *Composer* string |
-| ------------------------------------------------------------------------- | ----------------------------: |
-| Nothing Phone (1)                                                         |  `v1-Spacewar Glyph Composer` |
-| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode |  `v1-Spacewar Glyph Composer` |
-| Nothing Phone (2)                                                         |      `v1-Pong Glyph Composer` |
-| Nothing Phone (2a)                                                        |    `v1-Pacman Glyph Composer` |
-| Nothing Phone (2a) Plus                                                   | `v1-PacmanPro Glyph Composer` |
-| Nothing Phone (3a) / Nothing Phone (3a) Pro                               | `v1-Asteroids Glyph Composer` |
-| Nothing Phone (3)                                                         |   `v1-Metroid Glyph Composer` |
+| Phone                                                                      |             *Composer* string |
+| -------------------------------------------------------------------------- | ----------------------------: |
+| Nothing Phone (1)                                                          |  `v1-Spacewar Glyph Composer` |
+| Nothing Phone (1) - special 15 [\[Zones\]](./1_Terminology.md#zones) mode  |  `v1-Spacewar Glyph Composer` |
+| Nothing Phone (2)                                                          |      `v1-Pong Glyph Composer` |
+| Nothing Phone (2a)                                                         |    `v1-Pacman Glyph Composer` |
+| Nothing Phone (2a) Plus                                                    | `v1-PacmanPro Glyph Composer` |
+| Nothing Phone (3a) / Nothing Phone (3a) Pro                                | `v1-Asteroids Glyph Composer` |
+| Nothing Phone (3)                                                          |   `v1-Metroid Glyph Composer` |
+| Nothing Phone (4a)                                                         |   `v1-Frogger Glyph Composer` |
+| Nothing Phone (4a) - special 7 [\[Glyph\]](./1_Terminology.md#glyphs) mode |   `v1-Frogger Glyph Composer` |
 
 > [!IMPORTANT]
 > Before the 1.4.0 *Glyph Composer* update the prefix `v1-` was missing and only the Nothing Phone (1) and the Nothing Phone (2) were supported.
