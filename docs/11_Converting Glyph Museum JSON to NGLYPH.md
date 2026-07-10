@@ -42,12 +42,12 @@ You can customize the script's behavior by passing the following options:
 | Option | Description |
 | :--- | :--- |
 | `-o`, `--output` | Specify a custom file path for the output `.nglyph` file. |
-| `-m`, `--model` | Explicitly choose the target phone model (`PHONE3` or `PHONE4APRO`). |
-| `-i`, `--interpolation` | Interpolation mode between frames: `linear` (default, smooth transition) or `nearest` (instant transition). |
+| `-m`, `--model` | Explicitly choose the target phone model (`PHONE3` or `PHONE4APRO`), rather than autodetecting the phone model. |
+| `-i`, `--interpolation` | Interpolation mode between frames: `linear` (smooth transition) or `nearest` (default, instant transition). |
 | `--fps` | Set the target frame rate of the output `.nglyph` file (default: `60.0` FPS). |
 | `--version` | Show the version of the script and exit. |
 
-### Example with linear interpolation:
+### Example with nearest interpolation:
 ```bash
-python3 JsonToGlyphMatrix.py glyph_data_test.json -i linear
+python3 JsonToGlyphMatrix.py glyph_data_test.json -i nearest
 ```

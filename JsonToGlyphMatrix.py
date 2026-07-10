@@ -243,7 +243,7 @@ def main() -> int:
     parser.add_argument("JSON_PATH", help="Path to the Glyph Museum JSON file.", type=str)
     parser.add_argument("-o", "--output", help="Path to write the output .nglyph file.", type=str)
     parser.add_argument("-m", "--model", help="Target phone model. If omitted, auto-detected from JSON data.", type=str, choices=list(PHONE_MODEL_INFO.keys()))
-    parser.add_argument("-i", "--interpolation", help="Interpolation mode (linear or nearest). Default: linear.", type=str, choices=["linear", "nearest"], default="linear")
+    parser.add_argument("-i", "--interpolation", help="Interpolation mode (linear or nearest). Default: nearest.", type=str, choices=["linear", "nearest"], default="nearest")
     parser.add_argument("--fps", help="Target frame rate (default: 60.0).", type=float, default=60.0)
     parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     
