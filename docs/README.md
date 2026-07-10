@@ -23,6 +23,7 @@ The other chapters are here for the curious minds :wink:
 8. [**Migrating old Label Files to the v1 format**](./8_Migrating%20old%20Label%20Files.md)
 9. [**Technical Details**](./9_Technical%20Details.md)
 10. [**The NGlyph File Format**](./10_The%20NGlyph%20File%20Format.md)
+11. [**Converting Glyph Museum JSON to NGLYPH**](./11_Converting%20Glyph%20Museum%20JSON%20to%20NGLYPH.md)
 
 ## Need help?
 If you get stuck, have questions or need help, feel free to join the Discord here: https://discord.gg/EmcnHqDxZt
