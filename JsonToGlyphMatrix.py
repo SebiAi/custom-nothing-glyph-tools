@@ -171,7 +171,7 @@ def matrix_to_csv_string(matrix: list[int]) -> str:
     """Convert matrix list to comma separated string with trailing comma."""
     return ",".join(map(str, matrix)) + ","
 
-def interpolate_frames(frames: list[dict], target_fps: float, interpolation_mode: str, equal_duration: bool, override_duration_ms: float = None, override_total_frames: int = None) -> list[list[float]]:
+def interpolate_frames(frames: list[dict], target_fps: float, interpolation_mode: str) -> list[list[float]]:
     """Interpolate frames to the target FPS.
     
     Returns a list of frames, where each frame is a list of pixel values (0-255 floats).
@@ -183,92 +183,49 @@ def interpolate_frames(frames: list[dict], target_fps: float, interpolation_mode
     # Calculate input frame durations
     durations = [f.get('d', 100) for f in frames]
     
-    if equal_duration:
-        # Determine total duration
-        if override_duration_ms is not None:
-            total_duration = override_duration_ms
-        elif override_total_frames is not None:
-            total_duration = override_total_frames * (1000.0 / target_fps)
+    # Time-based interpolation
+    # Compute timeline boundaries
+    times = [0.0]
+    for d in durations:
+        times.append(times[-1] + d)
+        
+    total_duration = times[-1]
+    
+    total_output_frames = max(1, int(total_duration / 1000.0 * target_fps))
+        
+    logger.info(f"Time-based interpolation: total_duration={total_duration:.1f}ms, target_fps={target_fps}, total_output_frames={total_output_frames}")
+    
+    output_pixel_data = []
+    for j in range(total_output_frames):
+        t_out = j * (1000.0 / target_fps)
+        
+        # Find interval
+        k = 0
+        while k < num_input_frames - 1 and t_out >= times[k+1]:
+            k += 1
+            
+        p_curr = frames[k]['p']
+        
+        if interpolation_mode == 'nearest' or k >= num_input_frames - 1:
+            output_pixel_data.append(list(p_curr))
         else:
-            total_duration = sum(durations)
+            # Linear interpolation
+            t_curr = times[k]
+            t_next = times[k+1]
+            p_next = frames[k+1]['p']
             
-        # Determine total output frames
-        if override_total_frames is not None:
-            total_output_frames = override_total_frames
-        else:
-            total_output_frames = max(1, int(total_duration / 1000.0 * target_fps))
+            # Make sure we don't divide by zero
+            denom = t_next - t_curr
+            fraction = (t_out - t_curr) / denom if denom > 0 else 0.0
+            fraction = max(0.0, min(1.0, fraction))
             
-        # Allocate output frames to input frames as evenly as possible
-        base_frames = total_output_frames // num_input_frames
-        remainder = total_output_frames % num_input_frames
-        
-        allocated_counts = []
-        for k in range(num_input_frames):
-            allocated_counts.append(base_frames + (1 if k < remainder else 0))
+            p_interp = []
+            # Ensure we align lists correctly
+            for val_curr, val_next in zip(p_curr, p_next):
+                p_interp.append(val_curr + fraction * (val_next - val_curr))
+            output_pixel_data.append(p_interp)
             
-        logger.info(f"Equal-duration mode: total_output_frames={total_output_frames}, frame counts allocation={allocated_counts}")
-        
-        output_pixel_data = []
-        for k, count in enumerate(allocated_counts):
-            p_data = frames[k]['p']
-            for _ in range(count):
-                output_pixel_data.append(list(p_data))
-                
-        return output_pixel_data
-        
-    else:
-        # Time-based interpolation
-        # Compute timeline boundaries
-        times = [0.0]
-        for d in durations:
-            times.append(times[-1] + d)
-            
-        total_duration = times[-1]
-        
-        if override_duration_ms is not None:
-            # Scale timeline to the overridden total duration
-            scale_factor = override_duration_ms / total_duration if total_duration > 0 else 1.0
-            times = [t * scale_factor for t in times]
-            total_duration = override_duration_ms
-            
-        if override_total_frames is not None:
-            total_output_frames = override_total_frames
-        else:
-            total_output_frames = max(1, int(total_duration / 1000.0 * target_fps))
-            
-        logger.info(f"Time-based interpolation: total_duration={total_duration:.1f}ms, target_fps={target_fps}, total_output_frames={total_output_frames}")
-        
-        output_pixel_data = []
-        for j in range(total_output_frames):
-            t_out = j * (1000.0 / target_fps)
-            
-            # Find interval
-            k = 0
-            while k < num_input_frames - 1 and t_out >= times[k+1]:
-                k += 1
-                
-            p_curr = frames[k]['p']
-            
-            if interpolation_mode == 'nearest' or k >= num_input_frames - 1:
-                output_pixel_data.append(list(p_curr))
-            else:
-                # Linear interpolation
-                t_curr = times[k]
-                t_next = times[k+1]
-                p_next = frames[k+1]['p']
-                
-                # Make sure we don't divide by zero
-                denom = t_next - t_curr
-                fraction = (t_out - t_curr) / denom if denom > 0 else 0.0
-                fraction = max(0.0, min(1.0, fraction))
-                
-                p_interp = []
-                # Ensure we align lists correctly
-                for val_curr, val_next in zip(p_curr, p_next):
-                    p_interp.append(val_curr + fraction * (val_next - val_curr))
-                output_pixel_data.append(p_interp)
-                
-        return output_pixel_data
+    return output_pixel_data
 
 # +------------------------------------+
 # |                                    |
@@ -287,9 +244,6 @@ def main() -> int:
     parser.add_argument("-o", "--output", help="Path to write the output .nglyph file.", type=str)
     parser.add_argument("-m", "--model", help="Target phone model. If omitted, auto-detected from JSON data.", type=str, choices=list(PHONE_MODEL_INFO.keys()))
     parser.add_argument("-i", "--interpolation", help="Interpolation mode (linear or nearest). Default: linear.", type=str, choices=["linear", "nearest"], default="linear")
-    parser.add_argument("--equal-duration", help="Ignore input durations and distribute frames equally (matches test output style).", action="store_true")
-    parser.add_argument("--duration", help="Override total duration of the animation in milliseconds.", type=float)
-    parser.add_argument("--total-frames", help="Override total number of output frames.", type=int)
     parser.add_argument("--fps", help="Target frame rate (default: 60.0).", type=float, default=60.0)
     parser.add_argument("--version", action="version", version=SCRIPT_VERSION)
     
@@ -334,14 +288,11 @@ def main() -> int:
                 frame['p'] = list(frame['p']) + [0] * (needed_visible - len(frame['p']))
                 
     # Perform interpolation
-    logger.info(f"Interpolating frames (mode={args.interpolation}, equal_duration={args.equal_duration})...")
+    logger.info(f"Interpolating frames (mode={args.interpolation})...")
     interpolated_pixel_frames = interpolate_frames(
         data['frames'],
         target_fps=args.fps,
-        interpolation_mode=args.interpolation,
-        equal_duration=args.equal_duration,
-        override_duration_ms=args.duration,
-        override_total_frames=args.total_frames
+        interpolation_mode=args.interpolation
     )
     
     # Map and format frames
