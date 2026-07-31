@@ -108,7 +108,7 @@ V0_TO_V1_REPLACEMENTS: list[tuple[str, str]] = [# V0 also known as legacy
 
 # +------------------------------------+
 # |                                    |
-# |           Bioler Plate             |
+# |           Boiler Plate             |
 # |                                    |
 # +------------------------------------+
 
