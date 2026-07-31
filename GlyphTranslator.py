@@ -340,7 +340,7 @@ PHONE4A_7COL_GLYPH_INDEX_TO_ARRAY_INDEXES_7COL: list[list[int]] = [
 
 # +------------------------------------+
 # |                                    |
-# |           Bioler Plate             |
+# |           Boiler Plate             |
 # |                                    |
 # +------------------------------------+
 
