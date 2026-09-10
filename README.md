@@ -6,7 +6,12 @@ This repo is intended to be a collection of self contained tools and scripts to 
 
 ## Also check out my accompanying tool [*GlyphVisualizer*](https://github.com/SebiAi/GlyphVisualizer)!
 
-https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1cf9-4c0e-9835-792bf1b09a58
+<!-- https://github.com/SebiAi/custom-nothing-glyph-tools/assets/41116921/1852f2a6-1cf9-4c0e-9835-792bf1b09a58 -->
+https://github.com/user-attachments/assets/4ba43f4f-587a-4064-9c6e-1084f1f9cee8
+
+
+
+
 
 
 # :writing_hand: Table of contents
